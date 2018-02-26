@@ -3,20 +3,18 @@
 void TDLibJsonClient::__construct()
 {
     Php::Value self(this);
-    Php::out << this << std::flush;
-    self["client"] = "test";
+    // Php::out << this << std::flush;
+    // self["client"] = "test";
 }
 
 Php::Value TDLibJsonClient::create()
 {
     _client = td_json_client_create();
-    std::cout << _client;
     return _client;
 }
 
 void TDLibJsonClient::destroy()
 {
-    std::cout << _client;
     td_json_client_destroy(_client);
     return;
 }
