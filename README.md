@@ -16,11 +16,11 @@ cmake --build .
 cd ~/projects
 git clone https://github.com/yaroslavche/phptdlib.git
 cd phptdlib
-make
-sudo make install
+cmake
+sudo make
 
-make clean
 php -i | grep tdlib
+php -r "echo td_version(), PHP_EOL;"
 php test.php
 ```
 

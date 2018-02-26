@@ -11,7 +11,6 @@ $query = json_encode([
         '@type' => 'getAuthorizationState',
         '@extra' => 1.01234
     ]);
-var_dump($query);
 
 td_json_client_send($client, $query);
 while (true) {
