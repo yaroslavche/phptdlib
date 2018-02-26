@@ -1,4 +1,4 @@
-## prepare TDLib
+## install [TDLib][1]
 ```bash
 # opensuse
 sudo zypper in php7 gperf cmake gcc-c++ openssl-devel
@@ -9,6 +9,15 @@ mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build .
+make install
+```
+
+## install [PHP-CPP][2]
+```bash
+cd ~/projects
+git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
+cd PHP-CPP
+make
 ```
 
 ## install extension
@@ -20,7 +29,6 @@ cmake
 sudo make
 
 php -i | grep tdlib
-php -r "echo td_version(), PHP_EOL;"
 php test.php
 ```
 
@@ -46,3 +54,5 @@ while (true) {
     }
 }
 ```
+[1]: https://github.com/tdlib/td#building
+[2]: http://www.php-cpp.com/documentation/install
