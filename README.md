@@ -29,14 +29,17 @@ php test.php
 
 <?php
 
-$client = td_json_client_create();
+$client = new TDLibJsonClient();
+$client->create();
+
 $query = json_encode([
         '@type' => 'getAuthorizationState',
         '@extra' => 1.01234
     ]);
-td_json_client_send($client, $query);
+
+$client->send($query);
 while (true) {
-    $result = td_json_client_receive($client, 10);
+    $result = $client->receive(10);
     if (!empty($result)) {
         var_dump($result);
         break;
