@@ -1,4 +1,3 @@
-// #include </home/yaroslav/bin/td/build/td/telegram/tdjson_export.h>
 #include <phpcpp.h>
 #include <iostream>
 #include <td/telegram/tdjson_export.h>
@@ -29,8 +28,8 @@ Php::Value tdlib_td_json_client_receive(Php::Parameters &params)
 {
     // client
     double timeout = params[1];
-    std::string str = td_json_client_receive(client, timeout);
-    return "td_json_client_receive";
+    std::string receive = td_json_client_receive(client, timeout);
+    return receive;
 }
 
 Php::Value tdlib_td_json_client_execute(Php::Parameters &params)
