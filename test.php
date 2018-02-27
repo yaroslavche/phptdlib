@@ -24,23 +24,23 @@ $query = json_encode([
         "system_language_code" => "en",
         "device_model" => php_uname('s'),
         "system_version" => php_uname('v'),
-        "application_version" => "0.0.2",
+        "application_version" => "0.0.4",
         "enable_storage_optimizer" => true,
         "ignore_file_names" => false
     ]
 ]);
-$result = $client->send($query, 10);
+$result = $client->sendAndWait($query, 10);
 $query = json_encode([
     '@type' => 'setDatabaseEncryptionKey',
 ]);
-$result = $client->send($query, 10);
+$result = $client->sendAndWait($query, 10);
 $response = json_decode($result, true);
 var_dump($response);
 $query = json_encode([
     '@type' => 'getAuthorizationState',
     '@extra' => 1.01234
 ]);
-$result = $client->send($query, 10);
+$result = $client->sendAndWait($query, 10);
 $response = json_decode($result, true);
 var_dump($response);
 
