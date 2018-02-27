@@ -15,7 +15,7 @@ class TDLibJsonClient : public Php::Base
         Php::Value create();
         void destroy();
         Php::Value execute(Php::Parameters &params);
-        void send(Php::Parameters &params);
+        Php::Value send(Php::Parameters &params);
         Php::Value receive(Php::Parameters &params);
 };
 

@@ -8,7 +8,7 @@ extern "C" {
 
     PHPCPP_EXPORT void *get_module()
     {
-        static Php::Extension tdlib("tdlib", "0.0.2");
+        static Php::Extension tdlib("tdlib", "0.0.3");
 
         // td_json_client class implementation
         Php::Class<TDLibJsonClient> td_json_client("TDLibJsonClient");
@@ -18,7 +18,8 @@ extern "C" {
             Php::ByVal("query", Php::Type::String)
         });
         td_json_client.method<&TDLibJsonClient::send> ("send", {
-            Php::ByVal("query", Php::Type::String)
+            Php::ByVal("query", Php::Type::String),
+            Php::ByVal("timeout", Php::Type::Numeric, false),
         });
         td_json_client.method<&TDLibJsonClient::receive> ("receive", {
             Php::ByVal("timeout", Php::Type::Numeric)
