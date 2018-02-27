@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
-project(tdlib VERSION 0.0.1 LANGUAGES CXX)
+project(tdlib VERSION 0.0.3 LANGUAGES CXX)
 
 find_package(Td 1.1.1 REQUIRED)
 
