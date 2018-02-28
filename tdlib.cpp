@@ -13,7 +13,7 @@ extern "C" {
 
 PHPCPP_EXPORT void *get_module()
 {
-    static Php::Extension tdlib("tdlib", "0.0.4");
+    static Php::Extension tdlib("tdlib", "0.0.5");
 
     // td_json_client class implementation
     Php::Class<TDLibJsonClient> td_json_client("TDLibJsonClient");
@@ -36,23 +36,23 @@ PHPCPP_EXPORT void *get_module()
 
     // tdlib_json_client functions
     tdlib.add<tdlib_td_json_client_create>("td_json_client_create", {
-        Php::ByRef("client", Php::Type::Object)
+        Php::ByVal("client", Php::Type::Object)
     });
     tdlib.add<tdlib_td_json_client_destroy>("td_json_client_destroy");
     tdlib.add<tdlib_td_json_client_execute>("td_json_client_execute", {
-        Php::ByRef("client", Php::Type::Object),
+        Php::ByVal("client", Php::Type::Object),
         Php::ByVal("query", Php::Type::String)
     });
     tdlib.add<tdlib_td_json_client_send>("td_json_client_send", {
-        Php::ByRef("client", Php::Type::Object),
+        Php::ByVal("client", Php::Type::Object),
         Php::ByVal("query", Php::Type::String),
     });
     tdlib.add<tdlib_td_json_client_receive>("td_json_client_receive", {
-        Php::ByRef("client", Php::Type::Object),
+        Php::ByVal("client", Php::Type::Object),
         Php::ByVal("timeout", Php::Type::Numeric)
     });
     tdlib.add<tdlib_td_json_client_send_and_wait>("td_json_client_send_and_wait", {
-        Php::ByRef("client", Php::Type::Object),
+        Php::ByVal("client", Php::Type::Object),
         Php::ByVal("query", Php::Type::String),
         Php::ByVal("timeout", Php::Type::Numeric),
     });

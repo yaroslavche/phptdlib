@@ -18,6 +18,8 @@ class TDLibJsonClient : public Php::Base
         Php::Value send(Php::Parameters &params);
         Php::Value receive(Php::Parameters &params);
         Php::Value sendAndWait(Php::Parameters &params);
+
+        inline void *getPtr() { return _client; }
 };
 
 #endif // TDLIB_JSON_CLIENT_H

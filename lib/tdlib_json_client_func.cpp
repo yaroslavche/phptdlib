@@ -1,15 +1,24 @@
 #include "tdlib_json_client_func.hpp"
+#include "tdlib_json_client.hpp"
+
+/*
+ * not working now
+ */
 
 Php::Value tdlib_td_json_client_create()
 {
-    void *client = td_json_client_create();
+    TDLibJsonClient *clientResource = new TDLibJsonClient();
+    clientResource->create();
+    Php::Object client = Php::Object("TDLibJsonClient", clientResource);
     return client;
 }
 
 void tdlib_td_json_client_destroy(Php::Parameters &params)
 {
-    void *client = params[0].implementation();
-    td_json_client_destroy(client);
+    Php::Value object = params[0];
+    if (!object.instanceOf("TDLibJsonClient")) throw Php::Exception("First argument must be an instance of TDLibJsonClient.");
+    TDLibJsonClient *client = (TDLibJsonClient *)object.implementation();
+    td_json_client_destroy(client->getPtr());
     return;
 }
 
@@ -23,9 +32,11 @@ Php::Value tdlib_td_json_client_execute(Php::Parameters &params)
 
 Php::Value tdlib_td_json_client_send(Php::Parameters &params)
 {
-    void *client = params[0].implementation();
+    Php::Value object = params[0];
+    if (!object.instanceOf("TDLibJsonClient")) throw Php::Exception("First argument must be an instance of TDLibJsonClient.");
+    TDLibJsonClient *client = (TDLibJsonClient *)object.implementation();
     const char *query = params[1];
-    td_json_client_send(client, query);
+    td_json_client_send(client->getPtr(), query);
     return true;
 }
 
