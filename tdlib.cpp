@@ -6,55 +6,71 @@
 #include <td/telegram/td_json_client.h>
 #include <td/telegram/Log.h>
 
-#include "lib/tdlib_json_client.cpp"
-#include "lib/tdlib_json_client_func.cpp"
+#include "include/td_json_client_func.cpp"
+#include "include/TDLib/JsonClient.hpp"
+#include "include/TDApi/TDLibParameters.hpp"
 
 extern "C" {
 
 PHPCPP_EXPORT void *get_module()
 {
-    static Php::Extension tdlib("tdlib", "0.0.5");
+    static Php::Extension tdlib("tdlib", "0.0.6");
 
-    // td_json_client class implementation
-    Php::Class<TDLibJsonClient> td_json_client("TDLibJsonClient");
-    td_json_client.method<&TDLibJsonClient::create> ("create");
-    td_json_client.method<&TDLibJsonClient::destroy> ("destroy");
-    td_json_client.method<&TDLibJsonClient::execute> ("execute", {
+
+    Php::Namespace TDLibNamespace("TDLib");
+
+    // TDLib\JsonClient
+    Php::Class<JsonClient> json_client("JsonClient");
+    json_client.method<&JsonClient::__construct> ("__construct"); // if created return pointer
+    json_client.method<&JsonClient::create> ("create"); // if created return pointer
+    json_client.method<&JsonClient::destroy> ("destroy"); // if destroyed warning?
+    json_client.method<&JsonClient::execute> ("execute", {
         Php::ByVal("query", Php::Type::String)
     });
-    td_json_client.method<&TDLibJsonClient::send> ("send", {
-        Php::ByVal("query", Php::Type::String),
+    json_client.method<&JsonClient::send> ("send", {
+        Php::ByVal("query", Php::Type::String)
     });
-    td_json_client.method<&TDLibJsonClient::receive> ("receive", {
+    json_client.method<&JsonClient::receive> ("receive", {
         Php::ByVal("timeout", Php::Type::Numeric)
     });
-    td_json_client.method<&TDLibJsonClient::sendAndWait> ("sendAndWait", {
+    json_client.method<&JsonClient::sendAndWait> ("sendAndWait", {
         Php::ByVal("query", Php::Type::String),
-        Php::ByVal("timeout", Php::Type::Numeric),
+        Php::ByVal("timeout", Php::Type::Numeric)
     });
-    tdlib.add(std::move(td_json_client));
+    TDLibNamespace.add(std::move(json_client));
 
-    // tdlib_json_client functions
-    tdlib.add<tdlib_td_json_client_create>("td_json_client_create", {
+    tdlib.add(std::move(TDLibNamespace));
+
+
+    Php::Namespace TDApiNamespace("TDApi");
+
+    // TDApi\TDLibParameters
+    Php::Class<TDLibParameters> td_api_tdlibParameters("TDLibParameters");
+    td_api_tdlibParameters.method<&TDLibParameters::setParameter> ("setParameter", {
+        Php::ByVal("name", Php::Type::String),
+        Php::ByVal("value")
+    });
+    TDApiNamespace.add(std::move(td_api_tdlibParameters));
+
+    tdlib.add(std::move(TDApiNamespace));
+
+
+    // td_json_client_*
+    tdlib.add<td_json_client_func_create>("td_json_client_create");
+    tdlib.add<td_json_client_func_destroy>("td_json_client_destroy", {
         Php::ByVal("client", Php::Type::Object)
     });
-    tdlib.add<tdlib_td_json_client_destroy>("td_json_client_destroy");
-    tdlib.add<tdlib_td_json_client_execute>("td_json_client_execute", {
+    tdlib.add<td_json_client_func_execute>("td_json_client_execute", {
         Php::ByVal("client", Php::Type::Object),
         Php::ByVal("query", Php::Type::String)
     });
-    tdlib.add<tdlib_td_json_client_send>("td_json_client_send", {
+    tdlib.add<td_json_client_func_send>("td_json_client_send", {
         Php::ByVal("client", Php::Type::Object),
-        Php::ByVal("query", Php::Type::String),
+        Php::ByVal("query", Php::Type::String)
     });
-    tdlib.add<tdlib_td_json_client_receive>("td_json_client_receive", {
+    tdlib.add<td_json_client_func_receive>("td_json_client_receive", {
         Php::ByVal("client", Php::Type::Object),
         Php::ByVal("timeout", Php::Type::Numeric)
-    });
-    tdlib.add<tdlib_td_json_client_send_and_wait>("td_json_client_send_and_wait", {
-        Php::ByVal("client", Php::Type::Object),
-        Php::ByVal("query", Php::Type::String),
-        Php::ByVal("timeout", Php::Type::Numeric),
     });
 
     return tdlib;

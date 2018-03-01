@@ -1,3 +1,42 @@
+## example
+```php
+<?php
+
+$testQuery = json_encode(['@type' => 'getAuthorizationState', '@extra' => 1.01234]);
+
+$client = new TDLib\JsonClient();
+$client->create();
+$result = $client->execute($testQuery);
+$client->send($testQuery);
+$result = $client->receive(10);
+$result = $client->sendAndWait($testQuery, 10);
+// $client->destroy(); // segfault
+
+$tdlibParameters = new TDApi\TDLibParameters();
+$tdlibParameters->setParameter('use_test_dc', true);
+// ...
+```
+
+```php
+<?php
+
+$client = td_json_client_create();
+while(true)
+{
+    $result = td_json_client_receive($client, 10);
+    if(!empty($result)) {
+        echo $result;
+        break;
+    }
+}
+
+// $testQuery = json_encode(['@type' => 'getAuthorizationState', '@extra' => 1.01234]);
+// $result = td_json_client_execute($client, $testQuery);
+// td_json_client_send($client, $testQuery);
+
+// td_json_client_destroy($client); // segfault
+```
+
 ## install [TDLib][1]
 ```bash
 # opensuse
@@ -30,57 +69,6 @@ sudo make
 
 php -i | grep tdlib
 php test.php
-```
-
-## use extension
-```php
-<?php
-
-Error_Reporting(E_ALL);
-ini_set('display_errors', 1);
-
-$client = new TDLibJsonClient();
-$client->create();
-
-/**
- * @see https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1tdlib_parameters.html
- */
-$query = json_encode([
-    "@type" => "setTdlibParameters",
-    "parameters" => [
-        "use_test_dc" => true,
-        "database_directory" => "/var/tmp/tdlib",
-        "files_directory" => "/var/tmp/tdlib",
-        "use_file_database" => false,
-        "use_chat_info_database" => false,
-        "use_message_database" => false,
-        "use_secret_chats" => false,
-        "api_id" => 111111,
-        "api_hash" => "a1b2c3",
-        "system_language_code" => "en",
-        "device_model" => php_uname('s'),
-        "system_version" => php_uname('v'),
-        "application_version" => "0.0.2",
-        "enable_storage_optimizer" => true,
-        "ignore_file_names" => false
-    ]
-]);
-$result = $client->send($query, 10);
-$query = json_encode([
-    '@type' => 'setDatabaseEncryptionKey',
-]);
-$result = $client->send($query, 10);
-$response = json_decode($result, true);
-var_dump($response);
-$query = json_encode([
-    '@type' => 'getAuthorizationState',
-    '@extra' => 1.01234
-]);
-$result = $client->send($query, 10);
-$response = json_decode($result, true);
-var_dump($response);
-
-$client->destroy();
 ```
 [1]: https://github.com/tdlib/td#building
 [2]: http://www.php-cpp.com/documentation/install

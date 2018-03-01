@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
-project(tdlib VERSION 0.0.5 LANGUAGES CXX)
+project(tdlib VERSION 0.0.6 LANGUAGES CXX)
 
 #set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -42,7 +42,7 @@ endif (PHP_CONFIG)
 
 set(PHPINIFILE tdlib.ini)
 
-set(SOURCE_FILES tdlib.cpp)
+set(SOURCE_FILES tdlib.cpp include/TDLib/JsonClient.cpp include/TDApi/TDLibParameters.cpp)
 
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 add_library(tdlib SHARED ${SOURCE_FILES})
