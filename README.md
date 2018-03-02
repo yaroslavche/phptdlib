@@ -1,6 +1,27 @@
 ## example
 ```php
 <?php
+/**
+ * @see https://github.com/tdlib/td/blob/master/example/cpp/tdjson_example.cpp
+ */
+$client = td_json_client_create();
+while(true)
+{
+    $result = td_json_client_receive($client, 10);
+    if(!empty($result)) {
+        echo $result;
+        break;
+    }
+}
+
+// $result = td_json_client_execute($client, $query);
+// td_json_client_send($client, $query);
+
+// td_json_client_destroy($client); // segfault here
+```
+
+```php
+<?php
 
 $testQuery = json_encode(['@type' => 'getAuthorizationState', '@extra' => 1.01234]);
 
@@ -15,26 +36,6 @@ $result = $client->sendAndWait($testQuery, 10);
 $tdlibParameters = new TDApi\TDLibParameters();
 $tdlibParameters->setParameter('use_test_dc', true);
 // ...
-```
-
-```php
-<?php
-
-$client = td_json_client_create();
-while(true)
-{
-    $result = td_json_client_receive($client, 10);
-    if(!empty($result)) {
-        echo $result;
-        break;
-    }
-}
-
-// $testQuery = json_encode(['@type' => 'getAuthorizationState', '@extra' => 1.01234]);
-// $result = td_json_client_execute($client, $testQuery);
-// td_json_client_send($client, $testQuery);
-
-// td_json_client_destroy($client); // segfault
 ```
 
 ## install [TDLib][1]
@@ -65,10 +66,10 @@ cd ~/projects
 git clone https://github.com/yaroslavche/phptdlib.git
 cd phptdlib
 cmake .
-sudo make
+make
 
 php -i | grep tdlib
-php test.php
+php php_examples/func.php
 ```
 [1]: https://github.com/tdlib/td#building
 [2]: http://www.php-cpp.com/documentation/install
