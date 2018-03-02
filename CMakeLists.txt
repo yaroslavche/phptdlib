@@ -10,6 +10,12 @@ if(NOT Td_FOUND)
 	return()
 endif()
 
+find_library(PHPCPP phpcpp)
+if(NOT PHPCPP)
+	message(SEND_ERROR "Failed to find PHP-CPP")
+	return()
+endif()
+
 FIND_PROGRAM(PHP_CONFIG NAMES php-config)
 if(NOT PHP_CONFIG)
     message(SEND_ERROR "Failed to find php-config")
@@ -48,8 +54,8 @@ target_link_libraries(${EXT_NAME} phpcpp Td::TdJson)
 add_custom_command(TARGET ${EXT_NAME}
     POST_BUILD
     COMMAND echo 'extension=${CMAKE_SHARED_LIBRARY_PREFIX}${EXT_NAME}.so' > ${EXT_INI_FILE}
-    COMMAND sudo cp -f ${CMAKE_SOURCE_DIR}/${EXT_INI_FILE}; ${PHP_CONFIG_DIR}
-    COMMAND rm -f ${CMAKE_SOURCE_DIR}/${EXT_INI_FILE}
+    COMMAND sudo cp -f ${EXT_INI_FILE}; ${PHP_CONFIG_DIR}
+    COMMAND rm -f ${EXT_INI_FILE}
     COMMAND sudo cp -f $<TARGET_FILE:${EXT_NAME}> ${PHP_EXTENSIONS_DIR}
     COMMAND rm -f $<TARGET_FILE:${EXT_NAME}>
 )

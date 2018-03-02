@@ -1,9 +1,7 @@
 ## example
+[https://github.com/tdlib/td/blob/master/example/cpp/tdjson_example.cpp](https://github.com/tdlib/td/blob/master/example/cpp/tdjson_example.cpp)
 ```php
 <?php
-/**
- * @see https://github.com/tdlib/td/blob/master/example/cpp/tdjson_example.cpp
- */
 $client = td_json_client_create();
 while(true)
 {
@@ -13,29 +11,84 @@ while(true)
         break;
     }
 }
-
-// $result = td_json_client_execute($client, $query);
-// td_json_client_send($client, $query);
-
-// td_json_client_destroy($client); // segfault here
 ```
-
+or
 ```php
 <?php
-
-$testQuery = json_encode(['@type' => 'getAuthorizationState', '@extra' => 1.01234]);
-
 $client = new TDLib\JsonClient();
 $client->create();
-$result = $client->execute($testQuery);
-$client->send($testQuery);
-$result = $client->receive(10);
-$result = $client->sendAndWait($testQuery, 10);
-// $client->destroy(); // segfault
 
-$tdlibParameters = new TDApi\TDLibParameters();
-$tdlibParameters->setParameter('use_test_dc', true);
-// ...
+$query = json_encode([
+    "@type" => "setTdlibParameters",
+    "parameters" => [
+        "use_test_dc" => true,
+        "database_directory" => "/var/tmp/tdlib",
+        "files_directory" => "/var/tmp/tdlib",
+        "use_file_database" => false,
+        "use_chat_info_database" => false,
+        "use_message_database" => false,
+        "use_secret_chats" => false,
+        "api_id" => 111111,
+        "api_hash" => "a1b2c3",
+        "system_language_code" => "en",
+        "device_model" => php_uname('s'),
+        "system_version" => php_uname('v'),
+        "application_version" => "0.0.6",
+        "enable_storage_optimizer" => true,
+        "ignore_file_names" => false
+    ]
+]);
+$result = $client->sendAndWait($query, 10);
+$response = json_decode($result, true);
+var_dump($response);
+$query = json_encode([
+    '@type' => 'setDatabaseEncryptionKey',
+]);
+$result = $client->sendAndWait($query, 10);
+$response = json_decode($result, true);
+var_dump($response);
+$query = json_encode([
+    '@type' => 'getAuthorizationState',
+    '@extra' => 1.01234
+]);
+$result = $client->sendAndWait($query, 10);
+$response = json_decode($result, true);
+var_dump($response);
+
+$client->destroy();
+```
+
+```
+../php_examples/old.php:34:
+array(2) {
+  '@type' =>
+  string(24) "updateAuthorizationState"
+  'authorization_state' =>
+  array(1) {
+    '@type' =>
+    string(37) "authorizationStateWaitTdlibParameters"
+  }
+
+}
+../php_examples/old.php:40:
+array(2) {
+  '@type' =>
+  string(24) "updateAuthorizationState"
+  'authorization_state' =>
+  array(2) {
+    '@type' =>
+    string(35) "authorizationStateWaitEncryptionKey"
+    'is_encrypted' =>
+    bool(true)
+  }
+}
+../php_examples/old.php:47:
+array(2) {
+  '@type' =>
+  string(2) "ok"
+  '@extra' =>
+  NULL
+}
 ```
 
 ## install [TDLib][1]
@@ -64,12 +117,14 @@ sudo make
 ```bash
 cd ~/projects
 git clone https://github.com/yaroslavche/phptdlib.git
-cd phptdlib
-cmake .
+cd phptdlib && mkdir build && cd build
+cmake ..
 make
+cd ../php_examples
 
 php -i | grep tdlib
-php php_examples/func.php
+php func.php
+php client.php
 ```
 [1]: https://github.com/tdlib/td#building
 [2]: http://www.php-cpp.com/documentation/install

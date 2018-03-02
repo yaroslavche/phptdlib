@@ -15,6 +15,7 @@ JsonClient::JsonClient(void *&client_ptr)
 
 void JsonClient::__construct(Php::Parameters &params)
 {
+    td::Log::set_verbosity_level(0);
     // Php::Value object = params[0];
     // if(object.instanceOf("TDLib\\JsonClient"))
     // {
@@ -22,7 +23,6 @@ void JsonClient::__construct(Php::Parameters &params)
     //     this->_client = client->getClientPointer();
     //     Php::out << _client << std::endl << std::flush;
     // }
-    // td::Log::set_verbosity_level(0);
 }
 
 void JsonClient::create()

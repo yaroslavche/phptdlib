@@ -3,7 +3,7 @@
 Error_Reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$client = new TDLibJsonClient();
+$client = new TDLib\JsonClient();
 $client->create();
 
 /**
@@ -24,12 +24,14 @@ $query = json_encode([
         "system_language_code" => "en",
         "device_model" => php_uname('s'),
         "system_version" => php_uname('v'),
-        "application_version" => "0.0.4",
+        "application_version" => "0.0.6",
         "enable_storage_optimizer" => true,
         "ignore_file_names" => false
     ]
 ]);
 $result = $client->sendAndWait($query, 10);
+$response = json_decode($result, true);
+var_dump($response);
 $query = json_encode([
     '@type' => 'setDatabaseEncryptionKey',
 ]);
