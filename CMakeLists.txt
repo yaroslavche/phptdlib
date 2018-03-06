@@ -43,7 +43,7 @@ if(PHP_VERSION_NUMBER LESS 70000)
     return()
 endif()
 
-set(SOURCE_FILES tdlib.cpp include/TDLib/JsonClient.cpp include/TDApi/TDLibParameters.cpp)
+set(SOURCE_FILES tdlib.cpp include/TDLib/BaseJsonClient.cpp include/TDLib/JsonClient.cpp include/TDApi/TDLibParameters.cpp)
 set(EXT_INI_FILE ${EXT_NAME}.ini)
 
 set(CMAKE_SHARED_LIBRARY_PREFIX "")

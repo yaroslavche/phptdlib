@@ -3,7 +3,8 @@
 
 class TDLibParameters : public Php::Base // namespace: TDApi
 {
-    // private:
+    private:
+        std::vector<Php::Value> tdlibParams;
     //     bool locked = false;
 
     public:
@@ -12,7 +13,8 @@ class TDLibParameters : public Php::Base // namespace: TDApi
 
         // void __construct(array);
 
-        void setParameter(Php::Parameters &params);
+        Php::Value setParameter(Php::Parameters &params);
+        const char *toJson();
 
         // inline void setLocked() { locked == true; }
         // can set parameters if locked == false

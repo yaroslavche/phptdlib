@@ -4,46 +4,26 @@ Error_Reporting(E_ALL);
 ini_set('display_errors', 1);
 
 $client = new TDLib\JsonClient();
-$client->create();
 
-/**
- * @see https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1tdlib_parameters.html
- */
-$query = json_encode([
-    "@type" => "setTdlibParameters",
-    "parameters" => [
-        "use_test_dc" => true,
-        "database_directory" => "/var/tmp/tdlib",
-        "files_directory" => "/var/tmp/tdlib",
-        "use_file_database" => false,
-        "use_chat_info_database" => false,
-        "use_message_database" => false,
-        "use_secret_chats" => false,
-        "api_id" => 111111,
-        "api_hash" => "a1b2c3",
-        "system_language_code" => "en",
-        "device_model" => php_uname('s'),
-        "system_version" => php_uname('v'),
-        "application_version" => "0.0.6",
-        "enable_storage_optimizer" => true,
-        "ignore_file_names" => false
-    ]
-]);
-$result = $client->sendAndWait($query, 10);
-$response = json_decode($result, true);
-var_dump($response);
-$query = json_encode([
-    '@type' => 'setDatabaseEncryptionKey',
-]);
-$result = $client->sendAndWait($query, 10);
-$response = json_decode($result, true);
-var_dump($response);
-$query = json_encode([
-    '@type' => 'getAuthorizationState',
-    '@extra' => 1.01234
-]);
-$result = $client->sendAndWait($query, 10);
-$response = json_decode($result, true);
-var_dump($response);
+$tdlibParams = new TDApi\TDLibParameters();
+$tdlibParams
+    ->setParameter('use_test_dc', true)
+    ->setParameter('database_directory', '/var/tmp/tdlib')
+    ->setParameter('files_directory', '/var/tmp/tdlib')
+    ->setParameter('use_file_database', false)
+    ->setParameter('use_chat_info_database', false)
+    ->setParameter('use_message_database', false)
+    ->setParameter('use_secret_chats', false)
+    ->setParameter('api_id', 111111)
+    ->setParameter('api_hash', 'a1b2c3')
+    ->setParameter('system_language_code', 'en')
+    ->setParameter('device_model', php_uname('s'))
+    ->setParameter('system_version', php_uname('v'))
+    ->setParameter('application_version', '0.0.6')
+    ->setParameter('enable_storage_optimizer', true)
+    ->setParameter('ignore_file_names', false);
+$result = $client->setTdlibParameters($tdlibParams);
+$result = $client->setDatabaseEncryptionKey(md5(uniqid(rand(), true)));
+$result = $client->getAuthorizationState(1.01234);
 
-$client->destroy();
+// $client->destroy();

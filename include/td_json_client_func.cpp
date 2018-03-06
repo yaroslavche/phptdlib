@@ -1,18 +1,18 @@
-#include "TDLib/JsonClient.hpp"
+#include "TDLib/BaseJsonClient.hpp"
 
 Php::Value td_json_client_func_create()
 {
     void *client_ptr = td_json_client_create();
     // Php::out << "create " << client_ptr << std::endl << std::flush;
-    JsonClient *client = new JsonClient(client_ptr);
-    return Php::Object("TDLib\\JsonClient", client);
+    BaseJsonClient *client = new BaseJsonClient(client_ptr);
+    return Php::Object("TDLib\\BaseJsonClient", client);
 }
 
 void td_json_client_func_destroy(Php::Parameters &params)
 {
     Php::Value object = params[0];
-    if(!object.instanceOf("TDLib\\JsonClient")) throw Php::Exception("First parameter must be instance of TDLib\\JsonClient.");
-    JsonClient *client = (JsonClient *)object.implementation();
+    if(!object.instanceOf("TDLib\\BaseJsonClient")) throw Php::Exception("First parameter must be instance of TDLib\\BaseJsonClient.");
+    BaseJsonClient *client = (BaseJsonClient *)object.implementation();
     // Php::out << "destroy " << client->getClientPointer() << std::endl << std::flush;
     td_json_client_destroy(client->getClientPointer()); // segfault
     delete client;
@@ -21,9 +21,9 @@ void td_json_client_func_destroy(Php::Parameters &params)
 Php::Value td_json_client_func_execute(Php::Parameters &params)
 {
     Php::Value object = params[0];
-    if(!object.instanceOf("TDLib\\JsonClient")) throw Php::Exception("First parameter must be instance of TDLib\\JsonClient.");
+    if(!object.instanceOf("TDLib\\BaseJsonClient")) throw Php::Exception("First parameter must be instance of TDLib\\BaseJsonClient.");
     const char *query = params[1];
-    JsonClient *client = (JsonClient *)object.implementation();
+    BaseJsonClient *client = (BaseJsonClient *)object.implementation();
     // Php::out << "execute " << client->getClientPointer() << std::endl << std::flush;
     std::string result = td_json_client_execute(client->getClientPointer(), query);
     return result;
@@ -32,9 +32,9 @@ Php::Value td_json_client_func_execute(Php::Parameters &params)
 void td_json_client_func_send(Php::Parameters &params)
 {
     Php::Value object = params[0];
-    if(!object.instanceOf("TDLib\\JsonClient")) throw Php::Exception("First parameter must be instance of TDLib\\JsonClient.");
+    if(!object.instanceOf("TDLib\\BaseJsonClient")) throw Php::Exception("First parameter must be instance of TDLib\\BaseJsonClient.");
     const char *query = params[1];
-    JsonClient *client = (JsonClient *)object.implementation();
+    BaseJsonClient *client = (BaseJsonClient *)object.implementation();
     // Php::out << "send " << client->getClientPointer() << std::endl << std::flush;
     td_json_client_send(client->getClientPointer(), query);
 }
@@ -42,9 +42,9 @@ void td_json_client_func_send(Php::Parameters &params)
 Php::Value td_json_client_func_receive(Php::Parameters &params)
 {
     Php::Value object = params[0];
-    if(!object.instanceOf("TDLib\\JsonClient")) throw Php::Exception("First parameter must be instance of TDLib\\JsonClient.");
+    if(!object.instanceOf("TDLib\\BaseJsonClient")) throw Php::Exception("First parameter must be instance of TDLib\\BaseJsonClient.");
     double timeout = params[1];
-    JsonClient *client = (JsonClient *)object.implementation();
+    BaseJsonClient *client = (BaseJsonClient *)object.implementation();
     // Php::out << "receive " << client->getClientPointer() << std::endl << std::flush;
     std::string result = td_json_client_receive(client->getClientPointer(), timeout);
     return result;

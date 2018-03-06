@@ -59,7 +59,7 @@ $client->destroy();
 ```
 
 ```
-../php_examples/old.php:34:
+../php_examples/client.php:34:
 array(2) {
   '@type' =>
   string(24) "updateAuthorizationState"
@@ -70,7 +70,7 @@ array(2) {
   }
 
 }
-../php_examples/old.php:40:
+../php_examples/client.php:40:
 array(2) {
   '@type' =>
   string(24) "updateAuthorizationState"
@@ -82,7 +82,7 @@ array(2) {
     bool(true)
   }
 }
-../php_examples/old.php:47:
+../php_examples/client.php:47:
 array(2) {
   '@type' =>
   string(2) "ok"
@@ -117,14 +117,13 @@ sudo make
 ```bash
 cd ~/projects
 git clone https://github.com/yaroslavche/phptdlib.git
-cd phptdlib && mkdir build && cd build
-cmake ..
+cd phptdlib
+cmake .
 make
-cd ../php_examples
 
 php -i | grep tdlib
-php func.php
-php client.php
+php php_examples/func.php
+php php_examples/client.php
 ```
 [1]: https://github.com/tdlib/td#building
 [2]: http://www.php-cpp.com/documentation/install
