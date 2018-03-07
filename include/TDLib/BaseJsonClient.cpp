@@ -15,21 +15,23 @@ BaseJsonClient::BaseJsonClient()
     create();
 }
 
-BaseJsonClient::BaseJsonClient(bool createClient = true)
-{
-    td::Log::set_verbosity_level(0);
-    if(createClient) create();
-}
+// BaseJsonClient::BaseJsonClient(bool createClient = true)
+// {
+//     td::Log::set_verbosity_level(0);
+//     if(createClient) create();
+// }
 
 BaseJsonClient::BaseJsonClient(void *&client_ptr)
 {
     _client = client_ptr;
 }
 
-BaseJsonClient::~BaseJsonClient()
-{
-    if(_client) destroy();
-}
+// // loop if call destructor
+// BaseJsonClient::~BaseJsonClient()
+// {
+//     Php::out << "destroy object" << _client << std::endl << std::flush;
+//     if(_client != nullptr) destroy();
+// }
 
 void BaseJsonClient::create()
 {

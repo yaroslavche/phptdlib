@@ -15,103 +15,68 @@ while(true)
 or
 ```php
 <?php
+
+Error_Reporting(E_ALL);
+ini_set('display_errors', 1);
+
 $client = new TDLib\JsonClient();
-$client->create();
 
-$query = json_encode([
-    "@type" => "setTdlibParameters",
-    "parameters" => [
-        "use_test_dc" => true,
-        "database_directory" => "/var/tmp/tdlib",
-        "files_directory" => "/var/tmp/tdlib",
-        "use_file_database" => false,
-        "use_chat_info_database" => false,
-        "use_message_database" => false,
-        "use_secret_chats" => false,
-        "api_id" => 111111,
-        "api_hash" => "a1b2c3",
-        "system_language_code" => "en",
-        "device_model" => php_uname('s'),
-        "system_version" => php_uname('v'),
-        "application_version" => "0.0.6",
-        "enable_storage_optimizer" => true,
-        "ignore_file_names" => false
-    ]
-]);
-$result = $client->sendAndWait($query, 10);
-$response = json_decode($result, true);
-var_dump($response);
-$query = json_encode([
-    '@type' => 'setDatabaseEncryptionKey',
-]);
-$result = $client->sendAndWait($query, 10);
-$response = json_decode($result, true);
-var_dump($response);
-$query = json_encode([
-    '@type' => 'getAuthorizationState',
-    '@extra' => 1.01234
-]);
-$result = $client->sendAndWait($query, 10);
-$response = json_decode($result, true);
-var_dump($response);
-
+$tdlibParams = new TDApi\TDLibParameters();
+$tdlibParams
+    ->setParameter('use_test_dc', true)
+    ->setParameter('database_directory', '/var/tmp/tdlib')
+    ->setParameter('files_directory', '/var/tmp/tdlib')
+    ->setParameter('use_file_database', false)
+    ->setParameter('use_chat_info_database', false)
+    ->setParameter('use_message_database', false)
+    ->setParameter('use_secret_chats', false)
+    ->setParameter('api_id', '1112341')
+    ->setParameter('api_hash', 'a1b2c3')
+    ->setParameter('system_language_code', 'en')
+    ->setParameter('device_model', php_uname('s'))
+    ->setParameter('system_version', php_uname('v'))
+    ->setParameter('application_version', '0.0.7')
+    ->setParameter('enable_storage_optimizer', true)
+    ->setParameter('ignore_file_names', false);
+$result = $client->setTdlibParameters($tdlibParams);
+$result = $client->setDatabaseEncryptionKey();
+$result = $client->updateAuthorizationState();
+$result = $client->getAuthorizationState(1.01234);
+$result = $client->updateOption("version", "1.1.1");
+$result = $client->getAuthorizationState(1.01234);
 $client->destroy();
 ```
 
 ```
-../php_examples/client.php:34:
-array(2) {
-  '@type' =>
-  string(24) "updateAuthorizationState"
-  'authorization_state' =>
-  array(1) {
-    '@type' =>
-    string(37) "authorizationStateWaitTdlibParameters"
-  }
+debug:
+yaroslav@localhost:~/projects/phptdlib/build> php ../php_examples/client.php
+query: {"@type":"setTdlibParameters","parameters":{"use_test_dc":true,"database_directory":"/var/tmp/tdlib","files_directory":"/var/tmp/tdlib","use_file_database":false,"us
+e_chat_info_database":false,"use_message_database":false,"use_secret_chats":false,"api_id":"1112341","api_hash":"a1b2c3","system_language_code":"en","device_model":"Linux",
+"system_version":"#1 SMP PREEMPT Thu Feb 22 21:48:29 UTC 2018 (52ce732)","application_version":"0.0.7","enable_storage_optimizer":true,"ignore_file_names":false}}, timeout:
+ 10
+result: {"@type":"updateAuthorizationState","authorization_state":{"@type":"authorizationStateWaitTdlibParameters"}}
 
-}
-../php_examples/client.php:40:
-array(2) {
-  '@type' =>
-  string(24) "updateAuthorizationState"
-  'authorization_state' =>
-  array(2) {
-    '@type' =>
-    string(35) "authorizationStateWaitEncryptionKey"
-    'is_encrypted' =>
-    bool(true)
-  }
-}
-../php_examples/client.php:47:
-array(2) {
-  '@type' =>
-  string(2) "ok"
-  '@extra' =>
-  NULL
-}
+query: {"@type":"setDatabaseEncryptionKey"}, timeout: 10
+result: {"@type":"updateAuthorizationState","authorization_state":{"@type":"authorizationStateWaitEncryptionKey","is_encrypted":true}}
+
+query: {"@type":"updateAuthorizationState"}, timeout: 10
+
+result: {"@type":"ok","@extra":null}
+
+query: {"@type":"getAuthorizationState","@extra":0.1234}, timeout: 10
+result: {"@type":"updateOption","name":"version","value":{"@type":"optionValueString","value":"1.1.1"}}
+
+query: {"@type":"updateOption", "parameters":{"version":"1.1.1"}}, timeout: 10
+result: {"@type":"updateConnectionState","state":{"@type":"connectionStateConnecting"}}
+
+query: {"@type":"getAuthorizationState","@extra":0.1234}, timeout: 10
+result: {"@type":"updateAuthorizationState","authorization_state":{"@type":"authorizationStateWaitPhoneNumber"}}
 ```
 
-## install [TDLib][1]
-```bash
-# opensuse
-sudo zypper in php7 gperf cmake gcc-c++ openssl-devel
-cd ~/projects
-git clone https://github.com/tdlib/td.git
-cd td
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
-cmake --build .
-sudo make install
-```
 
-## install [PHP-CPP][2]
-```bash
-cd ~/projects
-git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
-cd PHP-CPP
-sudo make
-```
+## Required
+ - [TDLib v1.1.1][1]
+ - [PHP-CPP v2.0.0][2] (PHPCPP_API_VERSION 20150126)
 
 ## install extension
 ```bash
@@ -122,7 +87,6 @@ cmake .
 make
 
 php -i | grep tdlib
-php php_examples/func.php
 php php_examples/client.php
 ```
 [1]: https://github.com/tdlib/td#building
