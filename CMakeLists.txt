@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
 set(EXT_NAME tdlib)
-set(EXT_VERSION 0.0.6)
+set(EXT_VERSION 0.0.7)
 project(${EXT_NAME} VERSION ${EXT_VERSION} LANGUAGES CXX)
+
+set(CMAKE_CXX_FLAGS "-std=c++14 ${CMAKE_CXX_FLAGS}")
 
 find_package(Td 1.1.1 REQUIRED)
 if(NOT Td_FOUND)
@@ -43,13 +45,13 @@ if(PHP_VERSION_NUMBER LESS 70000)
     return()
 endif()
 
-set(SOURCE_FILES tdlib.cpp include/TDLib/JsonClient.cpp include/TDApi/TDLibParameters.cpp)
+set(SOURCE_FILES tdlib.cpp include/TDLib/BaseJsonClient.cpp include/TDLib/JsonClient.cpp include/TDApi/TDLibParameters.cpp)
 set(EXT_INI_FILE ${EXT_NAME}.ini)
 
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 add_library(${EXT_NAME} SHARED ${SOURCE_FILES})
-target_link_libraries(${EXT_NAME} phpcpp Td::TdJson)
+target_link_libraries(${EXT_NAME} phpcpp Td::TdJson Td::TdStatic)
 
 add_custom_command(TARGET ${EXT_NAME}
     POST_BUILD

@@ -11,5 +11,4 @@ td_json_client_send($client, $testQuery);
 td_json_client_send($client, $testQuery);
 td_json_client_send($client, $testQuery);
 $result = td_json_client_receive($client, 10);
-// td_json_client_destroy($client); // segfault
-unset($client);
+td_json_client_destroy($client); // segfault if not set params?

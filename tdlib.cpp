@@ -7,6 +7,7 @@
 #include <td/telegram/Log.h>
 
 #include "include/td_json_client_func.cpp"
+#include "include/TDLib/BaseJsonClient.hpp"
 #include "include/TDLib/JsonClient.hpp"
 #include "include/TDApi/TDLibParameters.hpp"
 
@@ -14,16 +15,31 @@ extern "C" {
 
 PHPCPP_EXPORT void *get_module()
 {
-    static Php::Extension tdlib("tdlib", "0.0.6");
+    static Php::Extension tdlib("tdlib", "0.0.7");
 
 
     Php::Namespace TDLibNamespace("TDLib");
 
-    // TDLib\JsonClient
+    // TDLib\BaseJsonClient
+    Php::Class<BaseJsonClient> base_json_client("BaseJsonClient");
+    base_json_client.method<&BaseJsonClient::__construct> ("__construct");
+    base_json_client.method<&BaseJsonClient::create> ("create");
+    base_json_client.method<&BaseJsonClient::destroy> ("destroy");
+    base_json_client.method<&BaseJsonClient::execute> ("execute", {
+        Php::ByVal("query", Php::Type::String)
+    });
+    base_json_client.method<&BaseJsonClient::send> ("send", {
+        Php::ByVal("query", Php::Type::String)
+    });
+    base_json_client.method<&BaseJsonClient::receive> ("receive", {
+        Php::ByVal("timeout", Php::Type::Numeric)
+    });
+
+    TDLibNamespace.add(std::move(base_json_client));
+
     Php::Class<JsonClient> json_client("JsonClient");
-    json_client.method<&JsonClient::__construct> ("__construct"); // if created return pointer
-    json_client.method<&JsonClient::create> ("create"); // if created return pointer
-    json_client.method<&JsonClient::destroy> ("destroy"); // if destroyed warning?
+    json_client.method<&JsonClient::create> ("create");
+    json_client.method<&JsonClient::destroy> ("destroy");
     json_client.method<&JsonClient::execute> ("execute", {
         Php::ByVal("query", Php::Type::String)
     });
@@ -33,10 +49,28 @@ PHPCPP_EXPORT void *get_module()
     json_client.method<&JsonClient::receive> ("receive", {
         Php::ByVal("timeout", Php::Type::Numeric)
     });
-    json_client.method<&JsonClient::sendAndWait> ("sendAndWait", {
+    json_client.method<&JsonClient::query> ("query", {
         Php::ByVal("query", Php::Type::String),
         Php::ByVal("timeout", Php::Type::Numeric)
     });
+    json_client.method<&JsonClient::setTdlibParameters> ("setTdlibParameters", {
+        Php::ByVal("parameters", "TDApi\\TDLibParameters"),
+    });
+    json_client.method<&JsonClient::setDatabaseEncryptionKey> ("setDatabaseEncryptionKey", {
+        Php::ByVal("new_encryption_key", Php::Type::String, false),
+    });
+    json_client.method<&JsonClient::getAuthorizationState> ("getAuthorizationState", {
+        Php::ByVal("extra", Php::Type::Float, false),
+    });
+    json_client.method<&JsonClient::updateAuthorizationState> ("updateAuthorizationState");
+    json_client.method<&JsonClient::setAuthenticationPhoneNumber> ("setAuthenticationPhoneNumber", {
+        Php::ByVal("phone_number", Php::Type::String),
+    });
+    json_client.method<&JsonClient::updateOption> ("updateOption", {
+        Php::ByVal("name", Php::Type::String),
+        Php::ByVal("value", Php::Type::String),
+    });
+
     TDLibNamespace.add(std::move(json_client));
 
     tdlib.add(std::move(TDLibNamespace));
