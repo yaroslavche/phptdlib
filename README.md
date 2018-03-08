@@ -30,8 +30,9 @@ $tdlibParams
     ->setParameter('use_chat_info_database', false)
     ->setParameter('use_message_database', false)
     ->setParameter('use_secret_chats', false)
-    ->setParameter('api_id', '1112341')
-    ->setParameter('api_hash', 'a1b2c3')
+    // SET API_CODE AND API_HASH
+    ->setParameter('api_id', 'xxx')
+    ->setParameter('api_hash', 'xxx')
     ->setParameter('system_language_code', 'en')
     ->setParameter('device_model', php_uname('s'))
     ->setParameter('system_version', php_uname('v'))
@@ -40,37 +41,14 @@ $tdlibParams
     ->setParameter('ignore_file_names', false);
 $result = $client->setTdlibParameters($tdlibParams);
 $result = $client->setDatabaseEncryptionKey();
-$result = $client->updateAuthorizationState();
+// SET PHONE_NUMBER
+$result = $client->setAuthenticationPhoneNumber("xxx");
+// UNCOMMENT WHEN RECEIVE SMS AND INSERT CODE.
+// $result = $client->query(json_encode(['@type' => 'checkAuthenticationCode', 'code' => 'xxx', 'first_name' => 'dummy', 'last_name' => 'dummy']), 10);
 $result = $client->getAuthorizationState(1.01234);
-$result = $client->updateOption("version", "1.1.1");
-$result = $client->getAuthorizationState(1.01234);
+$result = $client->query(json_encode(['@type' => 'searchPublicChat', 'username' => 'telegram']), 10);
+var_dump($result);
 $client->destroy();
-```
-
-```
-debug:
-yaroslav@localhost:~/projects/phptdlib/build> php ../php_examples/client.php
-query: {"@type":"setTdlibParameters","parameters":{"use_test_dc":true,"database_directory":"/var/tmp/tdlib","files_directory":"/var/tmp/tdlib","use_file_database":false,"us
-e_chat_info_database":false,"use_message_database":false,"use_secret_chats":false,"api_id":"1112341","api_hash":"a1b2c3","system_language_code":"en","device_model":"Linux",
-"system_version":"#1 SMP PREEMPT Thu Feb 22 21:48:29 UTC 2018 (52ce732)","application_version":"0.0.7","enable_storage_optimizer":true,"ignore_file_names":false}}, timeout:
- 10
-result: {"@type":"updateAuthorizationState","authorization_state":{"@type":"authorizationStateWaitTdlibParameters"}}
-
-query: {"@type":"setDatabaseEncryptionKey"}, timeout: 10
-result: {"@type":"updateAuthorizationState","authorization_state":{"@type":"authorizationStateWaitEncryptionKey","is_encrypted":true}}
-
-query: {"@type":"updateAuthorizationState"}, timeout: 10
-
-result: {"@type":"ok","@extra":null}
-
-query: {"@type":"getAuthorizationState","@extra":0.1234}, timeout: 10
-result: {"@type":"updateOption","name":"version","value":{"@type":"optionValueString","value":"1.1.1"}}
-
-query: {"@type":"updateOption", "parameters":{"version":"1.1.1"}}, timeout: 10
-result: {"@type":"updateConnectionState","state":{"@type":"connectionStateConnecting"}}
-
-query: {"@type":"getAuthorizationState","@extra":0.1234}, timeout: 10
-result: {"@type":"updateAuthorizationState","authorization_state":{"@type":"authorizationStateWaitPhoneNumber"}}
 ```
 
 
@@ -82,12 +60,12 @@ result: {"@type":"updateAuthorizationState","authorization_state":{"@type":"auth
 ```bash
 cd ~/projects
 git clone https://github.com/yaroslavche/phptdlib.git
-cd phptdlib
-cmake .
+cd phptdlib && mkdir build && cd build
+cmake ..
 make
 
 php -i | grep tdlib
-php php_examples/client.php
+php ../php_examples/client.php
 ```
 [1]: https://github.com/tdlib/td#building
 [2]: http://www.php-cpp.com/documentation/install

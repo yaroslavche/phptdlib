@@ -59,16 +59,14 @@ PHPCPP_EXPORT void *get_module()
     json_client.method<&JsonClient::setDatabaseEncryptionKey> ("setDatabaseEncryptionKey", {
         Php::ByVal("new_encryption_key", Php::Type::String, false),
     });
+    json_client.method<&JsonClient::checkDatabaseEncryptionKey> ("checkDatabaseEncryptionKey", {
+        Php::ByVal("key", Php::Type::String),
+    });
     json_client.method<&JsonClient::getAuthorizationState> ("getAuthorizationState", {
         Php::ByVal("extra", Php::Type::Float, false),
     });
-    json_client.method<&JsonClient::updateAuthorizationState> ("updateAuthorizationState");
     json_client.method<&JsonClient::setAuthenticationPhoneNumber> ("setAuthenticationPhoneNumber", {
         Php::ByVal("phone_number", Php::Type::String),
-    });
-    json_client.method<&JsonClient::updateOption> ("updateOption", {
-        Php::ByVal("name", Php::Type::String),
-        Php::ByVal("value", Php::Type::String),
     });
 
     TDLibNamespace.add(std::move(json_client));

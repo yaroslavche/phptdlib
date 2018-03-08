@@ -15,9 +15,8 @@ class JsonClient : public BaseJsonClient
         Php::Value query(Php::Parameters &params);
         Php::Value setTdlibParameters(Php::Parameters &params);
         Php::Value setDatabaseEncryptionKey(Php::Parameters &params);
+        Php::Value checkDatabaseEncryptionKey(Php::Parameters &params);
         Php::Value getAuthorizationState(Php::Parameters &params);
-        Php::Value updateAuthorizationState();
-        Php::Value updateOption(Php::Parameters &params);
         Php::Value setAuthenticationPhoneNumber(Php::Parameters &params);
 
         void setDefaultTimeout(Php::Parameters &params) { Php::warning << "implement" << std::flush; };

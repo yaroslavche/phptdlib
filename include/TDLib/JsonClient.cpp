@@ -16,16 +16,30 @@ Php::Value JsonClient::query(Php::Parameters &params)
 
 std::string JsonClient::query(const char *query, double timeout)
 {
+    Php::out << "query: " << query << std::endl;
     BaseJsonClient::send(query);
     std::string result;
-    while(true)
+    int i = 1;
+    try
     {
-        result = BaseJsonClient::receive(timeout);
-        if (!result.empty()) {
-            break;
+        while(true)
+        {
+            result = BaseJsonClient::receive(1);
+            if (!result.empty()) {
+                Php::out << i << ": " << result << std::endl << std::endl;
+                if (result == "{\"@type\":\"ok\",\"@extra\":null}") break;
+                if (result.find("{\"@type\":\"error\"") != std::string::npos) break;
+                // Php::out << result.find("{\"@type\":\"authorizationStateWait") << std::endl << std::endl;
+                if (result.find("{\"@type\":\"authorizationStateWait") == 0) break;
+            }
+            i++;
         }
     }
-    // Php::out << "query: " << query << ", timeout: " << timeout << std::endl << "result: " << result << std::endl << std::endl << std::flush;
+    catch(...)
+    {
+        Php::out << "EXCEPTION" << std::endl << std::endl;
+    }
+    Php::out << "result: " << result << std::endl << std::endl << std::flush;
     return result;
 }
 
@@ -39,12 +53,19 @@ Php::Value JsonClient::setTdlibParameters(Php::Parameters &params)
     return result;
 }
 
+Php::Value JsonClient::checkDatabaseEncryptionKey(Php::Parameters &params)
+{
+    const std::string key = params[0];
+    const std::string jsonQuery = "{\"@type\":\"checkDatabaseEncryptionKey\", \"key\":\"" + key + "\"}";
+    std::string result = query(jsonQuery.c_str(), defaultTimeout);
+    return result;
+}
+
 Php::Value JsonClient::setDatabaseEncryptionKey(Php::Parameters &params)
 {
-    const char *new_encryption_key = !params.empty() ? params[0] : "";
-    // const char *jsonQuery = "{\"@type\":\"setDatabaseEncryptionKey\"" + (strlen(new_encryption_key) > 0 ? "" : "") + "}"; // todo: how to set new key?
-    const char *jsonQuery = "{\"@type\":\"setDatabaseEncryptionKey\"}";
-    std::string result = query(jsonQuery, defaultTimeout);
+    const std::string new_encryption_key = !params.empty() ? params[0] : "";
+    const std::string jsonQuery = "{\"@type\":\"setDatabaseEncryptionKey\"" + (new_encryption_key.length() > 0 ? ",\"new_encryption_key\":\"" + new_encryption_key + "\"" : "") + "}";
+    std::string result = query(jsonQuery.c_str(), defaultTimeout);
     return result;
 }
 
@@ -56,26 +77,10 @@ Php::Value JsonClient::getAuthorizationState(Php::Parameters &params)
     return result;
 }
 
-Php::Value JsonClient::updateAuthorizationState()
-{
-    const char *jsonQuery = "{\"@type\":\"updateAuthorizationState\"}";
-    std::string result = query(jsonQuery, defaultTimeout);
-    return result;
-}
-
-Php::Value JsonClient::updateOption(Php::Parameters &params)
-{
-    std::string name = params[0];
-    std::string value = params[1];
-    std::string jsonQuery = "{\"@type\":\"updateOption\", \"parameters\":{\"" + name + "\":\"" + value + "\"}}";
-    std::string result = query(jsonQuery.c_str(), defaultTimeout);
-    return result;
-}
-
 Php::Value JsonClient::setAuthenticationPhoneNumber(Php::Parameters &params)
 {
     std::string phone_number = params[0];
-    std::string jsonQuery = "{\"@type\":\"setAuthenticationPhoneNumber\",\"parameters\":{\"phone_number\":\"" + phone_number + "\"}}";
+    std::string jsonQuery = "{\"@type\":\"setAuthenticationPhoneNumber\", \"phone_number\":\"" + phone_number + "\"}";
     std::string result = query(jsonQuery.c_str(), defaultTimeout);
     return result;
 }
