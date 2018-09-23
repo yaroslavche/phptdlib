@@ -16,7 +16,6 @@ Php::Value JsonClient::query(Php::Parameters &params)
 
 std::string JsonClient::query(const char *query, double timeout)
 {
-    Php::out << "query: " << query << std::endl;
     BaseJsonClient::send(query);
     std::string result;
     int i = 1;
@@ -26,10 +25,8 @@ std::string JsonClient::query(const char *query, double timeout)
         {
             result = BaseJsonClient::receive(1);
             if (!result.empty()) {
-                Php::out << i << ": " << result << std::endl << std::endl;
                 if (result == "{\"@type\":\"ok\",\"@extra\":null}") break;
                 if (result.find("{\"@type\":\"error\"") != std::string::npos) break;
-                // Php::out << result.find("{\"@type\":\"authorizationStateWait") << std::endl << std::endl;
                 if (result.find("{\"@type\":\"authorizationStateWait") == 0) break;
             }
             i++;
@@ -39,7 +36,6 @@ std::string JsonClient::query(const char *query, double timeout)
     {
         Php::out << "EXCEPTION" << std::endl << std::endl;
     }
-    Php::out << "result: " << result << std::endl << std::endl << std::flush;
     return result;
 }
 

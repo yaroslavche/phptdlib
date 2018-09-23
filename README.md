@@ -12,10 +12,9 @@ while(true)
     }
 }
 ```
-or
+
 ```php
 <?php
-
 Error_Reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -51,21 +50,35 @@ var_dump($result);
 $client->destroy();
 ```
 
-
 ## Required
- - [TDLib v1.1.1][1]
- - [PHP-CPP v2.0.0][2] (PHPCPP_API_VERSION 20150126)
+ - [TDLib v1.3.0][1]
+```bash
+git clone https://github.com/tdlib/td.git
+cd td && mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake --build .
+sudo cmake --build . --target install
+```
+ - [PHP-CPP v2.0.0][2]
+```bash
+git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
+cd PHP-CPP
+make
+sudo make install
+```
+
 
 ## install extension
 ```bash
-cd ~/projects
 git clone https://github.com/yaroslavche/phptdlib.git
 cd phptdlib && mkdir build && cd build
 cmake ..
 make
-
-php -i | grep tdlib
-php ../php_examples/client.php
 ```
-[1]: https://github.com/tdlib/td#building
-[2]: http://www.php-cpp.com/documentation/install
+### check
+```bash
+php -i | grep tdlib
+php ../php_examples/func.php
+```
+[1]: https://github.com/tdlib/td
+[2]: https://github.com/CopernicaMarketingSoftware/PHP-CPP/

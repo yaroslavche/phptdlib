@@ -6,7 +6,7 @@ project(${EXT_NAME} VERSION ${EXT_VERSION} LANGUAGES CXX)
 
 set(CMAKE_CXX_FLAGS "-std=c++14 ${CMAKE_CXX_FLAGS}")
 
-find_package(Td 1.1.1 REQUIRED)
+find_package(Td 1.3.0 REQUIRED)
 if(NOT Td_FOUND)
 	message(SEND_ERROR "Failed to find Td")
 	return()
