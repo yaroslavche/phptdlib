@@ -6,6 +6,9 @@
 
 #include "../TDApi/TDLibParameters.hpp"
 
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
+
 Php::Value JsonClient::query(Php::Parameters &params)
 {
     const char *queryParam = params[0];
@@ -16,20 +19,26 @@ Php::Value JsonClient::query(Php::Parameters &params)
 
 std::string JsonClient::query(const char *query, double timeout)
 {
+    // auto queryData = json::parse(query);
+    // Php::out << queryData << std::endl;
     BaseJsonClient::send(query);
     std::string result;
-    int i = 1;
     try
     {
         while(true)
         {
-            result = BaseJsonClient::receive(1);
-            if (!result.empty()) {
-                if (result == "{\"@type\":\"ok\",\"@extra\":null}") break;
-                if (result.find("{\"@type\":\"error\"") != std::string::npos) break;
-                if (result.find("{\"@type\":\"authorizationStateWait") == 0) break;
+            auto tmpResult = BaseJsonClient::receive(timeout);
+            Php::out << tmpResult << std::endl;
+            if (!tmpResult.empty()) {
+                result = tmpResult;
+                auto resultJson = json::parse(tmpResult);
+                if(resultJson["@type"] == "updateAuthorizationState") authorizationState = resultJson["authorization_state"]["@type"];
+                // if(j["@type"] == "ok") break;
+                // if(j["@type"] == "error") break;
+                // if(j["@type"] == "authorizationStateWaitTdlibParameters") break;
+                // if(j["@type"] == "authorizationStateWaitPhoneNumber") break;
+                // if(j["@type"] == "updateConnectionState" && j["state"]["@type"] == "connectionStateReady") break;
             }
-            i++;
         }
     }
     catch(...)

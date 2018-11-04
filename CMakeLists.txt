@@ -18,6 +18,11 @@ endif()
 #	return()
 #endif()
 
+find_file(NLOHMANN_JSON_INCLUDE_FILE nlohmann/json.hpp)
+if(NOT NLOHMANN_JSON_INCLUDE_FILE)
+	message(SEND_ERROR "Failed to find nlohmann_json")
+endif()
+
 FIND_PROGRAM(PHP_CONFIG NAMES php-config)
 if(NOT PHP_CONFIG)
     message(SEND_ERROR "Failed to find php-config")
