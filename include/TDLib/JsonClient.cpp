@@ -1,10 +1,17 @@
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 #include <phpcpp.h>
 
 #include "JsonClient.hpp"
 
 #include "../TDApi/TDLibParameters.hpp"
+
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
+
+// todo: constructor with query like getAuthorizationState by default (possibility to disable)
 
 Php::Value JsonClient::query(Php::Parameters &params)
 {
@@ -16,27 +23,43 @@ Php::Value JsonClient::query(Php::Parameters &params)
 
 std::string JsonClient::query(const char *query, double timeout)
 {
+    // Php::out << "handle before query: " << query << std::endl << std::endl;
+    handleResponses();
+    // checkAuthorizationState();
+    // Php::out << "send query: " << query << std::endl << std::endl;
     BaseJsonClient::send(query);
-    std::string result;
-    int i = 1;
-    try
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    // Php::out << "handle after query: " << query << std::endl << std::endl;
+    handleResponses();
+    // Php::out << "return with response \"" << lastResponse << "\" to query: " << query << std::endl << std::endl;
+    return lastResponse;
+    // todo: lastQuery [lastRequest, lastResponse, isSuccess, state] ?
+}
+
+void JsonClient::handleResponses()
+{
+    while(true)
     {
-        while(true)
+        try
         {
-            result = BaseJsonClient::receive(1);
-            if (!result.empty()) {
-                if (result == "{\"@type\":\"ok\",\"@extra\":null}") break;
-                if (result.find("{\"@type\":\"error\"") != std::string::npos) break;
-                if (result.find("{\"@type\":\"authorizationStateWait") == 0) break;
-            }
-            i++;
+            lastResponse = BaseJsonClient::receive(0);
         }
+        catch(const std::exception& e)
+        {
+            // todo handle exceptions
+            // basic_string::_M_construct null not valid
+            // Php::out << "exception " << e.what() << std::endl << std::endl;
+            break;
+        }
+        if (lastResponse.empty()) break;
+        auto responseJson = json::parse(lastResponse);
+        // Php::out << "handle response: " << responseJson << std::endl << std::endl;
+        if(responseJson["@type"] == "ok") ;
+        if(responseJson["@type"] == "error") ;
+        if(responseJson["@type"] == "updateAuthorizationState") authorizationState = responseJson["authorization_state"]["@type"];
+        if(responseJson["@type"] == "updateOption") ;
+        if(responseJson["@type"] == "updateConnectionState") ;
     }
-    catch(...)
-    {
-        Php::out << "EXCEPTION" << std::endl << std::endl;
-    }
-    return result;
 }
 
 Php::Value JsonClient::setTdlibParameters(Php::Parameters &params)
@@ -52,31 +75,38 @@ Php::Value JsonClient::setTdlibParameters(Php::Parameters &params)
 Php::Value JsonClient::checkDatabaseEncryptionKey(Php::Parameters &params)
 {
     const std::string key = params[0];
-    const std::string jsonQuery = "{\"@type\":\"checkDatabaseEncryptionKey\", \"key\":\"" + key + "\"}";
-    std::string result = query(jsonQuery.c_str(), defaultTimeout);
+    json jsonQuery;
+    jsonQuery["@type"] = "checkDatabaseEncryptionKey";
+    jsonQuery["key"] = key;
+    std::string result = query(jsonQuery.dump().c_str(), defaultTimeout);
     return result;
 }
 
 Php::Value JsonClient::setDatabaseEncryptionKey(Php::Parameters &params)
 {
     const std::string new_encryption_key = !params.empty() ? params[0] : "";
-    const std::string jsonQuery = "{\"@type\":\"setDatabaseEncryptionKey\"" + (new_encryption_key.length() > 0 ? ",\"new_encryption_key\":\"" + new_encryption_key + "\"" : "") + "}";
-    std::string result = query(jsonQuery.c_str(), defaultTimeout);
+    json jsonQuery;
+    jsonQuery["@type"] = "setDatabaseEncryptionKey";
+    if(new_encryption_key.length() > 0) jsonQuery["new_encryption_key"] = new_encryption_key;
+    std::string result = query(jsonQuery.dump().c_str(), defaultTimeout);
     return result;
 }
 
 Php::Value JsonClient::getAuthorizationState(Php::Parameters &params)
 {
     // double extra = params[0];
-    const char *jsonQuery = "{\"@type\":\"getAuthorizationState\",\"@extra\":0.1234}";
-    std::string result = query(jsonQuery, defaultTimeout);
+    json jsonQuery;
+    jsonQuery["@type"] = "getAuthorizationState";
+    std::string result = query(jsonQuery.dump().c_str(), defaultTimeout);
     return result;
 }
 
 Php::Value JsonClient::setAuthenticationPhoneNumber(Php::Parameters &params)
 {
     std::string phone_number = params[0];
-    std::string jsonQuery = "{\"@type\":\"setAuthenticationPhoneNumber\", \"phone_number\":\"" + phone_number + "\"}";
-    std::string result = query(jsonQuery.c_str(), defaultTimeout);
+    json jsonQuery;
+    jsonQuery["@type"] = "setAuthenticationPhoneNumber";
+    jsonQuery["phone_number"] = phone_number;
+    std::string result = query(jsonQuery.dump().c_str(), defaultTimeout);
     return result;
 }

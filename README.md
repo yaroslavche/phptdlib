@@ -66,7 +66,13 @@ cd PHP-CPP
 make
 sudo make install
 ```
-
+ - [nlohmann/json v3.2.0 (JSON for Modern C++)][3]
+```bash
+git clone https://github.com/nlohmann/json.git
+cd json && mkdir build && cd build
+cmake ..
+make install
+```
 
 ## install extension
 ```bash
@@ -82,3 +88,4 @@ php ../php_examples/func.php
 ```
 [1]: https://github.com/tdlib/td
 [2]: https://github.com/CopernicaMarketingSoftware/PHP-CPP/
+[3]: https://github.com/nlohmann/json

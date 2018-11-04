@@ -6,7 +6,13 @@
 class JsonClient : public BaseJsonClient
 {
     private:
-        double defaultTimeout = 10;
+        // todo: lastResponse json object
+        std::string lastResponse;
+        std::string authorizationState;
+        std::string connectionState;
+        double defaultTimeout = 0.5;
+
+        void handleResponses();
 
     public:
         std::string query(const char *query, double timeout);

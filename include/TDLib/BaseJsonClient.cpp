@@ -15,12 +15,6 @@ BaseJsonClient::BaseJsonClient()
     create();
 }
 
-// BaseJsonClient::BaseJsonClient(bool createClient = true)
-// {
-//     td::Log::set_verbosity_level(0);
-//     if(createClient) create();
-// }
-
 BaseJsonClient::BaseJsonClient(void *&client_ptr)
 {
     _client = client_ptr;
@@ -87,7 +81,6 @@ std::string BaseJsonClient::receive(double timeout)
 
 void BaseJsonClient::__construct(Php::Parameters &params)
 {
-    Php::out << "__construct" << std::endl << std::flush;
 }
 
 const char *BaseJsonClient::__toString()
