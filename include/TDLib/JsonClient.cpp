@@ -36,6 +36,13 @@ std::string JsonClient::query(const char *query, double timeout)
     // todo: lastQuery [lastRequest, lastResponse, isSuccess, state] ?
 }
 
+Php::Value JsonClient::getReceivedResponses(Php::Parameters &params)
+{
+    std::vector<std::string> oldResponses(receivedResponses);
+    receivedResponses.clear();
+    return oldResponses;
+}
+
 void JsonClient::handleResponses()
 {
     while(true)
@@ -59,6 +66,8 @@ void JsonClient::handleResponses()
         if(responseJson["@type"] == "updateAuthorizationState") authorizationState = responseJson["authorization_state"]["@type"];
         if(responseJson["@type"] == "updateOption") ;
         if(responseJson["@type"] == "updateConnectionState") ;
+        std::string responseCopy(lastResponse);
+        receivedResponses.push_back(responseCopy);
     }
 }
 
