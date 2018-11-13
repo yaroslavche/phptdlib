@@ -47,6 +47,10 @@ $result = $client->setAuthenticationPhoneNumber("xxx");
 $result = $client->getAuthorizationState(1.01234);
 $result = $client->query(json_encode(['@type' => 'searchPublicChat', 'username' => 'telegram']), 10);
 var_dump($result);
+
+$allNotifications = $client->getReceivedResponses();
+var_dump($allNotifications);
+
 $client->destroy();
 ```
 
