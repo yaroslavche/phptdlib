@@ -53,6 +53,8 @@ PHPCPP_EXPORT void *get_module()
         Php::ByVal("query", Php::Type::String),
         Php::ByVal("timeout", Php::Type::Numeric)
     });
+    json_client.method<&JsonClient::getReceivedResponses> ("getReceivedResponses");
+
     json_client.method<&JsonClient::setTdlibParameters> ("setTdlibParameters", {
         Php::ByVal("parameters", "TDApi\\TDLibParameters"),
     });

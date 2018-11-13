@@ -8,6 +8,7 @@ class JsonClient : public BaseJsonClient
     private:
         // todo: lastResponse json object
         std::string lastResponse;
+        std::vector<std::string> receivedResponses;
         std::string authorizationState;
         std::string connectionState;
         double defaultTimeout = 0.5;
@@ -24,6 +25,7 @@ class JsonClient : public BaseJsonClient
         Php::Value checkDatabaseEncryptionKey(Php::Parameters &params);
         Php::Value getAuthorizationState(Php::Parameters &params);
         Php::Value setAuthenticationPhoneNumber(Php::Parameters &params);
+        Php::Value getReceivedResponses(Php::Parameters &params);
 
         void setDefaultTimeout(Php::Parameters &params) { Php::warning << "implement" << std::flush; };
 
