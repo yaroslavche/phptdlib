@@ -38,6 +38,7 @@ std::string JsonClient::query(const char *query, double timeout)
 
 Php::Value JsonClient::getReceivedResponses(Php::Parameters &params)
 {
+    handleResponses();
     std::vector<std::string> oldResponses(receivedResponses);
     receivedResponses.clear();
     return oldResponses;
