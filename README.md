@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/yaroslavche/phptdlib.svg?branch=master)](https://travis-ci.org/yaroslavche/phptdlib)
+
 ## example
 [https://github.com/tdlib/td/blob/master/example/cpp/tdjson_example.cpp](https://github.com/tdlib/td/blob/master/example/cpp/tdjson_example.cpp)
 ```php
