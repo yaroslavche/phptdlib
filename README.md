@@ -90,6 +90,37 @@ make
 php -i | grep tdlib
 php ../php_examples/func.php
 ```
+
+
+## Docker
+
+```
+docker build -t phptdlib .
+docker run -it phptdlib
+
+php -i | grep tdlib
+
+cd $HOME/phptdlib/php_examples
+
+php func.php
+
+cp credentials.php.dist credentials.php
+php client.php
+```
+
+### yaroslavche/phptdlib
+[docker image][phptdlib_docker_image]
+
+```
+docker build -f Dockerfile.phptdlib_env -t yaroslavche/phptdlib .
+```
+
+`OpenSUSE Leap` with installed `sudo` `which` `gcc` `gcc-c++` `zlib` `gperf` `openssl` `openssl-devel` `cmake` `git` `php7` `php7-devel` `php7-ctype` `php7-json`. Needs min [4GB RAM][td_ram_issue] and must wait a while.
+1.25Gb
+needs: g++ -> clang (RAM issue) and opensuse -> alpine (size), docker-compose
+
 [1]: https://github.com/tdlib/td
 [2]: https://github.com/CopernicaMarketingSoftware/PHP-CPP/
 [3]: https://github.com/nlohmann/json
+[td_ram_issue]: https://github.com/tdlib/td/issues/67
+[phptdlib_docker_image]: https://hub.docker.com/r/yaroslavche/phptdlib/
