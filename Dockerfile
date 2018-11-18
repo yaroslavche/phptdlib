@@ -10,3 +10,5 @@ RUN cd $HOME/phptdlib && \
     mkdir build && cd build && \
     cmake .. && \
     make
+
+ENTRYPOINT ["php"]

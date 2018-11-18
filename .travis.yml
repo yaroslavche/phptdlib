@@ -12,7 +12,4 @@ install:
     - docker build -t phptdlib .
 
 script:
-    - docker run -it phptdlib
-    - php -i | grep tdlib
-    - cd $HOME/phptdlib/php_examples
-    - php func.php
+    - docker run phptdlib /root/phptdlib/php_examples/func.php
