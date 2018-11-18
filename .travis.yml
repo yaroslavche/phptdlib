@@ -1,0 +1,18 @@
+sudo: required
+
+language: cpp
+
+services:
+    - docker
+
+before_install:
+    - docker pull yaroslavche/phptdlib
+
+install:
+    - docker build -t phptdlib .
+
+script:
+    - docker run -it phptdlib
+    - php -i | grep tdlib
+    - cd $HOME/phptdlib/php_examples
+    - php func.php
