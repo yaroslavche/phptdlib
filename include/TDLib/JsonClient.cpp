@@ -15,7 +15,10 @@ using json = nlohmann::json;
 Php::Value JsonClient::query(Php::Parameters &params)
 {
     std::string requestString = params[0];
-    double timeout = params[1];
+    double timeout=defaultTimeout;
+    if(params.size()>1) {
+        timeout = params[1];
+    }
 
     json request=json::parse(requestString);
 
@@ -190,4 +193,18 @@ Php::Value JsonClient::setAuthenticationPhoneNumber(Php::Parameters &params)
     jsonQuery["@extra"] = extra;
 
     return query(jsonQuery.dump().c_str(), defaultTimeout, &extra);
+}
+
+void JsonClient::setDefaultTimeout(Php::Parameters &params)
+{
+    defaultTimeout = params[0];
+}
+
+Php::Value JsonClient::receive(Php::Parameters &params) {
+    double timeout = defaultTimeout;
+    if(params.size() > 0)
+    {
+        timeout = params[0];
+    }
+    return BaseJsonClient::receive(timeout);
 }
