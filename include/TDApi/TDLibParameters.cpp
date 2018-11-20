@@ -34,8 +34,11 @@ Php::Value TDLibParameters::setParameter(Php::Parameters &params)
 
 std::string TDLibParameters::toJsonQuery()
 {
+    std::string extra=this->extraParameterValue;
     // ugly, i know. You can PR with a better solution =)
-    std::string parametersJsonQuery = "{\"@type\":\"setTdlibParameters\",\"parameters\":{"
+    std::string parametersJsonQuery = "{\"@type\":\"setTdlibParameters\","
+        "\"@extra\":\""+ extra +"\","
+        "\"parameters\":{"
         "\"use_test_dc\":" + getParameterValue("use_test_dc") + ","
         "\"database_directory\":\"" + getParameterValue("database_directory") + "\","
         "\"files_directory\":\"" + getParameterValue("files_directory") + "\","

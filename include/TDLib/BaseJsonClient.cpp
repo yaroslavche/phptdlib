@@ -72,7 +72,10 @@ Php::Value BaseJsonClient::receive(Php::Parameters &params)
 
 std::string BaseJsonClient::receive(double timeout)
 {
-    return td_json_client_receive(_client, timeout);
+    const char* result=td_json_client_receive(_client, timeout);
+    if(result == nullptr) {
+        return "";
+    } else return result;
 }
 
 /**

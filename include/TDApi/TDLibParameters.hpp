@@ -1,6 +1,8 @@
 #ifndef TD_API_TDLIBPARAMETERS_H
 #define TD_API_TDLIBPARAMETERS_H
 
+#include <nlohmann/json.hpp>
+
 class TDLibParameters : public Php::Base // namespace: TDApi
 {
     private:
@@ -18,6 +20,8 @@ class TDLibParameters : public Php::Base // namespace: TDApi
 
         // inline void setLocked() { locked == true; }
         // can set parameters if locked == false
+
+    nlohmann::json extraParameterValue="1235847219223";
 };
 
 #endif // TD_API_TDLIBPARAMETERS_H

@@ -47,11 +47,11 @@ PHPCPP_EXPORT void *get_module()
         Php::ByVal("query", Php::Type::String)
     });
     json_client.method<&JsonClient::receive> ("receive", {
-        Php::ByVal("timeout", Php::Type::Numeric)
+        Php::ByVal("timeout", Php::Type::Numeric, false)
     });
     json_client.method<&JsonClient::query> ("query", {
         Php::ByVal("query", Php::Type::String),
-        Php::ByVal("timeout", Php::Type::Numeric)
+        Php::ByVal("timeout", Php::Type::Numeric, false)
     });
     json_client.method<&JsonClient::getReceivedResponses> ("getReceivedResponses");
 
@@ -66,6 +66,9 @@ PHPCPP_EXPORT void *get_module()
     });
     json_client.method<&JsonClient::getAuthorizationState> ("getAuthorizationState", {
         Php::ByVal("extra", Php::Type::Float, false),
+    });
+    json_client.method<&JsonClient::setDefaultTimeout> ("setDefaultTimeout", {
+        Php::ByVal("defaultTimeout", Php::Type::Float),
     });
     json_client.method<&JsonClient::setAuthenticationPhoneNumber> ("setAuthenticationPhoneNumber", {
         Php::ByVal("phone_number", Php::Type::String),
