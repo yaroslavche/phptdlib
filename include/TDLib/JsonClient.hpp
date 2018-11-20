@@ -1,6 +1,7 @@
 #ifndef TDLIB_JSONCLIENT_H
 #define TDLIB_JSONCLIENT_H
 
+#include <nlohmann/json.hpp>
 #include "BaseJsonClient.hpp"
 
 class JsonClient : public BaseJsonClient
@@ -9,14 +10,16 @@ class JsonClient : public BaseJsonClient
         // todo: lastResponse json object
         std::string lastResponse;
         std::vector<std::string> receivedResponses;
+        std::vector<nlohmann::json> receivedResponsesExtras;
         std::string authorizationState;
         std::string connectionState;
         double defaultTimeout = 0.5;
 
-        void handleResponses();
+        void handleResponses(nlohmann::json* breakOnExtra);
+        std::string waitForResponse(nlohmann::json* extra,double timeout);
 
     public:
-        std::string query(const char *query, double timeout);
+        std::string query(const char *query, double timeout, nlohmann::json* extra);
 
         // exported
         Php::Value query(Php::Parameters &params);
