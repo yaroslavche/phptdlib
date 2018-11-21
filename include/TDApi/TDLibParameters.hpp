@@ -6,22 +6,17 @@
 class TDLibParameters : public Php::Base // namespace: TDApi
 {
     private:
-        std::map<std::string, Php::Value> parameters;
-        std::string getParameterValue(const char *parameter);
+        nlohmann::json parameters;
 
     public:
         TDLibParameters();
         virtual ~TDLibParameters() = default;
 
-        // void __construct(array);
-
         Php::Value setParameter(Php::Parameters &params);
-        std::string toJsonQuery();
+        nlohmann::json getParameters();
 
         // inline void setLocked() { locked == true; }
         // can set parameters if locked == false
-
-    nlohmann::json extraParameterValue="1235847219223";
 };
 
 #endif // TD_API_TDLIBPARAMETERS_H

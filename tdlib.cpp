@@ -61,21 +61,26 @@ PHPCPP_EXPORT void *get_module()
 
     json_client.method<&JsonClient::setTdlibParameters> ("setTdlibParameters", {
         Php::ByVal("parameters", "TDApi\\TDLibParameters"),
+        Php::ByVal("timeout", Php::Type::Float, false)
     });
     json_client.method<&JsonClient::setDatabaseEncryptionKey> ("setDatabaseEncryptionKey", {
         Php::ByVal("new_encryption_key", Php::Type::String, false),
+        Php::ByVal("timeout", Php::Type::Float, false)
     });
     json_client.method<&JsonClient::checkDatabaseEncryptionKey> ("checkDatabaseEncryptionKey", {
         Php::ByVal("key", Php::Type::String),
+        Php::ByVal("timeout", Php::Type::Float, false)
     });
     json_client.method<&JsonClient::getAuthorizationState> ("getAuthorizationState", {
         Php::ByVal("extra", Php::Type::Float, false),
+        Php::ByVal("timeout", Php::Type::Float, false)
     });
     json_client.method<&JsonClient::setDefaultTimeout> ("setDefaultTimeout", {
         Php::ByVal("defaultTimeout", Php::Type::Float),
     });
     json_client.method<&JsonClient::setAuthenticationPhoneNumber> ("setAuthenticationPhoneNumber", {
         Php::ByVal("phone_number", Php::Type::String),
+        Php::ByVal("timeout", Php::Type::Float, false)
     });
 
     TDLibNamespace.add(std::move(json_client));
