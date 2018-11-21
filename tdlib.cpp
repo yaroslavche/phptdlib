@@ -22,6 +22,7 @@ PHPCPP_EXPORT void *get_module()
     // TDLib\BaseJsonClient
     Php::Class<BaseJsonClient> base_json_client("BaseJsonClient");
     base_json_client.method<&BaseJsonClient::__construct> ("__construct");
+    base_json_client.method<&BaseJsonClient::__destruct> ("__destruct");
     base_json_client.method<&BaseJsonClient::create> ("create");
     base_json_client.method<&BaseJsonClient::destroy> ("destroy");
     base_json_client.method<&BaseJsonClient::execute> ("execute", {
@@ -39,6 +40,8 @@ PHPCPP_EXPORT void *get_module()
 
     // TDLib\JsonClient
     Php::Class<JsonClient> json_client("JsonClient");
+    json_client.method<&JsonClient::__construct> ("__construct");
+    json_client.method<&JsonClient::__destruct> ("__destruct");
     json_client.method<&JsonClient::create> ("create");
     json_client.method<&JsonClient::destroy> ("destroy");
     json_client.method<&JsonClient::execute> ("execute", {

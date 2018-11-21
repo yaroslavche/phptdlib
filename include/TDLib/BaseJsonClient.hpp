@@ -7,7 +7,7 @@ class BaseJsonClient : public Php::Base
         void *_client = NULL;
 
     public:
-        BaseJsonClient();
+        BaseJsonClient() = default;
         BaseJsonClient(void *&client_ptr);
         virtual ~BaseJsonClient() = default;
 
@@ -19,6 +19,7 @@ class BaseJsonClient : public Php::Base
 
         // export
         void __construct(Php::Parameters &params);
+        void __destruct();
         const char *__toString();
         Php::Value __get(const Php::Value &name);
         void __set(const Php::Value &name, const Php::Value &value);
