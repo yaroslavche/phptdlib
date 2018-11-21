@@ -18,8 +18,11 @@ class JsonClient : public BaseJsonClient
         void handleResponses(nlohmann::json* breakOnExtra);
         std::string waitForResponse(nlohmann::json* extra,double timeout);
 
-    public:
         std::string query(const char *query, double timeout, nlohmann::json* extra);
+        std::string addExtraAndSendQuery(std::string type, nlohmann::json* jsonQuery, double timeout);
+        double getTimeoutFromParams(Php::Parameters &params, int timeoutParameterInde);
+
+    public:
 
         // exported
         Php::Value query(Php::Parameters &params);
@@ -36,7 +39,9 @@ class JsonClient : public BaseJsonClient
         inline void destroy() { BaseJsonClient::destroy(); }
         inline Php::Value execute(Php::Parameters &params) { BaseJsonClient::execute(params); }
         inline void send(Php::Parameters &params) { BaseJsonClient::send(params); }
-        inline Php::Value receive(Php::Parameters &params);
+        Php::Value receive(Php::Parameters &params);
+        inline void __construct(Php::Parameters &params) { BaseJsonClient::__construct(params);};
+        inline void __destruct() { BaseJsonClient::__destruct();};
 
         // internal
 

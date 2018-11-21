@@ -6,6 +6,8 @@ ini_set('display_errors', 1);
 if(file_exists(__DIR__ . '/credentials.php')) require_once __DIR__ . '/credentials.php';
 else die('cp php_examples/credentials.php.dist php_examples/credentials.php && edit' . PHP_EOL);
 
+TDApi\LogConfiguration::setLogVerbosityLevel(\TDApi\LogConfiguration::LVL_ERROR);
+
 $client = new TDLib\JsonClient();
 $client->getAuthorizationState();
 

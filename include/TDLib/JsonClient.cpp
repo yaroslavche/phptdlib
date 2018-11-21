@@ -15,25 +15,47 @@ using json = nlohmann::json;
 Php::Value JsonClient::query(Php::Parameters &params)
 {
     std::string requestString = params[0];
-    double timeout=defaultTimeout;
-    if(params.size()>1) {
-        timeout = params[1];
+    json request;
+
+    try {
+        request=json::parse(requestString);
+    } catch (nlohmann::json::exception exception) {
+        throw Php::Exception("Error parsing json");
     }
 
-    json request=json::parse(requestString);
+    auto typeIt = request.find("@type");
+    if (typeIt == request.end()) {
+        throw Php::Exception("Empty @type in query");
+    }
 
-    auto extraIt = request.find("@extra");
-    json extra=0;
-    if (extraIt == request.end())
+    if (! typeIt->is_string())
+    {
+        throw Php::Exception("Parameter @type should be string");
+    }
+
+    std::string type = *typeIt;
+
+    return addExtraAndSendQuery(
+            type,
+            &request,
+            getTimeoutFromParams(params, 1)
+    );
+}
+
+std::string JsonClient::addExtraAndSendQuery(std::string type, json* jsonQuery, double timeout) {
+    json extra;
+    auto extraIt = jsonQuery->find("@extra");
+    if (extraIt == jsonQuery->end())
     {
         extra=rand();
-        request["@extra"] = extra;
+        (*jsonQuery)["@extra"] = extra;
     } else {
         extra=extraIt.value();
     }
 
-    std::string result = query(request.dump().c_str(), timeout, &extra);
-    return result;
+    (*jsonQuery)["@type"] = type;
+
+    return query(jsonQuery->dump().c_str(), timeout, &extra);
 }
 
 std::string JsonClient::query(const char *query, double timeout, json* extra)
@@ -133,66 +155,82 @@ void JsonClient::handleResponses(json* breakOnExtra)
     }
 }
 
+double JsonClient::getTimeoutFromParams(Php::Parameters &params, int timeoutParameterIndex)
+{
+    if (params.size() <= timeoutParameterIndex)
+    {
+        return defaultTimeout;
+    }
+
+    return params[timeoutParameterIndex];
+}
+
 Php::Value JsonClient::setTdlibParameters(Php::Parameters &params)
 {
     Php::Value tdlibParams = params[0];
     if(!tdlibParams.instanceOf("TDApi\\TDLibParameters")) throw Php::Exception("First parameter must be instance of TDApi\\TDLibParameters.");
-    TDLibParameters *parameters = (TDLibParameters *)tdlibParams.implementation();
-    std::string parametersJsonQuery = parameters->toJsonQuery();
+    TDLibParameters *parametersObject = (TDLibParameters *)tdlibParams.implementation();
 
-    json extra = parameters->extraParameterValue;
+    json parameters = parametersObject->getParameters();
 
-    return query(parametersJsonQuery.c_str(), defaultTimeout, &extra);
+    json jsonQuery;
+    jsonQuery["parameters"] = parameters;
+
+    return addExtraAndSendQuery(
+            "setTdlibParameters",
+            &jsonQuery,
+            getTimeoutFromParams(params, 1)
+    );
 }
 
 Php::Value JsonClient::checkDatabaseEncryptionKey(Php::Parameters &params)
 {
     const std::string key = params[0];
     json jsonQuery;
-    jsonQuery["@type"] = "checkDatabaseEncryptionKey";
     jsonQuery["key"] = key;
 
-    json extra = rand();
-    jsonQuery["@extra"] = extra;
-
-    return query(jsonQuery.dump().c_str(), defaultTimeout, &extra);
+    return addExtraAndSendQuery(
+            "checkDatabaseEncryptionKey",
+            &jsonQuery,
+            getTimeoutFromParams(params, 1)
+    );
 }
 
 Php::Value JsonClient::setDatabaseEncryptionKey(Php::Parameters &params)
 {
     const std::string new_encryption_key = !params.empty() ? params[0] : "";
     json jsonQuery;
-    jsonQuery["@type"] = "setDatabaseEncryptionKey";
     if(new_encryption_key.length() > 0) jsonQuery["new_encryption_key"] = new_encryption_key;
 
-    json extra = rand();
-    jsonQuery["@extra"] = extra;
-
-    return query(jsonQuery.dump().c_str(), defaultTimeout, &extra);
+    return addExtraAndSendQuery(
+            "setDatabaseEncryptionKey",
+            &jsonQuery,
+            getTimeoutFromParams(params, 1)
+    );
 }
 
 Php::Value JsonClient::getAuthorizationState(Php::Parameters &params)
 {
     json jsonQuery;
-    jsonQuery["@type"] = "getAuthorizationState";
 
-    json extra = rand();
-    jsonQuery["@extra"] = extra;
-
-    return query(jsonQuery.dump().c_str(), defaultTimeout, &extra);
+    return addExtraAndSendQuery(
+            "getAuthorizationState",
+            &jsonQuery,
+            getTimeoutFromParams(params, 0)
+    );
 }
 
 Php::Value JsonClient::setAuthenticationPhoneNumber(Php::Parameters &params)
 {
     std::string phone_number = params[0];
     json jsonQuery;
-    jsonQuery["@type"] = "setAuthenticationPhoneNumber";
     jsonQuery["phone_number"] = phone_number;
 
-    json extra = rand();
-    jsonQuery["@extra"] = extra;
-
-    return query(jsonQuery.dump().c_str(), defaultTimeout, &extra);
+    return addExtraAndSendQuery(
+            "setAuthenticationPhoneNumber",
+            &jsonQuery,
+            getTimeoutFromParams(params, 1)
+    );
 }
 
 void JsonClient::setDefaultTimeout(Php::Parameters &params)

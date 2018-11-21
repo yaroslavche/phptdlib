@@ -20,6 +20,8 @@ while(true)
 Error_Reporting(E_ALL);
 ini_set('display_errors', 1);
 
+TDApi\LogConfiguration::setLogVerbosityLevel(\TDApi\LogConfiguration::LVL_ERROR);
+
 $client = new TDLib\JsonClient();
 
 $tdlibParams = new TDApi\TDLibParameters();

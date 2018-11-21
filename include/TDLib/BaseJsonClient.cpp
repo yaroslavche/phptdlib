@@ -2,30 +2,16 @@
 
 #include <phpcpp.h>
 
-#include <td/telegram/tdjson_export.h>
 #include <td/telegram/td_json_client.h>
-#include <td/telegram/Log.h>
 
 #include "BaseJsonClient.hpp"
 #include "../TDApi/TDLibParameters.hpp"
 
-BaseJsonClient::BaseJsonClient()
-{
-    td::Log::set_verbosity_level(0);
-    create();
-}
 
 BaseJsonClient::BaseJsonClient(void *&client_ptr)
 {
     _client = client_ptr;
 }
-
-// // loop if call destructor
-// BaseJsonClient::~BaseJsonClient()
-// {
-//     Php::out << "destroy object" << _client << std::endl << std::flush;
-//     if(_client != nullptr) destroy();
-// }
 
 void BaseJsonClient::create()
 {
@@ -35,7 +21,8 @@ void BaseJsonClient::create()
 void BaseJsonClient::destroy()
 {
     if(_client == nullptr) Php::Exception("BaseJsonClient not created. Use create() method before destroy");
-    td_json_client_destroy(_client); // segfault if close before parameters set
+    td_json_client_destroy(_client);
+    _client = nullptr;
 }
 
 Php::Value BaseJsonClient::execute(Php::Parameters &params)
@@ -84,6 +71,12 @@ std::string BaseJsonClient::receive(double timeout)
 
 void BaseJsonClient::__construct(Php::Parameters &params)
 {
+    create();
+}
+
+void BaseJsonClient::__destruct()
+{
+    if(_client != nullptr) destroy();
 }
 
 const char *BaseJsonClient::__toString()
