@@ -14,6 +14,7 @@ class TDLibParameters : public Php::Base // namespace: TDApi
 
         Php::Value setParameter(Php::Parameters &params);
         nlohmann::json getParameters();
+        Php::Value __debugInfo();
 
         // inline void setLocked() { locked == true; }
         // can set parameters if locked == false
