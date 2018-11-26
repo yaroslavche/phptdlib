@@ -51,6 +51,40 @@ Php::Value TDLibParameters::setParameter(Php::Parameters &params)
     return this;
 }
 
-nlohmann::json TDLibParameters::getParameters() {
+nlohmann::json TDLibParameters::getParameters()
+{
     return parameters;
+}
+
+Php::Value TDLibParameters::__debugInfo()
+{
+    Php::Value phpValueParameters, result;
+
+    for (auto iterator=parameters.begin(); iterator != parameters.end(); iterator++) {
+        if ((*iterator).is_number())
+        {
+            int value = iterator.value();
+            phpValueParameters[iterator.key()] = value;
+        }
+        else if ((*iterator).is_string())
+        {
+            std::string value = iterator.value();
+            phpValueParameters[iterator.key()] = value;
+        }
+        else if ((*iterator).is_boolean())
+        {
+            bool value = iterator.value();
+            phpValueParameters[iterator.key()] = value;
+        }
+        else if ((*iterator).is_null())
+        {
+            phpValueParameters[iterator.key()] = nullptr;
+        }
+        else {
+            throw Php::Exception("Invalid TDLib parameter value");
+        }
+    }
+
+    result["parameters"] = phpValueParameters;
+    return result;
 }

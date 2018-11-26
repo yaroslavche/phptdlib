@@ -99,6 +99,7 @@ PHPCPP_EXPORT void *get_module()
         Php::ByVal("name", Php::Type::String),
         Php::ByVal("value")
     });
+    td_api_tdlibParameters.method<&TDLibParameters::__debugInfo> ("__debugInfo");
 
     TDApiNamespace.add(std::move(td_api_tdlibParameters));
 
