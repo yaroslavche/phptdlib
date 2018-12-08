@@ -40,6 +40,7 @@ PHPCPP_EXPORT void *get_module()
 
     // TDLib\JsonClient
     Php::Class<JsonClient> json_client("JsonClient");
+    // BaseJsonClient
     json_client.method<&JsonClient::__construct> ("__construct");
     json_client.method<&JsonClient::__destruct> ("__destruct");
     json_client.method<&JsonClient::create> ("create");
@@ -53,20 +54,16 @@ PHPCPP_EXPORT void *get_module()
     json_client.method<&JsonClient::receive> ("receive", {
         Php::ByVal("timeout", Php::Type::Numeric, false)
     });
+    // JsonClient
     json_client.method<&JsonClient::query> ("query", {
         Php::ByVal("query", Php::Type::String),
         Php::ByVal("timeout", Php::Type::Numeric, false)
     });
     json_client.method<&JsonClient::getReceivedResponses> ("getReceivedResponses");
-
-    json_client.method<&JsonClient::setTdlibParameters> ("setTdlibParameters", {
-        Php::ByVal("parameters", "TDApi\\TDLibParameters"),
-        Php::ByVal("timeout", Php::Type::Float, false)
+    json_client.method<&JsonClient::setDefaultTimeout> ("setDefaultTimeout", {
+        Php::ByVal("defaultTimeout", Php::Type::Float),
     });
-    json_client.method<&JsonClient::setDatabaseEncryptionKey> ("setDatabaseEncryptionKey", {
-        Php::ByVal("new_encryption_key", Php::Type::String, false),
-        Php::ByVal("timeout", Php::Type::Float, false)
-    });
+    // tdlib Function Class Reference
     json_client.method<&JsonClient::checkDatabaseEncryptionKey> ("checkDatabaseEncryptionKey", {
         Php::ByVal("key", Php::Type::String),
         Php::ByVal("timeout", Php::Type::Float, false)
@@ -75,11 +72,16 @@ PHPCPP_EXPORT void *get_module()
         Php::ByVal("extra", Php::Type::Float, false),
         Php::ByVal("timeout", Php::Type::Float, false)
     });
-    json_client.method<&JsonClient::setDefaultTimeout> ("setDefaultTimeout", {
-        Php::ByVal("defaultTimeout", Php::Type::Float),
-    });
     json_client.method<&JsonClient::setAuthenticationPhoneNumber> ("setAuthenticationPhoneNumber", {
         Php::ByVal("phone_number", Php::Type::String),
+        Php::ByVal("timeout", Php::Type::Float, false)
+    });
+    json_client.method<&JsonClient::setDatabaseEncryptionKey> ("setDatabaseEncryptionKey", {
+        Php::ByVal("new_encryption_key", Php::Type::String, false),
+        Php::ByVal("timeout", Php::Type::Float, false)
+    });
+    json_client.method<&JsonClient::setTdlibParameters> ("setTdlibParameters", {
+        Php::ByVal("parameters", "TDApi\\TDLibParameters"),
         Php::ByVal("timeout", Php::Type::Float, false)
     });
 

@@ -119,6 +119,10 @@ $result = $client->query(json_encode([
 $result = $client->getAuthorizationState();
 $result = $client->query(json_encode(['@type' => 'searchPublicChat', 'username' => 'telegram']), 10);
 var_dump($result);
+
+$allNotifications = $client->getReceivedResponses();
+var_dump($allNotifications);
+
 $client->destroy();</code></pre>
                                     </div>
                                     <!--//code-block-->
