@@ -5,6 +5,8 @@
 #include <td/telegram/tdjson_export.h>
 #include <td/telegram/td_json_client.h>
 
+#include "tdlib.hpp"
+
 #include "include/td_json_client_func.cpp"
 #include "include/TDLib/JsonClient.hpp"
 #include "include/TDApi/TDLibParameters.hpp"
@@ -14,7 +16,7 @@ extern "C" {
 
 PHPCPP_EXPORT void *get_module()
 {
-    static Php::Extension tdlib("tdlib", "0.0.8");
+    static Php::Extension tdlib("tdlib", TDLIB_PHP_VERSION);
 
 
     Php::Namespace TDLibNamespace("TDLib");
@@ -23,8 +25,6 @@ PHPCPP_EXPORT void *get_module()
     Php::Class<BaseJsonClient> base_json_client("BaseJsonClient");
     base_json_client.method<&BaseJsonClient::__construct> ("__construct");
     base_json_client.method<&BaseJsonClient::__destruct> ("__destruct");
-    base_json_client.method<&BaseJsonClient::create> ("create");
-    base_json_client.method<&BaseJsonClient::destroy> ("destroy");
     base_json_client.method<&BaseJsonClient::execute> ("execute", {
         Php::ByVal("query", Php::Type::String)
     });
@@ -69,7 +69,6 @@ PHPCPP_EXPORT void *get_module()
         Php::ByVal("timeout", Php::Type::Float, false)
     });
     json_client.method<&JsonClient::getAuthorizationState> ("getAuthorizationState", {
-        Php::ByVal("extra", Php::Type::Float, false),
         Php::ByVal("timeout", Php::Type::Float, false)
     });
     json_client.method<&JsonClient::setAuthenticationPhoneNumber> ("setAuthenticationPhoneNumber", {
@@ -103,6 +102,22 @@ PHPCPP_EXPORT void *get_module()
     });
     td_api_tdlibParameters.method<&TDLibParameters::__debugInfo> ("__debugInfo");
 
+    td_api_tdlibParameters.property("USE_TEST_DC", TDLibParameters::USE_TEST_DC, Php::Const);
+    td_api_tdlibParameters.property("DATABASE_DIRECOTRY", TDLibParameters::DATABASE_DIRECOTRY, Php::Const);
+    td_api_tdlibParameters.property("FILES_DIRECTORY", TDLibParameters::FILES_DIRECTORY, Php::Const);
+    td_api_tdlibParameters.property("USE_FILE_DATABASE", TDLibParameters::USE_FILE_DATABASE, Php::Const);
+    td_api_tdlibParameters.property("USE_CHAT_INFO_DATABASE", TDLibParameters::USE_CHAT_INFO_DATABASE, Php::Const);
+    td_api_tdlibParameters.property("USE_MESSAGE_DATABASE", TDLibParameters::USE_MESSAGE_DATABASE, Php::Const);
+    td_api_tdlibParameters.property("USE_SECRET_CHATS", TDLibParameters::USE_SECRET_CHATS, Php::Const);
+    td_api_tdlibParameters.property("API_ID", TDLibParameters::API_ID, Php::Const);
+    td_api_tdlibParameters.property("API_HASH", TDLibParameters::API_HASH, Php::Const);
+    td_api_tdlibParameters.property("SYSTEM_LANGUAGE_CODE", TDLibParameters::SYSTEM_LANGUAGE_CODE, Php::Const);
+    td_api_tdlibParameters.property("DEVICE_MODEL", TDLibParameters::DEVICE_MODEL, Php::Const);
+    td_api_tdlibParameters.property("SYSTEM_VERSION", TDLibParameters::SYSTEM_VERSION, Php::Const);
+    td_api_tdlibParameters.property("APPLICATION_VERSION", TDLibParameters::APPLICATION_VERSION, Php::Const);
+    td_api_tdlibParameters.property("ENABLE_STORAGE_OPTIMIZER", TDLibParameters::ENABLE_STORAGE_OPTIMIZER, Php::Const);
+    td_api_tdlibParameters.property("IGNORE_FILE_NAMES", TDLibParameters::IGNORE_FILE_NAMES, Php::Const);
+
     TDApiNamespace.add(std::move(td_api_tdlibParameters));
 
 
@@ -118,13 +133,13 @@ PHPCPP_EXPORT void *get_module()
         Php::ByVal("logVerbosityLevel", Php::Type::Numeric)
     });
 
-    td_api_logConfiguration.property("LVL_FATAL_ERROR", 0, Php::Const);
-    td_api_logConfiguration.property("LVL_ERROR", 1, Php::Const);
-    td_api_logConfiguration.property("LVL_WARNING", 2, Php::Const);
-    td_api_logConfiguration.property("LVL_INFO", 3, Php::Const);
-    td_api_logConfiguration.property("LVL_DEBUG", 4, Php::Const);
-    td_api_logConfiguration.property("LVL_VERBOSE_DEBUG", 5, Php::Const);
-    td_api_logConfiguration.property("LVL_ALL", 1024, Php::Const);
+    td_api_logConfiguration.property("LVL_FATAL_ERROR", TDLibLogConfiguration::LVL_FATAL_ERROR, Php::Const);
+    td_api_logConfiguration.property("LVL_ERROR", TDLibLogConfiguration::LVL_ERROR, Php::Const);
+    td_api_logConfiguration.property("LVL_WARNING", TDLibLogConfiguration::LVL_WARNING, Php::Const);
+    td_api_logConfiguration.property("LVL_INFO", TDLibLogConfiguration::LVL_INFO, Php::Const);
+    td_api_logConfiguration.property("LVL_DEBUG", TDLibLogConfiguration::LVL_DEBUG, Php::Const);
+    td_api_logConfiguration.property("LVL_VERBOSE_DEBUG", TDLibLogConfiguration::LVL_VERBOSE_DEBUG, Php::Const);
+    td_api_logConfiguration.property("LVL_ALL", TDLibLogConfiguration::LVL_ALL, Php::Const);
 
     TDApiNamespace.add(std::move(td_api_logConfiguration));
 

@@ -4,7 +4,15 @@
 class TDLibLogConfiguration : public Php::Base // namespace: TDApi
 {
     public:
-    TDLibLogConfiguration() = default;
+        static constexpr const int LVL_FATAL_ERROR = 0;
+        static constexpr const int LVL_ERROR = 1;
+        static constexpr const int LVL_WARNING = 2;
+        static constexpr const int LVL_INFO = 3;
+        static constexpr const int LVL_DEBUG = 4;
+        static constexpr const int LVL_VERBOSE_DEBUG = 5;
+        static constexpr const int LVL_ALL = 1024;
+
+        TDLibLogConfiguration() = default;
         virtual ~TDLibLogConfiguration() = default;
 
         static Php::Value setLogFilePath(Php::Parameters &params);
