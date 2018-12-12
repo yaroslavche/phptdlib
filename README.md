@@ -28,29 +28,29 @@ $client = new TDLib\JsonClient();
 
 $tdlibParams = new TDApi\TDLibParameters();
 $tdlibParams
-    ->setParameter('use_test_dc', true)
-    ->setParameter('database_directory', '/var/tmp/tdlib')
-    ->setParameter('files_directory', '/var/tmp/tdlib')
-    ->setParameter('use_file_database', false)
-    ->setParameter('use_chat_info_database', false)
-    ->setParameter('use_message_database', false)
-    ->setParameter('use_secret_chats', false)
+    ->setParameter(\TDApi\TDLibParameters::USE_TEST_DC, true)
+    ->setParameter(\TDApi\TDLibParameters::DATABASE_DIRECOTRY, '/var/tmp/tdlib')
+    ->setParameter(\TDApi\TDLibParameters::FILES_DIRECTORY, '/var/tmp/tdlib')
+    ->setParameter(\TDApi\TDLibParameters::USE_FILE_DATABASE, false)
+    ->setParameter(\TDApi\TDLibParameters::USE_CHAT_INFO_DATABASE, false)
+    ->setParameter(\TDApi\TDLibParameters::USE_MESSAGE_DATABASE, false)
+    ->setParameter(\TDApi\TDLibParameters::USE_SECRET_CHATS, false)
     // SET API_CODE AND API_HASH
-    ->setParameter('api_id', 'xxx')
-    ->setParameter('api_hash', 'xxx')
-    ->setParameter('system_language_code', 'en')
-    ->setParameter('device_model', php_uname('s'))
-    ->setParameter('system_version', php_uname('v'))
-    ->setParameter('application_version', '0.0.7')
-    ->setParameter('enable_storage_optimizer', true)
-    ->setParameter('ignore_file_names', false);
+    ->setParameter(\TDApi\TDLibParameters::API_ID, 123)
+    ->setParameter(\TDApi\TDLibParameters::API_HASH, 'xxx')
+    ->setParameter(\TDApi\TDLibParameters::SYSTEM_LANGUAGE_CODE, 'en')
+    ->setParameter(\TDApi\TDLibParameters::DEVICE_MODEL, php_uname('s'))
+    ->setParameter(\TDApi\TDLibParameters::SYSTEM_VERSION, php_uname('v'))
+    ->setParameter(\TDApi\TDLibParameters::APPLICATION_VERSION, '0.0.8')
+    ->setParameter(\TDApi\TDLibParameters::ENABLE_STORAGE_OPTIMIZER, true)
+    ->setParameter(\TDApi\TDLibParameters::IGNORE_FILE_NAMES, false);
 $result = $client->setTdlibParameters($tdlibParams);
 $result = $client->setDatabaseEncryptionKey();
 // SET PHONE_NUMBER
 $result = $client->setAuthenticationPhoneNumber("xxx");
 // UNCOMMENT WHEN RECEIVE SMS AND INSERT CODE.
 // $result = $client->query(json_encode(['@type' => 'checkAuthenticationCode', 'code' => 'xxx', 'first_name' => 'dummy', 'last_name' => 'dummy']), 10);
-$result = $client->getAuthorizationState(1.01234);
+$result = $client->getAuthorizationState();
 $result = $client->query(json_encode(['@type' => 'searchPublicChat', 'username' => 'telegram']), 10);
 var_dump($result);
 
