@@ -4,24 +4,25 @@
 #include <phpcpp.h>
 
 #include "TDLibParameters.hpp"
+#include "../../tdlib.hpp"
 
 TDLibParameters::TDLibParameters()
 {
-    parameters["use_test_dc"] = false;
-    parameters["database_directory"] = "/var/tmp/tdlib";
-    parameters["files_directory"] = "/var/tmp/tdlib";
-    parameters["use_file_database"] = false;
-    parameters["use_chat_info_database"] = false;
-    parameters["use_message_database"] = false;
-    parameters["use_secret_chats"] = false;
-    parameters["api_id"] = 0;
-    parameters["api_hash"] = "";
-    parameters["system_language_code"] = "en";
-    parameters["device_model"] = "";
-    parameters["system_version"] = "";
-    parameters["application_version"] = "0.0.1";
-    parameters["enable_storage_optimizer"] = true;
-    parameters["ignore_file_names"] = false;
+    parameters[USE_TEST_DC] = false;
+    parameters[DATABASE_DIRECOTRY] = "/var/tmp/tdlib";
+    parameters[FILES_DIRECTORY] = "/var/tmp/tdlib";
+    parameters[USE_FILE_DATABASE] = false;
+    parameters[USE_CHAT_INFO_DATABASE] = false;
+    parameters[USE_MESSAGE_DATABASE] = false;
+    parameters[USE_SECRET_CHATS] = false;
+    parameters[API_ID] = 0;
+    parameters[API_HASH] = "";
+    parameters[SYSTEM_LANGUAGE_CODE] = "en";
+    parameters[DEVICE_MODEL] = "";
+    parameters[SYSTEM_VERSION] = "";
+    parameters[APPLICATION_VERSION] = TDLIB_PHP_VERSION;
+    parameters[ENABLE_STORAGE_OPTIMIZER] = true;
+    parameters[IGNORE_FILE_NAMES] = false;
 }
 
 Php::Value TDLibParameters::setParameter(Php::Parameters &params)
@@ -29,24 +30,30 @@ Php::Value TDLibParameters::setParameter(Php::Parameters &params)
     std::string parameter = params[0];
     Php::Value value = params[1];
 
-    if (value.isNumeric())
+    auto paramsIt = parameters.find(parameter);
+    if (paramsIt == parameters.end())
+    {
+        throw Php::Exception("Invalid parameter name");
+    }
+
+    if (value.isNumeric() && paramsIt->is_number())
     {
         int typedValue = value;
         parameters[parameter] = typedValue;
     }
-    else if (value.isString())
+    else if (value.isString() && paramsIt->is_string())
     {
         std::string typedValue = value;
         parameters[parameter] = typedValue;
     }
-    else if (value.isBool())
+    else if (value.isBool() && paramsIt->is_boolean())
     {
         bool typedValue = value;
         parameters[parameter] = typedValue;
     }
     else
     {
-        throw Php::Exception("TDLib parameter could be string, number or bool only");
+        throw Php::Exception("Invalid TDLib parameter type");
     }
     return this;
 }
@@ -81,7 +88,7 @@ Php::Value TDLibParameters::__debugInfo()
             phpValueParameters[iterator.key()] = nullptr;
         }
         else {
-            throw Php::Exception("Invalid TDLib parameter value");
+            assert(false);
         }
     }
 

@@ -84,7 +84,7 @@ std::string JsonClient::waitForResponse(json* extra,double timeout) {
         repeat=(time.count()<(int)(timeout*1000.));
     } while(repeat);
 
-    return "";
+    throw Php::Exception("Timeout waiting for response");
 }
 
 std::string JsonClient::query(const char *query, double timeout, json* extra) {
@@ -110,7 +110,7 @@ std::string JsonClient::addExtraAndSendQuery(std::string type, json* jsonQuery, 
 }
 
 double JsonClient::getTimeoutFromParams(Php::Parameters &params, int timeoutParameterIndex) {
-    if (params.size() <= timeoutParameterIndex)
+    if (params.size() <= timeoutParameterIndex || params[timeoutParameterIndex].isNull())
     {
         return defaultTimeout;
     }
