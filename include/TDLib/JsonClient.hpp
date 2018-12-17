@@ -27,8 +27,6 @@ class JsonClient : public BaseJsonClient
         // BaseJsonClient
         inline void __construct(Php::Parameters &params) { BaseJsonClient::__construct(params);};
         inline void __destruct() { BaseJsonClient::__destruct();};
-        inline void create() { BaseJsonClient::create(); }
-        inline void destroy() { BaseJsonClient::destroy(); }
         inline Php::Value execute(Php::Parameters &params) { return BaseJsonClient::execute(params); }
         inline void send(Php::Parameters &params) { BaseJsonClient::send(params); }
         Php::Value receive(Php::Parameters &params);

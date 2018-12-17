@@ -15,7 +15,7 @@ class BaseJsonClient : public Php::Base
         void send(const char *query);
         std::string receive(double timeout);
 
-        inline void *getClientPointer() { return _client; }
+        void *getClientPointer();
 
         // export
         void __construct(Php::Parameters &params);
