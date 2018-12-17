@@ -1,4 +1,5 @@
 #include "TDLib/BaseJsonClient.hpp"
+#include "td_json_client_func.hpp"
 
 Php::Value td_json_client_func_create()
 {
@@ -12,8 +13,8 @@ void td_json_client_func_destroy(Php::Parameters &params)
     Php::Value object = params[0];
     if(!object.instanceOf("TDLib\\BaseJsonClient")) throw Php::Exception("First parameter must be instance of TDLib\\BaseJsonClient.");
     BaseJsonClient *client = (BaseJsonClient *)object.implementation();
-    td_json_client_destroy(client->getClientPointer()); // segfault
-    delete client;
+
+    client->destroy();
 }
 
 Php::Value td_json_client_func_execute(Php::Parameters &params)
@@ -22,7 +23,8 @@ Php::Value td_json_client_func_execute(Php::Parameters &params)
     if(!object.instanceOf("TDLib\\BaseJsonClient")) throw Php::Exception("First parameter must be instance of TDLib\\BaseJsonClient.");
     const char *query = params[1];
     BaseJsonClient *client = (BaseJsonClient *)object.implementation();
-    std::string result = td_json_client_execute(client->getClientPointer(), query);
+
+    std::string result = client->execute(query);
     return result;
 }
 
@@ -32,7 +34,8 @@ void td_json_client_func_send(Php::Parameters &params)
     if(!object.instanceOf("TDLib\\BaseJsonClient")) throw Php::Exception("First parameter must be instance of TDLib\\BaseJsonClient.");
     const char *query = params[1];
     BaseJsonClient *client = (BaseJsonClient *)object.implementation();
-    td_json_client_send(client->getClientPointer(), query);
+
+    client->send(query);
 }
 
 Php::Value td_json_client_func_receive(Php::Parameters &params)
@@ -41,6 +44,7 @@ Php::Value td_json_client_func_receive(Php::Parameters &params)
     if(!object.instanceOf("TDLib\\BaseJsonClient")) throw Php::Exception("First parameter must be instance of TDLib\\BaseJsonClient.");
     double timeout = params[1];
     BaseJsonClient *client = (BaseJsonClient *)object.implementation();
-    std::string result = td_json_client_receive(client->getClientPointer(), timeout);
+
+    std::string result = client->receive(timeout);
     return result;
 }

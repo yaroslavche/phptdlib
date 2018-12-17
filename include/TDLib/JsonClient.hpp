@@ -10,8 +10,6 @@ class JsonClient : public BaseJsonClient
         std::string lastResponse;
         std::vector<std::string> receivedResponses;
         std::vector<nlohmann::json> receivedResponsesExtras;
-        std::string authorizationState;
-        std::string connectionState;
         double defaultTimeout = 0.5;
 
         void handleResponses(nlohmann::json* breakOnExtra);
@@ -27,8 +25,6 @@ class JsonClient : public BaseJsonClient
         // BaseJsonClient
         inline void __construct(Php::Parameters &params) { BaseJsonClient::__construct(params);};
         inline void __destruct() { BaseJsonClient::__destruct();};
-        inline void create() { BaseJsonClient::create(); }
-        inline void destroy() { BaseJsonClient::destroy(); }
         inline Php::Value execute(Php::Parameters &params) { return BaseJsonClient::execute(params); }
         inline void send(Php::Parameters &params) { BaseJsonClient::send(params); }
         Php::Value receive(Php::Parameters &params);

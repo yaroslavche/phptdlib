@@ -43,8 +43,6 @@ PHPCPP_EXPORT void *get_module()
     // BaseJsonClient
     json_client.method<&JsonClient::__construct> ("__construct");
     json_client.method<&JsonClient::__destruct> ("__destruct");
-    json_client.method<&JsonClient::create> ("create");
-    json_client.method<&JsonClient::destroy> ("destroy");
     json_client.method<&JsonClient::execute> ("execute", {
         Php::ByVal("query", Php::Type::String)
     });
