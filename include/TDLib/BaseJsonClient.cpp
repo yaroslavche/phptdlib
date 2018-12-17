@@ -68,14 +68,6 @@ std::string BaseJsonClient::receive(double timeout)
     } else return result;
 }
 
-void *BaseJsonClient::getClientPointer()
-{
-    if (_client == nullptr) {
-        throw Php::Exception("Client has already been destoyed");
-    }
-    return _client;
-}
-
 /**
  * Magic methods
  */

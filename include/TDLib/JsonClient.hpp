@@ -10,8 +10,6 @@ class JsonClient : public BaseJsonClient
         std::string lastResponse;
         std::vector<std::string> receivedResponses;
         std::vector<nlohmann::json> receivedResponsesExtras;
-        std::string authorizationState;
-        std::string connectionState;
         double defaultTimeout = 0.5;
 
         void handleResponses(nlohmann::json* breakOnExtra);

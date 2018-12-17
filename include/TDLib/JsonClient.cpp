@@ -29,11 +29,6 @@ void JsonClient::handleResponses(json* breakOnExtra) {
         else
         {
             auto responseJson = json::parse(lastResponse);
-            if(responseJson["@type"] == "ok") ;
-            if(responseJson["@type"] == "error") ;
-            if(responseJson["@type"] == "updateAuthorizationState") authorizationState = responseJson["authorization_state"]["@type"];
-            if(responseJson["@type"] == "updateOption") ;
-            if(responseJson["@type"] == "updateConnectionState") ;
 
             std::string responseCopy(lastResponse);
             receivedResponses.push_back(responseCopy);
@@ -137,7 +132,9 @@ Php::Value JsonClient::query(Php::Parameters &params) {
 
     try {
         request=json::parse(requestString);
-    } catch (nlohmann::json::exception exception) {
+    }
+    catch (nlohmann::json::exception& exception)
+    {
         throw Php::Exception("Error parsing json");
     }
 
