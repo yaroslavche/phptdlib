@@ -75,7 +75,7 @@ sudo make install
 
 ## install extension
 ```bash
-git clone https://github.com/yaroslavche/phptdlib.git
+git clone --recurse-submodules https://github.com/yaroslavche/phptdlib.git
 cd phptdlib && mkdir build && cd build
 cmake ..
 make
