@@ -61,27 +61,16 @@ $client->destroy();
 ```
 
 ## Required
- - [TDLib v1.3.0][1]
-```bash
-git clone https://github.com/tdlib/td.git
-cd td && mkdir build && cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
-cmake --build .
-sudo cmake --build . --target install
-```
  - [PHP-CPP v2.0.0][2]
+ 
+ All dependencies are installed via git submodules. But PHP-CPP
+ currently has buggy CMake configuration and should be globally installed as a library.
+ 
 ```bash
 git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
 cd PHP-CPP
 make
 sudo make install
-```
- - [nlohmann/json v3.2.0 (JSON for Modern C++)][3]
-```bash
-git clone https://github.com/nlohmann/json.git
-cd json && mkdir build && cd build
-cmake ..
-make install
 ```
 
 ## install extension
