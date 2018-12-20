@@ -1,11 +1,6 @@
-#include <iostream>
-
-#include <phpcpp.h>
-
-#include <td/telegram/td_json_client.h>
-
 #include "BaseJsonClient.hpp"
-#include "../TDApi/TDLibParameters.hpp"
+#include <cassert>
+#include <td/telegram/td_json_client.h>
 
 
 BaseJsonClient::BaseJsonClient(void *&client_ptr)

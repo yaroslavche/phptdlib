@@ -1,6 +1,8 @@
 #ifndef TDLIB_BASEJSONCLIENT_H
 #define TDLIB_BASEJSONCLIENT_H
 
+#include <phpcpp.h>
+
 class BaseJsonClient : public Php::Base
 {
     protected:

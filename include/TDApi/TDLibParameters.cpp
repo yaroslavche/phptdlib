@@ -1,8 +1,3 @@
-#include <iostream>
-#include <sstream>
-
-#include <phpcpp.h>
-
 #include "TDLibParameters.hpp"
 #include "../../tdlib.hpp"
 
