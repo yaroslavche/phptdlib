@@ -8,7 +8,8 @@ COPY . $HOME/phptdlib
 
 RUN cd $HOME/phptdlib && \
     mkdir build && cd build && \
-    cmake .. && \
-    make
+    cmake -DUSE_SHARED_TD=ON -DUSE_SHARED_JSON=ON -DUSE_SHARED_PHPCPP=ON .. && \
+    make && \
+    make install
 
 ENTRYPOINT ["php"]
