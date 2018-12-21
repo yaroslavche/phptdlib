@@ -61,10 +61,12 @@ $client->destroy();
 ```
 
 ## Required
- - [PHP-CPP v2.0.0][2]
+
+The most of dependencies are installed via git submodules currently.
+
+But PHP-CPP currently has to be built separately.
  
- All dependencies are installed via git submodules. But PHP-CPP
- currently has buggy CMake configuration and should be globally installed as a library.
+ - [PHP-CPP v2.0.0][2]
  
 ```bash
 git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
@@ -73,12 +75,16 @@ make
 sudo make install
 ```
 
+If you want to link other dependencies as dynamic libraries, you can pass
+ some options to cmake. Look through CMakeLists.txt comments to find out how.
+
 ## install extension
 ```bash
 git clone --recurse-submodules https://github.com/yaroslavche/phptdlib.git
 cd phptdlib && mkdir build && cd build
 cmake ..
 make
+sudo make install
 ```
 ### check
 ```bash
@@ -117,5 +123,6 @@ needs: g++ -> clang (RAM issue) and opensuse -> alpine (size), docker-compose
 [1]: https://github.com/tdlib/td
 [2]: https://github.com/CopernicaMarketingSoftware/PHP-CPP/
 [3]: https://github.com/nlohmann/json
+[td_dependencies]: https://github.com/tdlib/td#dependencies
 [td_ram_issue]: https://github.com/tdlib/td/issues/67
 [phptdlib_docker_image]: https://hub.docker.com/r/yaroslavche/phptdlib/
