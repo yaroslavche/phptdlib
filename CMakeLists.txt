@@ -119,6 +119,7 @@ if(USE_SHARED_JSON)
     if(NOT NLOHMANN_JSON_INCLUDE_FILE)
         message(SEND_ERROR "Failed to find nlohmann_json")
     endif()
+    set(NLOHMANN_JSON_LINK, "")
 else()
     set(JSON_BuildTests OFF CACHE INTERNAL "")
     add_subdirectory(modules/json EXCLUDE_FROM_ALL)
@@ -145,7 +146,7 @@ add_library(${EXT_NAME} SHARED ${SOURCE_FILES})
 
 target_link_libraries(${EXT_NAME}
         PRIVATE
-            Td::TdJson
+            Td::TdJsonStatic
             Td::TdStatic
             ${NLOHMANN_JSON_LINK}
         PUBLIC
