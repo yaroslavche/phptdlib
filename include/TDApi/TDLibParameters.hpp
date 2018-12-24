@@ -2,6 +2,7 @@
 #define TD_API_TDLIBPARAMETERS_H
 
 #include <nlohmann/json.hpp>
+#include <phpcpp.h>
 
 class TDLibParameters : public Php::Base // namespace: TDApi
 {

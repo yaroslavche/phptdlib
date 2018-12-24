@@ -1,4 +1,3 @@
-#include <phpcpp.h>
 #include <td/telegram/td_log.h>
 
 #include "TDLibLogConfiguration.hpp"

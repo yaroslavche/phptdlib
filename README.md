@@ -61,35 +61,30 @@ $client->destroy();
 ```
 
 ## Required
- - [TDLib v1.3.0][1]
-```bash
-git clone https://github.com/tdlib/td.git
-cd td && mkdir build && cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
-cmake --build .
-sudo cmake --build . --target install
-```
+
+The most of dependencies are installed via git submodules currently.
+
+But PHP-CPP currently has to be built separately.
+ 
  - [PHP-CPP v2.0.0][2]
+ 
 ```bash
 git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
 cd PHP-CPP
 make
 sudo make install
 ```
- - [nlohmann/json v3.2.0 (JSON for Modern C++)][3]
-```bash
-git clone https://github.com/nlohmann/json.git
-cd json && mkdir build && cd build
-cmake ..
-make install
-```
+
+If you want to link other dependencies as dynamic libraries, you can pass
+ some options to cmake. Look through CMakeLists.txt comments to find out how.
 
 ## install extension
 ```bash
-git clone https://github.com/yaroslavche/phptdlib.git
+git clone --recurse-submodules https://github.com/yaroslavche/phptdlib.git
 cd phptdlib && mkdir build && cd build
 cmake ..
 make
+sudo make install
 ```
 ### check
 ```bash
@@ -128,5 +123,6 @@ needs: g++ -> clang (RAM issue) and opensuse -> alpine (size), docker-compose
 [1]: https://github.com/tdlib/td
 [2]: https://github.com/CopernicaMarketingSoftware/PHP-CPP/
 [3]: https://github.com/nlohmann/json
+[td_dependencies]: https://github.com/tdlib/td#dependencies
 [td_ram_issue]: https://github.com/tdlib/td/issues/67
 [phptdlib_docker_image]: https://hub.docker.com/r/yaroslavche/phptdlib/

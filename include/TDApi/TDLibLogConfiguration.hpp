@@ -1,6 +1,8 @@
 #ifndef TD_API_LOGCONFIGURATION_H
 #define TD_API_LOGCONFIGURATION_H
 
+#include <phpcpp.h>
+
 class TDLibLogConfiguration : public Php::Base // namespace: TDApi
 {
     public:

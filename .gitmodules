@@ -1,0 +1,6 @@
+[submodule "modules/json"]
+	path = modules/json
+	url = git://github.com/nlohmann/json.git
+[submodule "modules/td"]
+	path = modules/td
+	url = git://github.com/tdlib/td.git

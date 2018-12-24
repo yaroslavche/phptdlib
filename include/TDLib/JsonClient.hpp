@@ -1,6 +1,7 @@
 #ifndef TDLIB_JSONCLIENT_H
 #define TDLIB_JSONCLIENT_H
 
+#include <phpcpp.h>
 #include <nlohmann/json.hpp>
 #include "BaseJsonClient.hpp"
 

@@ -7,7 +7,7 @@
 
 #include "tdlib.hpp"
 
-#include "include/td_json_client_func.cpp"
+#include "include/td_json_client_func.hpp"
 #include "include/TDLib/JsonClient.hpp"
 #include "include/TDApi/TDLibParameters.hpp"
 #include "include/TDApi/TDLibLogConfiguration.hpp"

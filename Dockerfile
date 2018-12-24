@@ -9,6 +9,7 @@ COPY . $HOME/phptdlib
 RUN cd $HOME/phptdlib && \
     mkdir build && cd build && \
     cmake .. && \
-    make
+    make && \
+    make install
 
 ENTRYPOINT ["php"]

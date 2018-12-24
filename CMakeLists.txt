@@ -4,45 +4,72 @@ set(EXT_NAME tdlib)
 set(EXT_VERSION 0.0.7)
 project(${EXT_NAME} VERSION ${EXT_VERSION} LANGUAGES CXX)
 
-set(CMAKE_CXX_FLAGS "-std=c++14 ${CMAKE_CXX_FLAGS}")
 
-find_package(Td 1.3.0 REQUIRED)
-if(NOT Td_FOUND)
-	message(SEND_ERROR "Failed to find Td")
-	return()
-endif()
 
-#find_library(PHPCPP phpcpp)
-#if(NOT PHPCPP)
-#	message(SEND_ERROR "Failed to find PHP-CPP")
-#	return()
-#endif()
+set(PHP_CONFIG_FILENAME php-config)
 
-find_file(NLOHMANN_JSON_INCLUDE_FILE nlohmann/json.hpp)
-if(NOT NLOHMANN_JSON_INCLUDE_FILE)
-	message(SEND_ERROR "Failed to find nlohmann_json")
-endif()
 
-FIND_PROGRAM(PHP_CONFIG NAMES php-config)
+#To compile for another PHP version choose the correct php-config, for example
+#   set(PHP_CONFIG_FILENAME php-config7.2)
+
+#If you want to preinstalled libraries (not to compile them every time), set the following flags:
+#   set(USE_SHARED_TD ON)
+#   set(USE_SHARED_JSON ON)
+#   set(USE_SHARED_PHPCPP ON)
+
+
+#PHP-CPP has an error in CMakeLists.txt. So, currently we can use it only as a shared library:
+set(USE_SHARED_PHPCPP ON)
+
+
+
+
+
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+
+###################
+#Determining PHP properties
+###################
+
+find_program(PHP_CONFIG NAMES ${PHP_CONFIG_FILENAME})
 if(NOT PHP_CONFIG)
-    message(SEND_ERROR "Failed to find php-config")
+    message(SEND_ERROR "Failed to find ${PHP_CONFIG_FILENAME}")
     return()
 endif()
+
 execute_process(
-    COMMAND ${PHP_CONFIG} --configure-options
-    COMMAND sed -ne "s/^.*--with-config-file-scan-dir=\\([^ ]*\\).*/\\1/p"
-    OUTPUT_VARIABLE PHP_CONFIG_DIR
-    OUTPUT_STRIP_TRAILING_WHITESPACE
+        COMMAND ${PHP_CONFIG} --php-binary
+        OUTPUT_VARIABLE PHP_BINARY
+        OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 execute_process(
-    COMMAND ${PHP_CONFIG} --extension-dir
-    OUTPUT_VARIABLE PHP_EXTENSIONS_DIR
-    OUTPUT_STRIP_TRAILING_WHITESPACE
+        COMMAND ${PHP_CONFIG} --include-dir
+        OUTPUT_VARIABLE PHP_INCLUDE_DIR
+        OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 execute_process(
-    COMMAND ${PHP_CONFIG} --vernum
-    OUTPUT_VARIABLE PHP_VERSION_NUMBER
-    OUTPUT_STRIP_TRAILING_WHITESPACE
+        COMMAND ${PHP_CONFIG} --configure-options
+        COMMAND sed -ne "s/^.*--with-config-file-scan-dir=\\([^ ]*\\).*/\\1/p"
+        OUTPUT_VARIABLE PHP_CONFIG_DIR
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+execute_process(
+        COMMAND ${PHP_CONFIG} --extension-dir
+        OUTPUT_VARIABLE PHP_EXTENSIONS_DIR
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+execute_process(
+        COMMAND ${PHP_CONFIG} --vernum
+        OUTPUT_VARIABLE PHP_VERSION_NUMBER
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+execute_process(
+        COMMAND ${PHP_BINARY} -r "echo PHP_INT_SIZE*8;"
+        OUTPUT_VARIABLE PHP_BIT_ARCHITECTURE
+        OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
 if(PHP_VERSION_NUMBER LESS 70000)
@@ -50,19 +77,100 @@ if(PHP_VERSION_NUMBER LESS 70000)
     return()
 endif()
 
-set(SOURCE_FILES tdlib.cpp include/TDLib/BaseJsonClient.cpp include/TDLib/JsonClient.cpp include/TDApi/TDLibParameters.cpp include/TDApi/TDLibLogConfiguration.cpp)
-set(EXT_INI_FILE ${EXT_NAME}.ini)
 
+
+###################
+#Compiling dependencies
+###################
+
+if(USE_SHARED_TD)
+    find_package(Td 1.3.0 REQUIRED)
+    if(NOT Td_FOUND)
+        message(SEND_ERROR "Failed to find Td")
+        return()
+    endif()
+    set(TD_LINK
+            Td::TdJson
+            Td::TdStatic
+            )
+else()
+    add_subdirectory(modules/td EXCLUDE_FROM_ALL)
+    set(TD_LINK
+            Td::TdJsonStatic
+            Td::TdStatic
+            )
+endif()
+
+if(USE_SHARED_PHPCPP)
+    find_library(PHPCPP phpcpp)
+    if(NOT PHPCPP)
+        message(SEND_ERROR "Failed to find PHP-CPP")
+        return()
+    endif()
+else()
+    # PHP-CPP now has incorrect CMakeLists.txt, so it could not be compiled via add_subdirectory.
+    # Waiting for fixes in PR 399 to be applied. Use USE_SHARED_PHPCPP instead of this.
+    message(SEND_ERROR "Currently PHP-CPP can be used only as a shared library. Use -DUSE_SHARED_PHPCPP option")
+
+    set(PHPCPP_PHP_PATH "${PHP_INCLUDE_DIR}" CACHE STRING "")
+    if("${PHP_BIT_ARCHITECTURE}" STREQUAL "64")
+        set(PHPCPP_ARCH "x86_64" CACHE STRING "")
+    else()
+        set(PHPCPP_ARCH "x86" CACHE STRING "")
+    endif()
+    include_directories(modules/PHP-CPP modules/PHP-CPP/include)
+    add_subdirectory(modules/PHP-CPP EXCLUDE_FROM_ALL)
+endif()
+
+if(USE_SHARED_JSON)
+    find_file(NLOHMANN_JSON_INCLUDE_FILE nlohmann/json.hpp)
+    if(NOT NLOHMANN_JSON_INCLUDE_FILE)
+        message(SEND_ERROR "Failed to find nlohmann_json")
+    endif()
+    set(NLOHMANN_JSON_LINK, "")
+else()
+    set(JSON_BuildTests OFF CACHE INTERNAL "")
+    add_subdirectory(modules/json EXCLUDE_FROM_ALL)
+    set(NLOHMANN_JSON_LINK, "nlohmann_json::nlohmann_json")
+endif()
+
+
+###################
+#Compiling phptdlib
+###################
+
+set(SOURCE_FILES
+        tdlib.cpp
+        include/TDLib/BaseJsonClient.cpp
+        include/TDLib/JsonClient.cpp
+        include/TDApi/TDLibParameters.cpp
+        include/TDApi/TDLibLogConfiguration.cpp
+        include/td_json_client_func.cpp
+        )
+set(EXT_INI_FILE ${EXT_NAME}.ini)
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 add_library(${EXT_NAME} SHARED ${SOURCE_FILES})
-target_link_libraries(${EXT_NAME} phpcpp Td::TdJson Td::TdStatic)
 
-add_custom_command(TARGET ${EXT_NAME}
-    POST_BUILD
-    COMMAND echo 'extension=${CMAKE_SHARED_LIBRARY_PREFIX}${EXT_NAME}.so' > ${EXT_INI_FILE}
-    COMMAND sudo cp -f ${EXT_INI_FILE}; ${PHP_CONFIG_DIR}
-    COMMAND rm -f ${EXT_INI_FILE}
-    COMMAND sudo cp -f $<TARGET_FILE:${EXT_NAME}> ${PHP_EXTENSIONS_DIR}
-    COMMAND rm -f $<TARGET_FILE:${EXT_NAME}>
-)
+target_link_libraries(${EXT_NAME}
+        PRIVATE
+            ${TD_LINK}
+            ${NLOHMANN_JSON_LINK}
+        PUBLIC
+            phpcpp
+        )
+
+
+###################
+#Generating configuration file
+###################
+set(EXT_LIBRARY_FILENAME "${CMAKE_SHARED_LIBRARY_PREFIX}${EXT_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+file(WRITE ${PROJECT_BINARY_DIR}/${EXT_INI_FILE} "extension=${EXT_LIBRARY_FILENAME}")
+
+
+###################
+#Extension installation instructions
+###################
+
+install(FILES ${PROJECT_BINARY_DIR}/${EXT_INI_FILE} DESTINATION ${PHP_CONFIG_DIR})
+install(TARGETS ${EXT_NAME} DESTINATION ${PHP_EXTENSIONS_DIR})
