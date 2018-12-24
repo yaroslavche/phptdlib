@@ -89,8 +89,16 @@ if(USE_SHARED_TD)
         message(SEND_ERROR "Failed to find Td")
         return()
     endif()
+    set(TD_LINK
+            Td::TdJson
+            Td::TdStatic
+            )
 else()
     add_subdirectory(modules/td EXCLUDE_FROM_ALL)
+    set(TD_LINK
+            Td::TdJsonStatic
+            Td::TdStatic
+            )
 endif()
 
 if(USE_SHARED_PHPCPP)
@@ -146,8 +154,7 @@ add_library(${EXT_NAME} SHARED ${SOURCE_FILES})
 
 target_link_libraries(${EXT_NAME}
         PRIVATE
-            Td::TdJsonStatic
-            Td::TdStatic
+            ${TD_LINK}
             ${NLOHMANN_JSON_LINK}
         PUBLIC
             phpcpp
