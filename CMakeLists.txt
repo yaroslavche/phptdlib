@@ -29,6 +29,26 @@ set(USE_SHARED_PHPCPP ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+if(NOT WIN32)
+    string(ASCII 27 Esc)
+    set(ColourReset "${Esc}[m")
+    set(ColourBold  "${Esc}[1m")
+    set(Red         "${Esc}[31m")
+    set(Green       "${Esc}[32m")
+    set(Yellow      "${Esc}[33m")
+    set(Blue        "${Esc}[34m")
+    set(Magenta     "${Esc}[35m")
+    set(Cyan        "${Esc}[36m")
+    set(White       "${Esc}[37m")
+    set(BoldRed     "${Esc}[1;31m")
+    set(BoldGreen   "${Esc}[1;32m")
+    set(BoldYellow  "${Esc}[1;33m")
+    set(BoldBlue    "${Esc}[1;34m")
+    set(BoldMagenta "${Esc}[1;35m")
+    set(BoldCyan    "${Esc}[1;36m")
+    set(BoldWhite   "${Esc}[1;37m")
+endif()
+
 
 ###################
 #Determining PHP properties
@@ -154,10 +174,10 @@ add_library(${EXT_NAME} SHARED ${SOURCE_FILES})
 
 target_link_libraries(${EXT_NAME}
         PRIVATE
-            ${TD_LINK}
-            ${NLOHMANN_JSON_LINK}
+        ${TD_LINK}
+        ${NLOHMANN_JSON_LINK}
         PUBLIC
-            phpcpp
+        phpcpp
         )
 
 
@@ -165,12 +185,21 @@ target_link_libraries(${EXT_NAME}
 #Generating configuration file
 ###################
 set(EXT_LIBRARY_FILENAME "${CMAKE_SHARED_LIBRARY_PREFIX}${EXT_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX}")
-file(WRITE ${PROJECT_BINARY_DIR}/${EXT_INI_FILE} "extension=${EXT_LIBRARY_FILENAME}")
-
+set(EXT_INI_CONTENTS "extension=${EXT_LIBRARY_FILENAME}")
+file(WRITE ${PROJECT_BINARY_DIR}/${EXT_INI_FILE} "${EXT_INI_CONTENTS}")
 
 ###################
 #Extension installation instructions
 ###################
 
-install(FILES ${PROJECT_BINARY_DIR}/${EXT_INI_FILE} DESTINATION ${PHP_CONFIG_DIR})
 install(TARGETS ${EXT_NAME} DESTINATION ${PHP_EXTENSIONS_DIR})
+
+if("${PHP_CONFIG_DIR}" STREQUAL "")
+    install(CODE "MESSAGE(\"\nThe extension is installed to ${PHP_EXTENSIONS_DIR}/${EXT_LIBRARY_FILENAME}
+
+Now you have to ${Red}add the following line${ColourReset} at the end of your php.ini
+${BoldRed}manually${ColourReset} ${Red}to be able to use the extension${ColourReset}:
+    ${EXT_INI_CONTENTS}\")")
+else()
+    install(FILES ${PROJECT_BINARY_DIR}/${EXT_INI_FILE} DESTINATION ${PHP_CONFIG_DIR})
+endif()
