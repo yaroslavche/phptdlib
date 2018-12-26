@@ -20,14 +20,6 @@ class BaseJsonClient : public Php::Base
         // export
         void __construct(Php::Parameters &params);
         void __destruct();
-        const char *__toString();
-        Php::Value __get(const Php::Value &name);
-        void __set(const Php::Value &name, const Php::Value &value);
-        bool __isset(const Php::Value &name);
-        void __unset(const Php::Value &name);
-        Php::Value __call(const char *name, Php::Parameters &params);
-        static Php::Value __callStatic(const char *name, Php::Parameters &params);
-        Php::Value __invoke(Php::Parameters &params);
 
         void create();
         void destroy();
