@@ -26,7 +26,7 @@ SCENARIO( "Check TDLibParameters", "[TDLibParameters]" ) {
 
         WHEN ( "set integer parameter" ) {
             Php::Value parameterValue = 11223344;
-            parameters->setParameter(TDLibParameters::API_ID, &parameterValue);
+            parameters->setParameter(TDLibParameters::API_ID, parameterValue);
             THEN ( "should be the same" ) {
                 nlohmann::json parametersArray = parameters->getParameters();
                 REQUIRE ( ((int)parametersArray[TDLibParameters::API_ID]) == (int)parameterValue );
@@ -36,7 +36,7 @@ SCENARIO( "Check TDLibParameters", "[TDLibParameters]" ) {
         WHEN ( "set parameter of invalid type" ) {
             Php::Value parameterValue = 11223344;
             THEN ( "should throw exception" ) {
-                REQUIRE_THROWS( parameters->setParameter(TDLibParameters::API_HASH, &parameterValue) );
+                REQUIRE_THROWS( parameters->setParameter(TDLibParameters::API_HASH, parameterValue) );
             }
         }
     }

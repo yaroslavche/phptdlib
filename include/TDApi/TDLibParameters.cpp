@@ -24,6 +24,7 @@ Php::Value TDLibParameters::setParameter(Php::Parameters &params)
 {
     std::string parameter = params[0];
     Php::Value value = params[1];
+    setParameter(parameter, value);
     return this;
 }
 
@@ -42,7 +43,7 @@ void TDLibParameters::setParameter(const std::string &parameterName, bool parame
     parameters[parameterName] = parameterValue;
 }
 
-void TDLibParameters::setParameter(const std::string &parameterName, Php::Value *parameterValue)
+void TDLibParameters::setParameter(const std::string &parameterName, const Php::Value &parameterValue)
 {
     auto paramsIt = parameters.find(parameterName);
     if (paramsIt == parameters.end())
@@ -50,19 +51,19 @@ void TDLibParameters::setParameter(const std::string &parameterName, Php::Value 
         throw Php::Exception("Invalid parameter name");
     }
 
-    if (parameterValue->isNumeric() && paramsIt->is_number())
+    if (parameterValue.isNumeric() && paramsIt->is_number())
     {
-        int typedValue = *parameterValue;
+        int typedValue = parameterValue;
         setParameter(parameterName, typedValue);
     }
-    else if (parameterValue->isString() && paramsIt->is_string())
+    else if (parameterValue.isString() && paramsIt->is_string())
     {
-        std::string typedValue = *parameterValue;
+        std::string typedValue = parameterValue;
         setParameter(parameterName, typedValue);
     }
-    else if (parameterValue->isBool() && paramsIt->is_boolean())
+    else if (parameterValue.isBool() && paramsIt->is_boolean())
     {
-        bool typedValue = *parameterValue;
+        bool typedValue = parameterValue;
         setParameter(parameterName, typedValue);
     }
     else
