@@ -170,14 +170,18 @@ set(SOURCE_FILES
 set(EXT_INI_FILE ${EXT_NAME}.ini)
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
+if(APPLE)
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -undefined dynamic_lookup")
+endif()
+
 add_library(${EXT_NAME} SHARED ${SOURCE_FILES})
 
 target_link_libraries(${EXT_NAME}
         PRIVATE
-        ${TD_LINK}
-        ${NLOHMANN_JSON_LINK}
+            ${TD_LINK}
+            ${NLOHMANN_JSON_LINK}
         PUBLIC
-        phpcpp
+            phpcpp
         )
 
 
