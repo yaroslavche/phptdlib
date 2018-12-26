@@ -24,33 +24,51 @@ Php::Value TDLibParameters::setParameter(Php::Parameters &params)
 {
     std::string parameter = params[0];
     Php::Value value = params[1];
+    return this;
+}
 
-    auto paramsIt = parameters.find(parameter);
+void TDLibParameters::setParameter(const std::string &parameterName, int parameterValue)
+{
+    parameters[parameterName] = parameterValue;
+}
+
+void TDLibParameters::setParameter(const std::string &parameterName, std::string parameterValue)
+{
+    parameters[parameterName] = parameterValue;
+}
+
+void TDLibParameters::setParameter(const std::string &parameterName, bool parameterValue)
+{
+    parameters[parameterName] = parameterValue;
+}
+
+void TDLibParameters::setParameter(const std::string &parameterName, Php::Value *parameterValue)
+{
+    auto paramsIt = parameters.find(parameterName);
     if (paramsIt == parameters.end())
     {
         throw Php::Exception("Invalid parameter name");
     }
 
-    if (value.isNumeric() && paramsIt->is_number())
+    if (parameterValue->isNumeric() && paramsIt->is_number())
     {
-        int typedValue = value;
-        parameters[parameter] = typedValue;
+        int typedValue = *parameterValue;
+        setParameter(parameterName, typedValue);
     }
-    else if (value.isString() && paramsIt->is_string())
+    else if (parameterValue->isString() && paramsIt->is_string())
     {
-        std::string typedValue = value;
-        parameters[parameter] = typedValue;
+        std::string typedValue = *parameterValue;
+        setParameter(parameterName, typedValue);
     }
-    else if (value.isBool() && paramsIt->is_boolean())
+    else if (parameterValue->isBool() && paramsIt->is_boolean())
     {
-        bool typedValue = value;
-        parameters[parameter] = typedValue;
+        bool typedValue = *parameterValue;
+        setParameter(parameterName, typedValue);
     }
     else
     {
         throw Php::Exception("Invalid TDLib parameter type");
     }
-    return this;
 }
 
 nlohmann::json TDLibParameters::getParameters()

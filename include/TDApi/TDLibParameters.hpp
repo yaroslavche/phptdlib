@@ -30,6 +30,10 @@ class TDLibParameters : public Php::Base // namespace: TDApi
         virtual ~TDLibParameters() = default;
 
         Php::Value setParameter(Php::Parameters &params);
+        void setParameter(const std::string &parameterName, Php::Value *parameterValue);
+        void setParameter(const std::string &parameterName, int parameterValue);
+        void setParameter(const std::string &parameterName, std::string parameterValue);
+        void setParameter(const std::string &parameterName, bool parameterValue);
         nlohmann::json getParameters();
         Php::Value __debugInfo();
 

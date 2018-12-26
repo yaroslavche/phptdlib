@@ -20,6 +20,7 @@ class TDLibLogConfiguration : public Php::Base // namespace: TDApi
         static Php::Value setLogFilePath(Php::Parameters &params);
         static void setLogMaxFileSize(Php::Parameters &params);
         static void setLogVerbosityLevel(Php::Parameters &params);
+        static void setLogVerbosityLevel(int logVerbosityLevel);
 //    todo: void setLogFatalErrorCallback(Php::Parameters &params);
 };
 

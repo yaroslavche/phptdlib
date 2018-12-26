@@ -46,7 +46,7 @@ void JsonClient::handleResponses(json* breakOnExtra) {
     }
 }
 
-std::string JsonClient::waitForResponse(json* extra,double timeout) {
+std::string JsonClient::waitForResponse(json* extra, double timeout) {
     std::vector<nlohmann::json>::iterator itExtras;
     std::vector<std::string>::iterator itResponses;
 
@@ -88,7 +88,7 @@ std::string JsonClient::query(const char *query, double timeout, json* extra) {
     // todo: lastQuery [lastRequest, lastResponse, isSuccess, state] ?
 }
 
-std::string JsonClient::addExtraAndSendQuery(std::string type, json* jsonQuery, double timeout) {
+std::string JsonClient::addExtraAndSendQuery(const std::string &type, json* jsonQuery, double timeout) {
     json extra;
     auto extraIt = jsonQuery->find("@extra");
     if (extraIt == jsonQuery->end())
@@ -128,6 +128,11 @@ Php::Value JsonClient::receive(Php::Parameters &params) {
 
 Php::Value JsonClient::query(Php::Parameters &params) {
     std::string requestString = params[0];
+    double timeout = getTimeoutFromParams(params, 1);
+    return query(requestString, timeout);
+}
+
+Php::Value JsonClient::query(const std::string &requestString, double timeout) {
     json request;
 
     try {
@@ -153,7 +158,7 @@ Php::Value JsonClient::query(Php::Parameters &params) {
     return addExtraAndSendQuery(
             type,
             &request,
-            getTimeoutFromParams(params, 1)
+            timeout
     );
 }
 
@@ -219,19 +224,29 @@ Php::Value JsonClient::setDatabaseEncryptionKey(Php::Parameters &params) {
     );
 }
 
-Php::Value JsonClient::setTdlibParameters(Php::Parameters &params) {
-    Php::Value tdlibParams = params[0];
-    if(!tdlibParams.instanceOf("TDApi\\TDLibParameters")) throw Php::Exception("First parameter must be instance of TDApi\\TDLibParameters.");
-    TDLibParameters *parametersObject = (TDLibParameters *)tdlibParams.implementation();
-
-    json parameters = parametersObject->getParameters();
+std::string JsonClient::setTdlibParameters(TDLibParameters *parameters, double timeout) {
+    json parametersJson = parameters->getParameters();
 
     json jsonQuery;
-    jsonQuery["parameters"] = parameters;
+    jsonQuery["parameters"] = parametersJson;
 
     return addExtraAndSendQuery(
             "setTdlibParameters",
             &jsonQuery,
+            timeout
+    );
+}
+
+Php::Value JsonClient::setTdlibParameters(Php::Parameters &params) {
+    Php::Value tdlibParams = params[0];
+    if(!tdlibParams.instanceOf("TDApi\\TDLibParameters")) {
+        throw Php::Exception("First parameter must be instance of TDApi\\TDLibParameters.");
+    }
+
+    TDLibParameters *parametersObject = (TDLibParameters *)tdlibParams.implementation();
+
+    return setTdlibParameters(
+            parametersObject,
             getTimeoutFromParams(params, 1)
     );
 }

@@ -16,5 +16,10 @@ void TDLibLogConfiguration::setLogMaxFileSize(Php::Parameters &params)
 void TDLibLogConfiguration::setLogVerbosityLevel(Php::Parameters &params)
 {
     int logVerbosityLevel=params[0];
+    setLogVerbosityLevel(logVerbosityLevel);
+}
+
+void TDLibLogConfiguration::setLogVerbosityLevel(int logVerbosityLevel)
+{
     td_set_log_verbosity_level(logVerbosityLevel);
 }
