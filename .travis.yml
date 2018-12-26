@@ -13,4 +13,4 @@ install:
 
 script:
     - docker run phptdlib /root/phptdlib/php_examples/func.php
-    - docker run phptdlib /root/phptdlib/build/tester
+    - docker run --entrypoint /root/phptdlib/build/tester phptdlib
