@@ -10,12 +10,12 @@ addons:
         packages:
             - zlib
             - openssl
-            - openssl-devel
+            - libssl-dev
             - gperf
-            - php7-cli
-            - php7-dev
-            - php7-json
-            - php7-embed
+            - php-cli
+            - php-dev
+            - php-json
+            - libphp-embed
 
 install:
     - cmake -DTDLIB_BUILD_TESTS=ON && make && sudo make install
