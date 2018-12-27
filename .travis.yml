@@ -2,15 +2,13 @@ sudo: required
 
 language: cpp
 
-services:
-    - docker
-
 before_install:
-    - docker pull yaroslavche/phptdlib
+    - apt-get update
+    - apt-get install -y zlib openssl openssl-devel gperf php7 php7-dev php7-json php7-embed
 
 install:
-    - docker build -t phptdlib .
+    - cmake -DTDLIB_BUILD_TESTS=ON && make && sudo make install
 
 script:
-    - docker run phptdlib /root/phptdlib/php_examples/func.php
-    - docker run --entrypoint /root/phptdlib/build/tester phptdlib
+    - ./tester
+    - php php_examples/func.php
