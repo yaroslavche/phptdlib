@@ -2,9 +2,20 @@ sudo: required
 
 language: cpp
 
-before_install:
-    - apt-get update
-    - apt-get install -y zlib openssl openssl-devel gperf php7 php7-dev php7-json php7-embed
+os:
+    - linux
+
+addons:
+    apt:
+        packages:
+            - zlib
+            - openssl
+            - openssl-devel
+            - gperf
+            - php7-cli
+            - php7-dev
+            - php7-json
+            - php7-embed
 
 install:
     - cmake -DTDLIB_BUILD_TESTS=ON && make && sudo make install
