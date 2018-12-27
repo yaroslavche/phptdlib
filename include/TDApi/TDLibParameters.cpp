@@ -1,5 +1,6 @@
 #include "TDLibParameters.hpp"
 #include "../../tdlib.hpp"
+#include "../common.hpp"
 
 TDLibParameters::TDLibParameters()
 {
@@ -22,7 +23,7 @@ TDLibParameters::TDLibParameters()
 
 Php::Value TDLibParameters::setParameter(Php::Parameters &params)
 {
-    std::string parameter = params[0];
+    std::string parameter = getPhpFunctionArgument(params, 0, "");
     Php::Value value = params[1];
     setParameter(parameter, value);
     return this;

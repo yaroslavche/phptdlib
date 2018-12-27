@@ -170,6 +170,7 @@ set(SOURCE_FILES
         include/TDApi/TDLibParameters.cpp
         include/TDApi/TDLibLogConfiguration.cpp
         include/td_json_client_func.cpp
+        include/common.cpp
         )
 set(EXT_INI_FILE ${EXT_NAME}.ini)
 set(CMAKE_SHARED_LIBRARY_PREFIX "")

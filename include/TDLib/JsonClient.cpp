@@ -6,7 +6,7 @@
 
 #include "JsonClient.hpp"
 
-#include "../TDApi/TDLibParameters.hpp"
+#include "../common.hpp"
 
 using json = nlohmann::json;
 
@@ -104,31 +104,18 @@ std::string JsonClient::addExtraAndSendQuery(const std::string &type, json* json
     return query(jsonQuery->dump().c_str(), timeout, &extra);
 }
 
-double JsonClient::getTimeoutFromParams(Php::Parameters &params, int timeoutParameterIndex) {
-    if (params.size() <= timeoutParameterIndex || params[timeoutParameterIndex].isNull())
-    {
-        return defaultTimeout;
-    }
-
-    return params[timeoutParameterIndex];
-}
-
 /**
 * exported
 **/
 
 Php::Value JsonClient::receive(Php::Parameters &params) {
-    double timeout = defaultTimeout;
-    if(params.size() > 0)
-    {
-        timeout = params[0];
-    }
+    double timeout = getPhpFunctionArgument(params, 0, defaultTimeout);
     return BaseJsonClient::receive(timeout);
 }
 
 Php::Value JsonClient::query(Php::Parameters &params) {
-    std::string requestString = params[0];
-    double timeout = getTimeoutFromParams(params, 1);
+    std::string requestString = getPhpFunctionArgument(params, 0, "");
+    double timeout = getPhpFunctionArgument(params, 1, defaultTimeout);
     return query(requestString, timeout);
 }
 
@@ -171,7 +158,7 @@ Php::Value JsonClient::getReceivedResponses(Php::Parameters &params) {
 }
 
 void JsonClient::setDefaultTimeout(Php::Parameters &params) {
-    defaultTimeout = params[0];
+    defaultTimeout = getPhpFunctionArgument(params, 0, 0.0);
 }
 
 /**
@@ -179,14 +166,14 @@ void JsonClient::setDefaultTimeout(Php::Parameters &params) {
 **/
 
 Php::Value JsonClient::checkDatabaseEncryptionKey(Php::Parameters &params) {
-    const std::string key = params[0];
+    const std::string key = getPhpFunctionArgument(params, 0, "");
     json jsonQuery;
     jsonQuery["key"] = key;
 
     return addExtraAndSendQuery(
             "checkDatabaseEncryptionKey",
             &jsonQuery,
-            getTimeoutFromParams(params, 1)
+            getPhpFunctionArgument(params, 1, defaultTimeout)
     );
 }
 
@@ -196,31 +183,31 @@ Php::Value JsonClient::getAuthorizationState(Php::Parameters &params) {
     return addExtraAndSendQuery(
             "getAuthorizationState",
             &jsonQuery,
-            getTimeoutFromParams(params, 0)
+            getPhpFunctionArgument(params, 0, defaultTimeout)
     );
 }
 
 Php::Value JsonClient::setAuthenticationPhoneNumber(Php::Parameters &params) {
-    std::string phone_number = params[0];
+    std::string phone_number = getPhpFunctionArgument(params, 0, "");
     json jsonQuery;
     jsonQuery["phone_number"] = phone_number;
 
     return addExtraAndSendQuery(
             "setAuthenticationPhoneNumber",
             &jsonQuery,
-            getTimeoutFromParams(params, 1)
+            getPhpFunctionArgument(params, 1, defaultTimeout)
     );
 }
 
 Php::Value JsonClient::setDatabaseEncryptionKey(Php::Parameters &params) {
-    const std::string new_encryption_key = !params.empty() ? params[0] : "";
+    const std::string new_encryption_key = getPhpFunctionArgument(params, 0, "");
     json jsonQuery;
     if(new_encryption_key.length() > 0) jsonQuery["new_encryption_key"] = new_encryption_key;
 
     return addExtraAndSendQuery(
             "setDatabaseEncryptionKey",
             &jsonQuery,
-            getTimeoutFromParams(params, 1)
+            getPhpFunctionArgument(params, 1, defaultTimeout)
     );
 }
 
@@ -238,7 +225,7 @@ std::string JsonClient::setTdlibParameters(TDLibParameters *parameters, double t
 }
 
 Php::Value JsonClient::setTdlibParameters(Php::Parameters &params) {
-    Php::Value tdlibParams = params[0];
+    Php::Value tdlibParams = getPhpFunctionArgument(params, 0);
     if(!tdlibParams.instanceOf("TDApi\\TDLibParameters")) {
         throw Php::Exception("First parameter must be instance of TDApi\\TDLibParameters.");
     }
@@ -247,6 +234,6 @@ Php::Value JsonClient::setTdlibParameters(Php::Parameters &params) {
 
     return setTdlibParameters(
             parametersObject,
-            getTimeoutFromParams(params, 1)
+            getPhpFunctionArgument(params, 1, defaultTimeout)
     );
 }

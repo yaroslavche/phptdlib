@@ -17,8 +17,6 @@ class JsonClient : public BaseJsonClient
         void handleResponses(nlohmann::json* breakOnExtra);
         std::string waitForResponse(nlohmann::json* extra,double timeout);
 
-        double getTimeoutFromParams(Php::Parameters &params, int timeoutParameterInde);
-
     public:
 
         // exported

@@ -1,22 +1,21 @@
 #include <td/telegram/td_log.h>
 
 #include "TDLibLogConfiguration.hpp"
+#include "../common.hpp"
 
 Php::Value TDLibLogConfiguration::setLogFilePath(Php::Parameters &params)
 {
-    return td_set_log_file_path(params[0]);
+    return td_set_log_file_path(getPhpFunctionArgument(params, 0, ""));
 }
 
 void TDLibLogConfiguration::setLogMaxFileSize(Php::Parameters &params)
 {
-    int maxLogFileSize=params[0];
-    td_set_log_max_file_size(maxLogFileSize);
+    td_set_log_max_file_size(getPhpFunctionArgument(params, 0, 0));
 }
 
 void TDLibLogConfiguration::setLogVerbosityLevel(Php::Parameters &params)
 {
-    int logVerbosityLevel=params[0];
-    setLogVerbosityLevel(logVerbosityLevel);
+    setLogVerbosityLevel(getPhpFunctionArgument(params, 0, LVL_ERROR));
 }
 
 void TDLibLogConfiguration::setLogVerbosityLevel(int logVerbosityLevel)
