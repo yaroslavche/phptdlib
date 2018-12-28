@@ -20,11 +20,13 @@ addons:
             - libphp-embed
 
 before_install:
+    - git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
+    - cd PHP-CPP && make && sudo make install && cd ..
     - wget https://github.com/Kitware/CMake/releases/download/v3.13.2/cmake-3.13.2-Linux-x86_64.tar.gz -O /opt/cmake.tar.gz
     - tar -xzf /opt/cmake.tar.gz -C /opt
 
 install:
-    - /opt/cmake/cmake-3.13.2-Linux-x86_64/bin/cmake -DTDLIB_BUILD_TESTS=ON && make && sudo make install
+    - /opt/cmake-3.13.2-Linux-x86_64/bin/cmake -DTDLIB_BUILD_TESTS=ON && make && sudo make install
 
 script:
     - ./tester
