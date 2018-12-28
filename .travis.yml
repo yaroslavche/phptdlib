@@ -26,7 +26,7 @@ before_install:
     - tar -xzf /opt/cmake.tar.gz -C /opt
 
 install:
-    - /opt/cmake-3.13.2-Linux-x86_64/bin/cmake -DTDLIB_BUILD_TESTS=ON && make && sudo make install
+    - /opt/cmake-3.13.2-Linux-x86_64/bin/cmake -DTDLIB_BUILD_TESTS=ON . && make && sudo make install
 
 script:
     - ./tester
