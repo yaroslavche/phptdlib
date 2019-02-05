@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "../include/TDApi/TDLibLogConfiguration.hpp"
+#include "../../include/TDApi/TDLibLogConfiguration.hpp"
 
 TEST_CASE( "Check TDLibLogConfiguration", "[TDLibLogConfiguration]" ) {
     SECTION ( "checking constants" ) {

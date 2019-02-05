@@ -225,7 +225,7 @@ endif()
 if(TDLIB_BUILD_TESTS)
     set(INTERFACE_POSITION_INDEPENDENT_CODE ON)
 
-    file(GLOB TEST_SOURCES tests/*.cpp)
+    file(GLOB TEST_SOURCES tests/src/*.cpp)
 
     add_executable(tester
             ${SOURCE_FILES}

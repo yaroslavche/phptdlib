@@ -1,0 +1,45 @@
+ARG DISTR=opensuse/leap:latest
+
+FROM $DISTR as build
+LABEL maintainer="yaroslav429@gmail.com"
+
+ENV container docker
+ENV HOME /root
+
+RUN zypper -n install sudo which gcc gcc-c++ zlib gperf openssl openssl-devel cmake git php7 php7-devel php7-ctype php7-json php7-embed && \
+    zypper clean
+
+COPY . $HOME/phptdlib
+
+RUN cd $HOME && \
+    git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git && \
+    cd $HOME/PHP-CPP && \
+    make && \
+    make install && \
+    make clean
+
+RUN cd $HOME/phptdlib && mkdir build && cd build && \
+    cmake -DTDLIB_BUILD_TESTS=ON .. && \
+    cmake --build . && \
+    sudo cmake --build . --target install
+
+RUN $HOME/phptdlib/build/tester
+
+
+
+
+FROM $DISTR
+LABEL maintainer="yaroslav429@gmail.com"
+ENV container docker
+ENV HOME /root
+
+RUN zypper -n install php7 php7-ctype php7-json && \
+    zypper clean
+
+COPY --from=build /usr/lib/libphpcpp.so* /usr/lib/
+COPY --from=build /usr/lib64/php7/extensions/tdlib.so /usr/lib64/php7/extensions/
+COPY --from=build /etc/php7/conf.d/tdlib.ini /etc/php7/conf.d/
+
+RUN /sbin/ldconfig
+
+ENTRYPOINT ["php"]

@@ -1,7 +1,7 @@
 #include "catch.hpp"
 
 #include <phpcpp.h>
-#include "../include/TDApi/TDLibParameters.hpp"
+#include "../../include/TDApi/TDLibParameters.hpp"
 
 SCENARIO( "Check TDLibParameters", "[TDLibParameters]" ) {
     GIVEN ( "new TDLibParameters" ) {

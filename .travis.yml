@@ -2,33 +2,23 @@ sudo: required
 
 language: cpp
 
+services:
+    - docker
+
 os:
     - linux
 
 dist: xenial
 
-addons:
-    apt:
-        packages:
-            - wget
-            - openssl
-            - libssl-dev
-            - gperf
-            - php-cli
-            - php-dev
-            - php-json
-            - libphp-embed
-
-before_install:
-    - git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
-    - cd PHP-CPP && make && sudo make install && cd ..
-    - wget https://github.com/Kitware/CMake/releases/download/v3.13.2/cmake-3.13.2-Linux-x86_64.tar.gz -O /opt/cmake.tar.gz
-    - tar -xzf /opt/cmake.tar.gz -C /opt
+matrix:
+    include:
+        - name: "Opensuse static build"
+          env: os=opensuse linktype=static
+        - name: "Opensuse shared build"
+          env: os=opensuse linktype=shared
 
 install:
-    - mkdir build && cd ./build
-    - /opt/cmake-3.13.2-Linux-x86_64/bin/cmake -DTDLIB_BUILD_TESTS=ON .. && make && sudo make install
+    - $TRAVIS_BUILD_DIR/tests/scripts/build_docker.sh $os $linktype phptdlib/$os-$linktype
 
 script:
-    - ./tester
-    - php ../php_examples/func.php
+    - docker run -it -v $TRAVIS_BUILD_DIR/php_examples:/php_examples phptdlib/$os-$linktype /php_examples/func.php

@@ -1,7 +1,7 @@
 #include "catch.hpp"
 
-#include "../include/TDLib/BaseJsonClient.hpp"
-#include "../include/TDLib/JsonClient.hpp"
+#include "../../include/TDLib/BaseJsonClient.hpp"
+#include "../../include/TDLib/JsonClient.hpp"
 
 
 SCENARIO ("Check base JsonClient methods", "[JsonClient]") {

@@ -1,6 +1,6 @@
 #include "catch.hpp"
 
-#include "../include/TDLib/BaseJsonClient.hpp"
+#include "../../include/TDLib/BaseJsonClient.hpp"
 
 #define GET_STATUS_REQUEST "{\"@type\":\"getAuthorizationState\",\"@extra\":\"1234\"}"
 
