@@ -10,15 +10,22 @@ os:
 
 dist: xenial
 
+env:
+    - JOBS_IN_PARALLEL=2
+    - from_image=opensuse/leap:latest
+
 matrix:
     include:
         - name: "Opensuse static build"
-          env: os=opensuse linktype=static
+          env: tag=opensuse-static target_image=phptdlib/opensuse-static
         - name: "Opensuse shared build"
-          env: os=opensuse linktype=shared
+          env: tag=opensuse-shared target_image=phptdlib/opensuse-shared
+
+before_install:
+    - docker pull $from_image
 
 install:
-    - $TRAVIS_BUILD_DIR/tests/scripts/build_docker.sh $os $linktype phptdlib/$os-$linktype
+    - $TRAVIS_BUILD_DIR/tests/scripts/docker_build.sh $tag $from_image $target_image
 
 script:
-    - docker run -it -v $TRAVIS_BUILD_DIR/php_examples:/php_examples phptdlib/$os-$linktype /php_examples/func.php
+    - docker run -it -v $TRAVIS_BUILD_DIR/php_examples:/php_examples $target_image /php_examples/func.php

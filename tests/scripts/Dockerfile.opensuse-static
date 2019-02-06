@@ -1,12 +1,16 @@
-ARG DISTR=opensuse/leap:latest
+ARG FROM_IMAGE
+ARG JOBS_IN_PARALLEL
 
-FROM $DISTR as build
+FROM $FROM_IMAGE as build
 LABEL maintainer="yaroslav429@gmail.com"
 
 ENV container docker
 ENV HOME /root
 
-RUN zypper -n install sudo which gcc gcc-c++ zlib gperf openssl openssl-devel cmake git php7 php7-devel php7-ctype php7-json php7-embed && \
+RUN zypper -n install php7 php7-ctype php7-json && \
+    zypper clean
+
+RUN zypper -n install git which gcc gcc-c++ zlib gperf openssl libopenssl-devel cmake php7-devel php7-embed && \
     zypper clean
 
 COPY . $HOME/phptdlib
@@ -14,13 +18,13 @@ COPY . $HOME/phptdlib
 RUN cd $HOME && \
     git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git && \
     cd $HOME/PHP-CPP && \
-    make && \
+    make -j $JOBS_IN_PARALLEL && \
     make install && \
     make clean
 
 RUN cd $HOME/phptdlib && mkdir build && cd build && \
     cmake -DTDLIB_BUILD_TESTS=ON .. && \
-    cmake --build . && \
+    cmake --build . -- -j $JOBS_IN_PARALLEL && \
     sudo cmake --build . --target install
 
 RUN $HOME/phptdlib/build/tester
@@ -28,7 +32,7 @@ RUN $HOME/phptdlib/build/tester
 
 
 
-FROM $DISTR
+FROM $FROM_IMAGE
 LABEL maintainer="yaroslav429@gmail.com"
 ENV container docker
 ENV HOME /root
