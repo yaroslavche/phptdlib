@@ -10,9 +10,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="favicon.ico">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+          rel='stylesheet' type='text/css'>
     <!-- FontAwesome JS -->
-    <script defer src="https://use.fontawesome.com/releases/v5.1.1/js/all.js" integrity="sha384-BtvRZcyfv4r0x/phJt9Y9HhnN5ur1Z+kZbKVgzVBAlQZX4jvAuImlIz+bG7TS00a" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.1.1/js/all.js"
+            integrity="sha384-BtvRZcyfv4r0x/phJt9Y9HhnN5ur1Z+kZbKVgzVBAlQZX4jvAuImlIz+bG7TS00a"
+            crossorigin="anonymous"></script>
     <!-- Global CSS -->
     <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Plugins CSS -->
@@ -25,167 +28,238 @@
 </head>
 
 <body class="body-green">
-    <div class="page-wrapper">
-        <!-- ******Header****** -->
-        <header id="header" class="header">
-            <div class="container">
+<div class="page-wrapper">
+    <!-- ******Header****** -->
+    <header id="header" class="header">
+        <div class="container">
                 <span style="font-size: 3em; position:absolute; top:20px; right:40px">
                     <a href="https://github.com/yaroslavche/phptdlib" target="_blank"><i class="fab fa-github"></i></a>
                 </span>
-                <div class="branding">
-                    <h1 class="logo">
-                        <a href="index.html">
-                            <span aria-hidden="true" class="fa fa-paper-plane icon"></span>
-                            <span class="text-highlight">PHP</span><span class="text-bold">TdLib</span>
-                        </a>
-                    </h1>
-                </div>
-                <!--//branding-->
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item active">Documentation</li>
-                </ol>
+            <div class="branding">
+                <h1 class="logo">
+                    <a href="index.html">
+                        <span aria-hidden="true" class="fa fa-paper-plane icon"></span>
+                        <span class="text-highlight">PHP</span><span class="text-bold">TdLib</span>
+                    </a>
+                </h1>
             </div>
-            <!--//container-->
-        </header>
-        <!--//header-->
-        <div class="doc-wrapper">
-            <div class="container">
-                <div id="doc-header" class="doc-header text-center">
-                    <h1 class="doc-title"><i class="icon icon_cogs"></i> Documentation</h1>
-                    <div class="meta"><i class="far fa-clock"></i> Last updated: November 25, 2018</div>
-                </div>
-                <!--//doc-header-->
-                <div class="doc-body row">
-                    <div class="doc-content col-md-9 col-12 order-1">
-                        <div class="content-inner">
-                            <section id="example-section" class="doc-section">
-                                <h2 class="section-title">Demo example</h2>
-                                <div id="example-wrapper" class="section-block">
-                                    <div class="code-block">
-                                        <h6>tdlib/td wrapper</h6>
-                                        <pre><code class="language-php">&lt;?php
+            <!--//branding-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active">Documentation</li>
+            </ol>
+        </div>
+        <!--//container-->
+    </header>
+    <!--//header-->
+    <div class="doc-wrapper">
+        <div class="container">
+            <div id="doc-header" class="doc-header text-center">
+                <h1 class="doc-title"><i class="icon icon_cogs"></i> Documentation</h1>
+                <div class="meta"><i class="far fa-clock"></i> Last updated: February 06, 2019</div>
+            </div>
+            <!--//doc-header-->
+            <div class="doc-body row">
+                <div class="doc-content col-md-9 col-12 order-1">
+                    <div class="content-inner">
+                        <section id="example-section" class="doc-section">
+                            <h2 class="section-title">Demo example</h2>
+                            <div id="example-wrapper" class="section-block">
+                                <div class="code-block">
+                                    <h6>tdlib/td wrapper</h6>
+                                    <pre><code class="language-php">&lt;?php
 
 $client = td_json_client_create();
 $result = td_json_client_execute($client, json_encode(['@type' =&gt; 'getAuthorizationState']));
 td_json_client_send($client, json_encode(['@type' =&gt; '...']));
 $result = td_json_client_receive($client, 10);
 td_json_client_destroy($client);</code></pre>
-                                    </div>
-                                    <!--//code-block-->
                                 </div>
-                                <!--//section-block-->
-                                <div id="example-client" class="section-block">
-                                    <div class="code-block">
-                                        <h6>TDLib\JsonClient</h6>
-                                        <pre><code class="language-php">&lt;?php
-TDApi\LogConfiguration::setLogVerbosityLevel(\TDApi\LogConfiguration::LVL_ERROR);
+                                <!--//code-block-->
+                                Check <a
+                                    href="https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1_function.html">tdlib
+                                Function Class Reference</a>.
+                            </div>
+                            <!--//section-block-->
+                            <div id="example-client" class="section-block">
+                                <div class="code-block">
+                                    <h6>TDLib\JsonClient</h6>
+                                    <pre><code class="language-php"><?php
 
-$client = new TDLib\JsonClient();
-$client->getAuthorizationState();
+Error_Reporting(E_ALL);
+ini_set('display_errors', 1);
 
-$api_id = '11111';
+$api_id = 11111; // must be integer
 $api_hash = 'abcdef1234567890abcdef1234567890';
 $phone_number = '+380991234567';
 
-$tdlibParams = new TDApi\TDLibParameters();
-$tdlibParams
-    ->setParameter('use_test_dc', true)
-    ->setParameter('database_directory', '/var/tmp/tdlib')
-    ->setParameter('files_directory', '/var/tmp/tdlib')
-    ->setParameter('use_file_database', false)
-    ->setParameter('use_chat_info_database', false)
-    ->setParameter('use_message_database', false)
-    ->setParameter('use_secret_chats', false)
-    ->setParameter('api_id', $api_id)
-    ->setParameter('api_hash', $api_hash)
-    ->setParameter('system_language_code', 'en')
-    ->setParameter('device_model', php_uname('s'))
-    ->setParameter('system_version', php_uname('v'))
-    ->setParameter('application_version', '0.1.0')
-    ->setParameter('enable_storage_optimizer', true)
-    ->setParameter('ignore_file_names', false);
-$result = $client->setTdlibParameters($tdlibParams);
-$result = $client->setDatabaseEncryptionKey();
-$result = $client->setAuthenticationPhoneNumber($phone_number);
-/*
-$result = $client->query(json_encode([
-        '@type' => 'checkAuthenticationCode',
-        'code' => 'xxx',
-        'first_name' => 'dummy',
-        'last_name' => 'dummy'
-    ]), 10);
-*/
-$result = $client->getAuthorizationState();
-$result = $client->query(json_encode(['@type' => 'searchPublicChat', 'username' => 'telegram']), 10);
-var_dump($result);
+try {
+    TDApi\LogConfiguration::setLogVerbosityLevel(\TDApi\LogConfiguration::LVL_ERROR);
 
-$allNotifications = $client->getReceivedResponses();
-var_dump($allNotifications);
+    $client = new TDLib\JsonClient();
+    $client->getAuthorizationState();
 
-$client->destroy();</code></pre>
-                                    </div>
-                                    <!--//code-block-->
+    $tdlibParams = new TDApi\TDLibParameters();
+    $tdlibParams
+        ->setParameter(TDApi\TDLibParameters::USE_TEST_DC, true)
+        ->setParameter(TDApi\TDLibParameters::DATABASE_DIRECOTRY, '/var/tmp/tdlib')
+        ->setParameter(TDApi\TDLibParameters::FILES_DIRECTORY, '/var/tmp/tdlib')
+        ->setParameter(TDApi\TDLibParameters::USE_FILE_DATABASE, false)
+        ->setParameter(TDApi\TDLibParameters::USE_CHAT_INFO_DATABASE, false)
+        ->setParameter(TDApi\TDLibParameters::USE_MESSAGE_DATABASE, false)
+        ->setParameter(TDApi\TDLibParameters::USE_SECRET_CHATS, false)
+        ->setParameter(TDApi\TDLibParameters::API_ID, $api_id)
+        ->setParameter(TDApi\TDLibParameters::API_HASH, $api_hash)
+        ->setParameter(TDApi\TDLibParameters::SYSTEM_LANGUAGE_CODE, 'en')
+        ->setParameter(TDApi\TDLibParameters::DEVICE_MODEL, php_uname('s'))
+        ->setParameter(TDApi\TDLibParameters::SYSTEM_VERSION, php_uname('v'))
+        ->setParameter(TDApi\TDLibParameters::APPLICATION_VERSION, '0.0.8')
+        ->setParameter(TDApi\TDLibParameters::ENABLE_STORAGE_OPTIMIZER, true)
+        ->setParameter(TDApi\TDLibParameters::IGNORE_FILE_NAMES, false);
+    $result = $client->setTdlibParameters($tdlibParams);
+    $result = $client->setDatabaseEncryptionKey(); // checkDatabaseEncryptionKey(key) or DESTROY
+    $result = $client->setAuthenticationPhoneNumber($phone_number, 3); // wait response 3 seconds. default - 1.
+    // UNCOMMENT NEXT and COMMENT PREVIOUS LINES WHEN RECEIVE SMS. Set your data
+    // $result = $client->query(json_encode(['@type' => 'checkAuthenticationCode', 'code' => 'xxxxx', 'first_name' => 'dummy', 'last_name' => 'dummy']), 10);
+    $result = $client->getAuthorizationState();
+    $result = $client->query(json_encode(['@type' => 'searchPublicChat', 'username' => 'telegram']), 10);
+    var_dump($result);
+    $allNotifications = $client->getReceivedResponses();
+    var_dump($allNotifications);
+} catch (\Exception $exception) {
+    echo sprintf('something goes wrong: %s', $exception->getMessage());
+}</code></pre>
                                 </div>
-                                <!--//section-block-->
-                            </section>
-                            <!--//doc-section-->
-                        </div>
-                        <!--//content-inner-->
+                                <!--//code-block-->
+                            </div>
+                            <!--//section-block-->
+                            <div id="example-send-message" class="section-block">
+                                <div class="code-block">
+                                    <h6>sendMessage example</h6>
+                                    <pre><code class="language-php">
+$chat_id=-1001190992756;
+$message_text = 'hello';
+$print_timeout = 1;
+
+$client->query(json_encode([
+    '@type'=>'openChat',
+    'chat_id'=>$chat_id
+]));
+
+$client->query(json_encode([
+    '@type'   => 'sendChatAction',
+    'chat_id' => $chat_id,
+    'action'  => [
+        '@type' => 'chatActionTyping'
+    ]
+]));
+
+sleep(1);
+
+$client->query(json_encode([
+    '@type'   => 'sendChatAction',
+    'chat_id' => $chat_id,
+    'action'  => [
+        '@type' => 'chatActionCancel'
+    ]
+]));
+
+
+$res=$client->query(json_encode([
+    '@type'=>'sendMessage',
+    'chat_id'=>$chat_id,
+    'reply_to_message_id'=>0,
+    'disable_notification'=>false,
+    'from_background'=>false,
+    'input_message_content'=>[
+        '@type'=>'inputMessageText',
+        'text'=>[
+            '@type'=>'formattedText',
+            'text'=>$message_text,
+            'entities'=>[]
+        ],
+        'disable_web_page_preview'=>false,
+        'clear_draft'=>false
+    ]
+]));
+
+$client->query(json_encode([
+    '@type'   => 'closeChat',
+    'chat_id' => $chat_id
+]));
+
+if(!empty($res['last_message']['sendingState']) && $res['last_message']['sendingState']['@type']==='messageSendingStateFailed') {
+    throw new Exception('Message sending failed');
+}
+</code></pre>
+                                </div>
+                                <!--//code-block-->
+                            </div>
+                            <!--//section-block-->
+                        </section>
+                        <!--//doc-section-->
                     </div>
-                    <!--//doc-content-->
-                    <div class="doc-sidebar col-md-3 col-12 order-0 d-none d-md-flex">
-                        <div id="doc-nav" class="doc-nav">
-                            <nav id="doc-menu" class="nav doc-menu flex-column sticky">
-                                <a class="nav-link scrollto" href="#example-section">Documentation</a>
-                                <nav class="doc-sub-menu nav flex-column">
-                                    <a class="nav-link scrollto" href="#example-wrapper">tdlib/td wrapper example</a>
-                                    <a class="nav-link scrollto" href="#example-client">TDLib\JsonClient example</a>
-                                </nav>
-                                <!--//nav-->
+                    <!--//content-inner-->
+                </div>
+                <!--//doc-content-->
+                <div class="doc-sidebar col-md-3 col-12 order-0 d-none d-md-flex">
+                    <div id="doc-nav" class="doc-nav">
+                        <nav id="doc-menu" class="nav doc-menu flex-column sticky">
+                            <a class="nav-link scrollto" href="#example-section">Documentation</a>
+                            <nav class="doc-sub-menu nav flex-column">
+                                <a class="nav-link scrollto" href="#example-wrapper">tdlib/td wrapper example</a>
+                                <a class="nav-link scrollto" href="#example-client">TDLib\JsonClient example</a>
+                                <a class="nav-link scrollto" href="#example-send-message">sendMessage example</a>
                             </nav>
-                            <!--//doc-menu-->
-                        </div>
+                            <!--//nav-->
+                        </nav>
+                        <!--//doc-menu-->
                     </div>
-                    <!--//doc-sidebar-->
                 </div>
-                <!--//doc-body-->
+                <!--//doc-sidebar-->
             </div>
-            <!--//container-->
-        </div>
-        <!--//doc-wrapper-->
-
-    </div>
-    <!--//page-wrapper-->
-
-    <footer id="footer" class="footer text-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <!-- GITHUB BUTTON JS -->
-                    <script async defer src="https://buttons.github.io/buttons.js"></script>
-                    <a class="github-button" href="https://github.com/yaroslavche/phptdlib" data-size="small" aria-label="Star yaroslavche/phptdlib on GitHub">Star</a>
-                    <a class="github-button" href="https://github.com/yaroslavche" data-size="small" aria-label="Follow @yaroslavche on GitHub">Follow @yaroslavche</a>
-                    <a class="github-button" href="https://github.com/maxvgi" data-size="small" aria-label="Follow @maxvgi on GitHub">Follow @maxvgi</a>
-                </div>
-                <div class="col-md-6">
-                    <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can buy the commercial license via our website: themes.3rdwavemedia.com */-->
-                    <small class="copyright">Designed with <i class="fas fa-heart"></i> by <a href="https://themes.3rdwavemedia.com/" target="_blank">Xiaoying Riley</a> for developers</small>
-                </div>
-            </div>
+            <!--//doc-body-->
         </div>
         <!--//container-->
-    </footer>
-    <!--//footer-->
+    </div>
+    <!--//doc-wrapper-->
+
+</div>
+<!--//page-wrapper-->
+
+<footer id="footer" class="footer text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- GITHUB BUTTON JS -->
+                <script async defer src="https://buttons.github.io/buttons.js"></script>
+                <a class="github-button" href="https://github.com/yaroslavche/phptdlib" data-size="small"
+                   aria-label="Star yaroslavche/phptdlib on GitHub">Star</a>
+                <a class="github-button" href="https://github.com/yaroslavche" data-size="small"
+                   aria-label="Follow @yaroslavche on GitHub">Follow @yaroslavche</a>
+                <a class="github-button" href="https://github.com/maxvgi" data-size="small"
+                   aria-label="Follow @maxvgi on GitHub">Follow @maxvgi</a>
+            </div>
+            <div class="col-md-6">
+                <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can buy the commercial license via our website: themes.3rdwavemedia.com */-->
+                <small class="copyright">Designed with <i class="fas fa-heart"></i> by <a
+                        href="https://themes.3rdwavemedia.com/" target="_blank">Xiaoying Riley</a> for developers
+                </small>
+            </div>
+        </div>
+    </div>
+    <!--//container-->
+</footer>
+<!--//footer-->
 
 
-    <!-- Main Javascript -->
-    <script type="text/javascript" src="assets/plugins/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="assets/plugins/prism/prism.js"></script>
-    <script type="text/javascript" src="assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
-    <script type="text/javascript" src="assets/plugins/stickyfill/dist/stickyfill.min.js"></script>
-    <script type="text/javascript" src="assets/js/main.js"></script>
+<!-- Main Javascript -->
+<script type="text/javascript" src="assets/plugins/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="assets/plugins/prism/prism.js"></script>
+<script type="text/javascript" src="assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
+<script type="text/javascript" src="assets/plugins/stickyfill/dist/stickyfill.min.js"></script>
+<script type="text/javascript" src="assets/js/main.js"></script>
 
 </body>
 

@@ -9,9 +9,12 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="favicon.ico">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+          rel='stylesheet' type='text/css'>
     <!-- FontAwesome JS -->
-    <script defer src="https://use.fontawesome.com/releases/v5.1.1/js/all.js" integrity="sha384-BtvRZcyfv4r0x/phJt9Y9HhnN5ur1Z+kZbKVgzVBAlQZX4jvAuImlIz+bG7TS00a" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.1.1/js/all.js"
+            integrity="sha384-BtvRZcyfv4r0x/phJt9Y9HhnN5ur1Z+kZbKVgzVBAlQZX4jvAuImlIz+bG7TS00a"
+            crossorigin="anonymous"></script>
     <!-- Global CSS -->
     <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
     <!-- Plugins CSS -->
@@ -24,126 +27,171 @@
 </head>
 
 <body class="body-pink">
-    <div class="page-wrapper">
-        <!-- ******Header****** -->
-        <header id="header" class="header">
-            <div class="container">
+<div class="page-wrapper">
+    <!-- ******Header****** -->
+    <header id="header" class="header">
+        <div class="container">
                 <span style="font-size: 3em; position:absolute; top:20px; right:40px">
                     <a href="https://github.com/yaroslavche/phptdlib" target="_blank"><i class="fab fa-github"></i></a>
                 </span>
-                <div class="branding">
-                    <h1 class="logo">
-                        <a href="index.html">
-                            <span aria-hidden="true" class="fa fa-paper-plane icon"></span>
-                            <span class="text-highlight">PHP</span><span class="text-bold">TdLib</span>
-                        </a>
-                    </h1>
-                </div><!--//branding-->
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item active">Installation</li>
-                </ol>
-            </div><!--//container-->
-        </header><!--//header-->
-        <div class="doc-wrapper">
-            <div class="container">
-                <div id="doc-header" class="doc-header text-center">
-                    <h1 class="doc-title"><i class="icon icon_cogs"></i> Installation</h1>
-                    <div class="meta"><i class="far fa-clock"></i> Last updated: November 25, 2018</div>
-                </div><!--//doc-header-->
-                <div class="doc-body row">
-                    <div class="doc-content col-md-9 col-12 order-1">
-                        <div class="content-inner">
-                            <section id="installation-section" class="doc-section">
-                                <h2 class="section-title">Installation</h2>
-                                <div id="tdlib" class="section-block">
-                                    <h3 class="block-title">tdlib/td</h3>
-                                    <div class="code-block">
-<pre><code class="language-bash">git clone https://github.com/tdlib/td.git
-cd td && mkdir build && cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
-cmake --build .
-sudo cmake --build . --target install</code></pre>
-                                    </div><!--//code-block-->
-                                </div><!--//section-block-->
-                                <div id="php-cpp" class="section-block">
-                                    <h3 class="block-title">CopernicaMarketingSoftware/PHP-CPP</h3>
-                                    <div class="code-block">
+            <div class="branding">
+                <h1 class="logo">
+                    <a href="index.html">
+                        <span aria-hidden="true" class="fa fa-paper-plane icon"></span>
+                        <span class="text-highlight">PHP</span><span class="text-bold">TdLib</span>
+                    </a>
+                </h1>
+            </div><!--//branding-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active">Installation</li>
+            </ol>
+        </div><!--//container-->
+    </header><!--//header-->
+    <div class="doc-wrapper">
+        <div class="container">
+            <div id="doc-header" class="doc-header text-center">
+                <h1 class="doc-title"><i class="icon icon_cogs"></i> Installation</h1>
+                <div class="meta"><i class="far fa-clock"></i> Last updated: February 06, 2019</div>
+            </div><!--//doc-header-->
+            <div class="doc-body row">
+                <div class="doc-content col-md-9 col-12 order-1">
+                    <div class="content-inner">
+                        <section id="installation-section" class="doc-section">
+                            <h2 class="section-title">Installation</h2>
+                            <div class="callout-block callout-info">
+                                <div class="icon-holder">
+                                    <i class="fas fa-info-circle"></i>
+                                </div><!--//icon-holder-->
+                                <div class="content">
+                                    <h4 class="callout-title">Note</h4>
+                                    <p>The most of dependencies are installed via git submodules currently.
+                                        But PHP-CPP currently has to be built separately.</p>
+                                </div><!--//content-->
+                            </div><!--//callout-block-->
+
+                            <div id="php-cpp" class="section-block">
+                                <h3 class="block-title">CopernicaMarketingSoftware/PHP-CPP</h3>
+                                <div class="code-block">
 <pre><code class="language-bash">git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
 cd PHP-CPP
 make
 sudo make install</code></pre>
-                                    </div><!--//code-block-->
-                                </div><!--//section-block-->
-                                <div id="json" class="section-block">
-                                    <h3 class="block-title">nlohmann/json</h3>
-                                    <div class="code-block">
-<pre><code class="language-bash">git clone https://github.com/nlohmann/json.git
-cd json && mkdir build && cd build
-cmake ..
-make install</code></pre>
-                                    </div><!--//code-block-->
-                                </div><!--//section-block-->
-                                <div id="phptdlib" class="section-block">
-                                    <h3 class="block-title">yaroslavche/phptdlib</h3>
-                                    <div class="code-block">
-<pre><code class="language-bash">git clone https://github.com/yaroslavche/phptdlib.git
+                                </div><!--//code-block-->
+                            </div><!--//section-block-->
+                            <div id="phptdlib" class="section-block">
+                                <h3 class="block-title">yaroslavche/phptdlib</h3>
+                                <div class="callout-block callout-info">
+                                    <div class="icon-holder">
+                                        <i class="fas fa-info-circle"></i>
+                                    </div><!--//icon-holder-->
+                                    <div class="content">
+                                        <h4 class="callout-title">Note</h4>
+                                        <p>
+                                            If you want to link other dependencies as dynamic libraries, you can pass
+                                            some options to cmake. Look through <a
+                                                href="https://github.com/yaroslavche/phptdlib/blob/master/CMakeLists.txt">CMakeLists.txt</a>
+                                            comments to find out how.
+                                            Required more than <a href="https://github.com/tdlib/td/issues/67">4GB
+                                            RAM</a> and must wait a while.
+                                        </p>
+                                    </div><!--//content-->
+                                </div><!--//callout-block-->
+                                <div class="code-block">
+<pre><code class="language-bash">git clone --recurse-submodules https://github.com/yaroslavche/phptdlib.git
 cd phptdlib && mkdir build && cd build
 cmake ..
-make</code></pre>
-                                    </div><!--//code-block-->
-                                </div><!--//section-block-->
-                            </section><!--//doc-section-->
+make
+sudo make install</code></pre>
+                                </div><!--//code-block-->
+                            </div><!--//section-block-->
+                            <div id="ubuntu-bionic-beaver" class="section-block">
+                                <h3 class="block-title">Full installation example on Ubuntu 18.04</h3>
+                                <div class="code-block">
+                                    Go to some dir where phptdlib and PHP-CPP dirs will be placed:
+                                    <pre><code class="language-bash">
+$ cd ~/projects</code></pre>
+                                    Install required dependencies:
+                                    <pre><code class="language-bash">
+$ sudo apt install gperf zlib1g-dev php-all-dev</code></pre>
+                                    Clone and build PHP-CPP:
+                                    <pre><code class="language-bash">
+$ git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
+$ cd PHP-CPP
+$ make
+$ sudo make install</code></pre>
+                                    Return back into installation dir:
+                                    <pre><code class="language-bash">
+$ cd ../</code></pre>
+                                    Clone and build phptdlib:
+                                    <pre><code class="language-bash">
+$ git clone --recurse-submodules https://github.com/yaroslavche/phptdlib.git
+$ cd phptdlib && mkdir build && cd build
+$ cmake ..
+$ make
+$ sudo make install</code></pre>
+                                    And check if it works:
+                                    <pre><code class="language-bash">
+$ php -m | grep tdlib
+$ php ../php_examples/func.php
+$ php -r "echo function_exists('td_json_client_create') ? 'ok' : 'failed' . PHP_EOL;"</code></pre>
+                                </div><!--//code-block-->
+                            </div><!--//section-block-->
+                        </section><!--//doc-section-->
 
 
-
-                        </div><!--//content-inner-->
-                    </div><!--//doc-content-->
-                    <div class="doc-sidebar col-md-3 col-12 order-0 d-none d-md-flex">
-                        <div id="doc-nav" class="doc-nav">
-	                            <nav id="doc-menu" class="nav doc-menu flex-column sticky">
-	                                <a class="nav-link scrollto" href="#installation-section">Installation</a>
-                                    <nav class="doc-sub-menu nav flex-column">
-<a class="nav-link scrollto" href="#tdlib">tdlib/td</a>
-<a class="nav-link scrollto" href="#php-cpp">CopernicaMarketingSoftware/PHP-CPP</a>
-<a class="nav-link scrollto" href="#json">nlohmann/json</a>
-<a class="nav-link scrollto" href="#phptdlib">yaroslavche/phptdlib</a>
-                                    </nav><!--//nav-->
-	                            </nav><!--//doc-menu-->
-                        </div>
-                    </div><!--//doc-sidebar-->
-                </div><!--//doc-body-->
-            </div><!--//container-->
-        </div><!--//doc-wrapper-->
-
-    </div><!--//page-wrapper-->
-
-    <footer id="footer" class="footer text-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <!-- GITHUB BUTTON JS -->
-                    <script async defer src="https://buttons.github.io/buttons.js"></script>
-                    <a class="github-button" href="https://github.com/yaroslavche/phptdlib" data-size="small" aria-label="Star yaroslavche/phptdlib on GitHub">Star</a>
-                    <a class="github-button" href="https://github.com/yaroslavche" data-size="small" aria-label="Follow @yaroslavche on GitHub">Follow @yaroslavche</a>
-                    <a class="github-button" href="https://github.com/maxvgi" data-size="small" aria-label="Follow @maxvgi on GitHub">Follow @maxvgi</a>
-                </div>
-                <div class="col-md-6">
-                    <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can buy the commercial license via our website: themes.3rdwavemedia.com */-->
-                    <small class="copyright">Designed with <i class="fas fa-heart"></i> by <a href="https://themes.3rdwavemedia.com/" target="_blank">Xiaoying Riley</a> for developers</small>
-                </div>
-            </div>
+                    </div><!--//content-inner-->
+                </div><!--//doc-content-->
+                <div class="doc-sidebar col-md-3 col-12 order-0 d-none d-md-flex">
+                    <div id="doc-nav" class="doc-nav">
+                        <nav id="doc-menu" class="nav doc-menu flex-column sticky">
+                            <a class="nav-link scrollto" href="#installation-section">Installation</a>
+                            <nav class="doc-sub-menu nav flex-column">
+                                <a class="nav-link scrollto" href="#php-cpp">CopernicaMarketingSoftware/PHP-CPP</a>
+                                <a class="nav-link scrollto" href="#phptdlib">yaroslavche/phptdlib</a>
+                                <a class="nav-link scrollto" href="#ubuntu-bionic-beaver">Installation example on Ubuntu
+                                    18.04</a>
+                            </nav><!--//nav-->
+                        </nav><!--//doc-menu-->
+                    </div>
+                </div><!--//doc-sidebar-->
+            </div><!--//doc-body-->
         </div><!--//container-->
-    </footer><!--//footer-->
+    </div><!--//doc-wrapper-->
+
+</div><!--//page-wrapper-->
+
+<footer id="footer" class="footer text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- GITHUB BUTTON JS -->
+                <script async defer src="https://buttons.github.io/buttons.js"></script>
+                <a class="github-button" href="https://github.com/yaroslavche/phptdlib" data-size="small"
+                   aria-label="Star yaroslavche/phptdlib on GitHub">Star</a>
+                <a class="github-button" href="https://github.com/yaroslavche" data-size="small"
+                   aria-label="Follow @yaroslavche on GitHub">Follow @yaroslavche</a>
+                <a class="github-button" href="https://github.com/maxvgi" data-size="small"
+                   aria-label="Follow @maxvgi on GitHub">Follow @maxvgi</a>
+            </div>
+            <div class="col-md-6">
+                <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can buy the commercial license via our website: themes.3rdwavemedia.com */-->
+                <small class="copyright">Designed with <i class="fas fa-heart"></i> by <a
+                        href="https://themes.3rdwavemedia.com/" target="_blank">Xiaoying Riley</a> for developers
+                </small>
+            </div>
+        </div>
+    </div><!--//container-->
+</footer><!--//footer-->
 
 
-    <!-- Main Javascript -->
-    <script type="text/javascript" src="assets/plugins/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="assets/plugins/prism/prism.js"></script>
-    <script type="text/javascript" src="assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
-    <script type="text/javascript" src="assets/plugins/stickyfill/dist/stickyfill.min.js"></script>
-    <script type="text/javascript" src="assets/js/main.js"></script>
+<!-- Main Javascript -->
+<script type="text/javascript" src="assets/plugins/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="assets/plugins/prism/prism.js"></script>
+<script type="text/javascript" src="assets/plugins/jquery-scrollTo/jquery.scrollTo.min.js"></script>
+<script type="text/javascript" src="assets/plugins/stickyfill/dist/stickyfill.min.js"></script>
+<script type="text/javascript" src="assets/js/main.js"></script>
 
 </body>
 </html>
