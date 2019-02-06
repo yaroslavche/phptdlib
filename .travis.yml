@@ -11,8 +11,7 @@ os:
 dist: xenial
 
 env:
-    - JOBS_IN_PARALLEL=2
-    - from_image=opensuse/leap:latest
+    - JOBS_IN_PARALLEL=2 from_image=opensuse/leap:latest
 
 matrix:
     include:

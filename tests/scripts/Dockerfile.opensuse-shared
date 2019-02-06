@@ -1,7 +1,6 @@
 ARG FROM_IMAGE
-ARG JOBS_IN_PARALLEL
-
 FROM $FROM_IMAGE as build
+
 LABEL maintainer="yaroslav429@gmail.com"
 
 ENV container docker
@@ -15,6 +14,7 @@ RUN zypper -n install git which gcc gcc-c++ zlib gperf openssl libopenssl-devel 
 
 COPY . $HOME/phptdlib
 
+ARG JOBS_IN_PARALLEL
 RUN cd $HOME && \
     git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git && \
     cd $HOME/PHP-CPP && \
@@ -22,6 +22,7 @@ RUN cd $HOME && \
     make install && \
     make clean
 
+ARG JOBS_IN_PARALLEL
 RUN cd $HOME/phptdlib/modules/td && \
     mkdir build && cd build && \
     cmake -DCMAKE_BUILD_TYPE=Release .. && \
@@ -32,14 +33,15 @@ RUN cd $HOME/phptdlib/modules/td && \
 
 RUN cd $HOME/phptdlib/modules/json && \
     mkdir build && cd build && \
-    cmake ..&& \
+    cmake .. && \
     make install && \
     make clean && \
     rm -rf $HOME/json/build
 
+ARG JOBS_IN_PARALLEL
 RUN cd $HOME/phptdlib && mkdir build && cd build && \
     cmake -DUSE_SHARED_TD=ON -DUSE_SHARED_JSON=ON -DUSE_SHARED_PHPCPP=ON -DTDLIB_BUILD_TESTS=ON .. && \
-    cmake --build . && \
+    cmake --build -- -j $JOBS_IN_PARALLEL. && \
     sudo cmake --build . --target install
 
 RUN $HOME/phptdlib/build/tester
