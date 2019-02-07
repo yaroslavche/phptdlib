@@ -14,8 +14,8 @@ matrix:
     include:
         - name: "Opensuse static build"
           env: tag=opensuse-static target_image=phptdlib/opensuse-static JOBS_IN_PARALLEL=2 from_image=opensuse/leap:latest
-        - name: "Opensuse shared build"
-          env: tag=opensuse-shared target_image=phptdlib/opensuse-shared JOBS_IN_PARALLEL=2 from_image=opensuse/leap:latest
+#        - name: "Opensuse shared build"
+#          env: tag=opensuse-shared target_image=phptdlib/opensuse-shared JOBS_IN_PARALLEL=2 from_image=opensuse/leap:latest
 
 before_install:
     - docker pull $from_image
