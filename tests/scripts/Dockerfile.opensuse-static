@@ -26,7 +26,7 @@ ARG JOBS_IN_PARALLEL
 RUN cd $HOME/phptdlib && mkdir build && cd build && \
     cmake -DTDLIB_BUILD_TESTS=ON .. && \
     cmake --build . -- -j $JOBS_IN_PARALLEL && \
-    sudo cmake --build . --target install
+    cmake --build . --target install
 
 RUN $HOME/phptdlib/build/tester
 

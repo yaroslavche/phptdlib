@@ -42,7 +42,7 @@ ARG JOBS_IN_PARALLEL
 RUN cd $HOME/phptdlib && mkdir build && cd build && \
     cmake -DUSE_SHARED_TD=ON -DUSE_SHARED_JSON=ON -DUSE_SHARED_PHPCPP=ON -DTDLIB_BUILD_TESTS=ON .. && \
     cmake --build -- -j $JOBS_IN_PARALLEL. && \
-    sudo cmake --build . --target install
+    cmake --build . --target install
 
 RUN $HOME/phptdlib/build/tester
 
