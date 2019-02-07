@@ -5,11 +5,23 @@ language: cpp
 services:
     - docker
 
+os:
+    - linux
+
+dist: xenial
+
+matrix:
+    include:
+        - name: "Opensuse static build"
+          env: tag=opensuse-static target_image=phptdlib/opensuse-static JOBS_IN_PARALLEL=2 from_image=opensuse/leap:latest
+#        - name: "Opensuse shared build"
+#          env: tag=opensuse-shared target_image=phptdlib/opensuse-shared JOBS_IN_PARALLEL=2 from_image=opensuse/leap:latest
+
 before_install:
-    - docker pull yaroslavche/phptdlib
+    - docker pull $from_image
 
 install:
-    - docker build -t phptdlib .
+    - $TRAVIS_BUILD_DIR/tests/scripts/docker_build.sh $tag $from_image $target_image
 
 script:
-    - docker run phptdlib /root/phptdlib/php_examples/func.php
+    - docker run -it -v $TRAVIS_BUILD_DIR/php_examples:/php_examples $target_image /php_examples/func.php

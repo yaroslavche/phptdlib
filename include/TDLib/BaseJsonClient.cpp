@@ -1,4 +1,5 @@
 #include "BaseJsonClient.hpp"
+#include "../common.hpp"
 #include <cassert>
 #include <td/telegram/td_json_client.h>
 
@@ -23,7 +24,7 @@ void BaseJsonClient::destroy()
 Php::Value BaseJsonClient::execute(Php::Parameters &params)
 {
     assert(_client != nullptr);
-    const char *query = params[0];
+    const char *query = getPhpFunctionArgument(params, 0, "");
     return execute(query);
 }
 
@@ -37,7 +38,7 @@ std::string BaseJsonClient::execute(const char *query)
 void BaseJsonClient::send(Php::Parameters &params)
 {
     assert(_client != nullptr);
-    const char *query = params[0];
+    const char *query = getPhpFunctionArgument(params, 0, "");
     send(query);
 }
 
@@ -50,7 +51,7 @@ void BaseJsonClient::send(const char *query)
 Php::Value BaseJsonClient::receive(Php::Parameters &params)
 {
     assert(_client != nullptr);
-    double timeout = params[0];
+    double timeout = getPhpFunctionArgument(params, 0, 0.0);
     return receive(timeout);
 }
 

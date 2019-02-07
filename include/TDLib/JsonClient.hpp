@@ -4,6 +4,7 @@
 #include <phpcpp.h>
 #include <nlohmann/json.hpp>
 #include "BaseJsonClient.hpp"
+#include "../TDApi/TDLibParameters.hpp"
 
 class JsonClient : public BaseJsonClient
 {
@@ -16,10 +17,6 @@ class JsonClient : public BaseJsonClient
         void handleResponses(nlohmann::json* breakOnExtra);
         std::string waitForResponse(nlohmann::json* extra,double timeout);
 
-        std::string query(const char *query, double timeout, nlohmann::json* extra);
-        std::string addExtraAndSendQuery(std::string type, nlohmann::json* jsonQuery, double timeout);
-        double getTimeoutFromParams(Php::Parameters &params, int timeoutParameterInde);
-
     public:
 
         // exported
@@ -31,7 +28,10 @@ class JsonClient : public BaseJsonClient
         Php::Value receive(Php::Parameters &params);
 
         // JsonClient
+        std::string query(const char *query, double timeout, nlohmann::json* extra);
         Php::Value query(Php::Parameters &params);
+        Php::Value query(const std::string &requestString, double timeout);
+        std::string addExtraAndSendQuery(const std::string &type, nlohmann::json* jsonQuery, double timeout);
         Php::Value getReceivedResponses(Php::Parameters &params);
         void setDefaultTimeout(Php::Parameters &params);
 
@@ -41,6 +41,7 @@ class JsonClient : public BaseJsonClient
         Php::Value setAuthenticationPhoneNumber(Php::Parameters &params);
         Php::Value setDatabaseEncryptionKey(Php::Parameters &params);
         Php::Value setTdlibParameters(Php::Parameters &params);
+        std::string setTdlibParameters(TDLibParameters *parameters, double timeout);
 };
 
 #endif // TDLIB_JSONCLIENT_H

@@ -17,6 +17,10 @@ set(PHP_CONFIG_FILENAME php-config)
 #   set(USE_SHARED_JSON ON)
 #   set(USE_SHARED_PHPCPP ON)
 
+#By default tests are compiled in debug build and not compiled in release. If you want to
+#change this begaviour manualy, you can set the following constant to ON or OFF:
+#   set(TDLIB_BUILD_TESTS ON)
+
 
 #PHP-CPP has an error in CMakeLists.txt. So, currently we can use it only as a shared library:
 set(USE_SHARED_PHPCPP ON)
@@ -167,6 +171,7 @@ set(SOURCE_FILES
         include/TDApi/TDLibParameters.cpp
         include/TDApi/TDLibLogConfiguration.cpp
         include/td_json_client_func.cpp
+        include/common.cpp
         )
 set(EXT_INI_FILE ${EXT_NAME}.ini)
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
@@ -207,4 +212,30 @@ ${BoldRed}manually${ColourReset} ${Red}to be able to use the extension${ColourRe
     ${EXT_INI_CONTENTS}\")")
 else()
     install(FILES ${PROJECT_BINARY_DIR}/${EXT_INI_FILE} DESTINATION ${PHP_CONFIG_DIR})
+endif()
+
+if(NOT DEFINED TDLIB_BUILD_TESTS)
+    if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+        set(TDLIB_BUILD_TESTS ON)
+    else()
+        set(TDLIB_BUILD_TESTS OFF)
+    endif()
+endif()
+
+if(TDLIB_BUILD_TESTS)
+    set(INTERFACE_POSITION_INDEPENDENT_CODE ON)
+
+    file(GLOB TEST_SOURCES tests/src/*.cpp)
+
+    add_executable(tester
+            ${SOURCE_FILES}
+            ${TEST_SOURCES}
+            )
+
+    target_link_libraries(tester
+            ${TD_LINK}
+            ${NLOHMANN_JSON_LINK}
+            phpcpp
+            php7
+            )
 endif()
