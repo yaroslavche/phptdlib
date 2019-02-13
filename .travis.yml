@@ -14,6 +14,7 @@ git:
 env:
   global:
     - MAKEFLAGS="-j 2"
+    - CMAKE_VERSION=3.13.4
 
 matrix:
   include:
@@ -24,16 +25,14 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-7
+            - g++-8
             - gperf
             - build-essential
             - zlib1g-dev
       env:
         - CONFIG=gcc
-        - CC=/usr/bin/gcc-7
-        - CC_LOCAL_BIN=/usr/local/bin/gcc
-        - CXX=/usr/bin/g++-7
-        - CXX_LOCAL_BIN=/usr/local/bin/g++
+        - CC=gcc-8
+        - CXX=g++-8
 
     # Latest clang supported by Travis Linux
     - os: linux
@@ -44,17 +43,14 @@ matrix:
             - llvm-toolchain-trusty-7
           packages:
             - clang-7
-            - g++-7
+            - g++-8
             - gperf
             - build-essential
             - zlib1g-dev
       env:
         - CONFIG=clang
-        - CC=/usr/bin/clang-7
-        - CC_LOCAL_BIN=/usr/local/bin/clang
-        - CXX=/usr/bin/clang++-7
-        - CXX_LOCAL_BIN=/usr/local/bin/clang++
-        - CXXFLAGS="-stdlib=libc++"
+        - CC=clang-7
+        - CXX=clang++-7
 
 before_install:
   # install php7-embed need for tester. Maybe needs install php on clear os
@@ -63,14 +59,18 @@ before_install:
   #  - sudo -E apt -y update && sudo apt -y install libphp7.2-embed
   # install newest CMake
   # todo cache cmake downloaded archive and install here. It's be little bit faster
-  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
-  - mkdir ${DEPS_DIR} && cd ${DEPS_DIR}
-  - travis_retry wget --no-check-certificate https://cmake.org/files/v3.13/cmake-3.13.4-Linux-x86_64.tar.gz
-  - tar -xvf cmake-3.13.4-Linux-x86_64.tar.gz > /dev/null
-  - mv cmake-3.13.4-Linux-x86_64 cmake-install
-  - PATH=${DEPS_DIR}/cmake-install:${DEPS_DIR}/cmake-install/bin:$PATH
-  - sudo ln -s ${CC} ${CC_LOCAL_BIN}
-  - sudo ln -s ${CXX} ${CXX_LOCAL_BIN}
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+      DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+      mkdir -p "${DEPS_DIR}"
+      cd "${DEPS_DIR}"
+      CMAKE_URL="https://cmake.org/files/v${CMAKE_VERSION%.[0-9]}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz"
+      mkdir cmake && travis_retry wget --no-check-certificate -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+      export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+    fi
+  - cmake --version
+  - ${CC} --version
+  - ${CXX} --version
   - cd ${TRAVIS_BUILD_DIR}
   # check cached builded dependencies
   - ./scripts/install.sh ~/cached_builds
