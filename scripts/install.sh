@@ -50,28 +50,28 @@ do
     if [ ! -z "${LIBRARY_REPO_HEAD_HASH}" ]; then
         LIBRARY_CACHE_PATH="${PHPTDLIB_CACHE_DIR}/${PHPTDLIB_CURRENT_OS}/${PHPTDLIB_CURRENT_BRANCH}/${CONFIG}/${LIBRARY_ALIAS}/${LIBRARY_REPO_HEAD_HASH}"
         if [ ! -d "${LIBRARY_CACHE_PATH}" ]; then
-            echo "Build ${LIBRARY_ALIAS} in ${LIBRARY_CACHE_PATH}. Hash: ${LIBRARY_REPO_HEAD_HASH}."
+            echo "Build ${LIBRARY_ALIAS} in ${LIBRARY_CACHE_PATH}."
             mkdir -p ${LIBRARY_CACHE_PATH}
             cd ${LIBRARY_CACHE_PATH}
             git clone ${LIBRARY_REPO_HTTPS_URI} .
             build ${LIBRARY_ALIAS} ${LIBRARY_CACHE_PATH}
             BUILD_STATUS_CODE=$?
             if [ ${BUILD_STATUS_CODE} == 0 ]; then
-                echo "${LIBRARY_ALIAS} successfully builded in ${LIBRARY_CACHE_PATH}. Hash: ${LIBRARY_REPO_HEAD_HASH}."
+                echo "${LIBRARY_ALIAS} successfully builded in ${LIBRARY_CACHE_PATH}."
             else
                 echo "Build ${LIBRARY_ALIAS} failed (${BUILD_STATUS_CODE}). Remove cache ${LIBRARY_CACHE_PATH}."
                 rm -rf ${LIBRARY_CACHE_PATH}
                 cd ${PHPTDLIB_BASE_PATH}
             fi
         else
-            echo "${LIBRARY_ALIAS} is up to date. Hash: ${LIBRARY_REPO_HEAD_HASH} (Full path: ${LIBRARY_CACHE_PATH})."
+            echo "${LIBRARY_ALIAS} is up to date. Cache path: ${LIBRARY_CACHE_PATH}."
         fi
 
-        echo "Install ${LIBRARY_ALIAS} from ${LIBRARY_CACHE_PATH}. Hash: ${LIBRARY_REPO_HEAD_HASH}."
+        echo "Install ${LIBRARY_ALIAS} from ${LIBRARY_CACHE_PATH}."
         install ${LIBRARY_ALIAS} ${LIBRARY_CACHE_PATH}
         INSTALL_STATUS_CODE=$?
         if [ ${INSTALL_STATUS_CODE} == 0 ]; then
-            echo "${LIBRARY_ALIAS} successfully installed from ${LIBRARY_CACHE_PATH}. Hash: ${LIBRARY_REPO_HEAD_HASH}."
+            echo "${LIBRARY_ALIAS} successfully installed from ${LIBRARY_CACHE_PATH}."
         else
             echo "Install ${LIBRARY_ALIAS} failed (${INSTALL_STATUS_CODE}). Remove cache ${LIBRARY_CACHE_PATH}."
             rm -rf ${LIBRARY_CACHE_PATH}
