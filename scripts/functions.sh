@@ -31,11 +31,13 @@ build()
     LIBRARY_ALIAS=$1
     LIBRARY_CACHE_PATH=$2
 
-    if [ ! -z "${MAKEFLAGS}" ]; then
+    cd ${LIBRARY_CACHE_PATH}
+
+
+    if [ -z "${MAKEFLAGS}" ]; then
         MAKEFLAGS="-j2"
     fi
 
-    cd ${LIBRARY_CACHE_PATH}
     case ${LIBRARY_ALIAS} in
         "PHPCPP") build_phpcpp;;
         "JSON") build_json;;
@@ -43,6 +45,7 @@ build()
         *) return ${PHPTDLIB_INVALID_LIBRARY_ALIAS};;
     esac
     BUILD_STATUS_CODE=$?
+
     return ${BUILD_STATUS_CODE}
 }
 
@@ -51,11 +54,12 @@ install()
     LIBRARY_ALIAS=$1
     LIBRARY_CACHE_PATH=$2
 
-    if [ ! -z "${MAKEFLAGS}" ]; then
+    cd ${LIBRARY_CACHE_PATH}
+
+    if [ -z "${MAKEFLAGS}" ]; then
         MAKEFLAGS="-j2"
     fi
 
-    cd ${LIBRARY_CACHE_PATH}
     case ${LIBRARY_ALIAS} in
         "PHPCPP") install_phpcpp;;
         "JSON") install_json;;
@@ -63,6 +67,7 @@ install()
         *) return ${PHPTDLIB_INVALID_LIBRARY_ALIAS};;
     esac
     INSTALL_STATUS_CODE=$?
+
     return ${INSTALL_STATUS_CODE}
 }
 
@@ -76,7 +81,7 @@ build_json()
 {
     mkdir build
     cd build
-    cmake .. -- ${MAKEFLAGS} || return ${PHPTDLIB_BUILD_JSON_FAILED}
+    cmake .. || return ${PHPTDLIB_BUILD_JSON_FAILED}
     return 0
 }
 
@@ -84,7 +89,7 @@ build_td()
 {
     mkdir build
     cd build
-    cmake -DCMAKE_BUILD_TYPE=Release .. -- ${MAKEFLAGS} || return ${PHPTDLIB_BUILD_TD_FAILED}
+    cmake -DCMAKE_BUILD_TYPE=Release .. || return ${PHPTDLIB_BUILD_TD_FAILED}
     cmake --build . -- ${MAKEFLAGS} || return ${PHPTDLIB_BUILD_TD_FAILED}
     return 0
 }

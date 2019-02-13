@@ -13,7 +13,7 @@ git:
 
 env:
   global:
-    - MAKEFLAGS="-j 2"
+    - MAKEFLAGS="-j2"
     - CMAKE_VERSION=3.13.4
 
 matrix:
