@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 
-PHPTDLIB_BUILD_INVALID_LIBRARY_ALIAS=1
+PHPTDLIB_INVALID_LIBRARY_ALIAS=1
 PHPTDLIB_BUILD_PHPCPP_FAILED=2
 PHPTDLIB_BUILD_JSON_FAILED=3
 PHPTDLIB_BUILD_TD_FAILED=4
 PHPTDLIB_INSTALL_ERROR=5
 PHPTDLIB_INSTALL_MAKEFILE_NOT_FOUND=6
+PHPTDLIB_INSTALL_PHPCPP_FAILED=7
+PHPTDLIB_INSTALL_JSON_FAILED=8
+PHPTDLIB_INSTALL_TD_FAILED=9
+
 
 get_repository_head_hash()
 {
@@ -33,7 +37,7 @@ build()
         "PHPCPP") build_phpcpp;;
         "JSON") build_json;;
         "TD") build_td;;
-        *) return ${PHPTDLIB_BUILD_INVALID_LIBRARY_ALIAS};;
+        *) return ${PHPTDLIB_INVALID_LIBRARY_ALIAS};;
     esac
     BUILD_STATUS_CODE=$?
     return ${BUILD_STATUS_CODE}
@@ -41,13 +45,16 @@ build()
 
 install()
 {
-    LIBRARY_CACHE_PATH=$1
+    LIBRARY_ALIAS=$1
+    LIBRARY_CACHE_PATH=$2
 
     cd ${LIBRARY_CACHE_PATH}
-    if [ ! -f "${LIBRARY_CACHE_PATH}/Makefile" ]; then
-        return ${PHPTDLIB_INSTALL_MAKEFILE_NOT_FOUND}
-    fi
-    sudo make install || return ${PHPTDLIB_INSTALL_ERROR}
+    case ${LIBRARY_ALIAS} in
+        "PHPCPP") install_phpcpp;;
+        "JSON") install_json;;
+        "TD") install_td;;
+        *) return ${PHPTDLIB_INVALID_LIBRARY_ALIAS};;
+    esac
     INSTALL_STATUS_CODE=$?
     return ${INSTALL_STATUS_CODE}
 }
@@ -75,6 +82,26 @@ build_td()
     return 0
 }
 
+install_phpcpp()
+{
+    sudo make install || return ${PHPTDLIB_INSTALL_PHPCPP_FAILED}
+    return 0
+}
+
+install_json()
+{
+    cd build
+    sudo make install || return ${PHPTDLIB_INSTALL_JSON_FAILED}
+    return 0
+}
+
+install_td()
+{
+    cd build
+    sudo make install || return ${PHPTDLIB_INSTALL_TD_FAILED}
+    return 0
+}
+
 #get_error_message()
 #{
 #    CODE=$1
@@ -84,7 +111,7 @@ build_td()
 #        "${PHPTDLIB_BUILD_JSON_FAILED}") echo "json build failed";;
 #        "${PHPTDLIB_BUILD_TD_FAILED}") echo "td build failed";;
 #        "${PHPTDLIB_INSTALL_ERROR}") echo "Install failed";;
-#        "${PHPTDLIB_BUILD_INVALID_LIBRARY_ALIAS}") echo "Unknown library alias";;
+#        "${PHPTDLIB_INVALID_LIBRARY_ALIAS}") echo "Unknown library alias";;
 #        *) echo "Unhandled error";;
 #    esac
 #    return 0
