@@ -40,18 +40,21 @@ matrix:
       addons:
         apt:
           sources:
-            - llvm-toolchain-trusty-5.0
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-7
           packages:
-            - clang-5.0
+            - clang-7
+            - g++-7
             - gperf
             - build-essential
             - zlib1g-dev
       env:
         - CONFIG=clang
-        - CC=/usr/bin/clang-5.0
+        - CC=/usr/bin/clang-7
         - CC_LOCAL_BIN=/usr/local/bin/clang
-        - CXX=/usr/bin/clang++-5.0
+        - CXX=/usr/bin/clang++-7
         - CXX_LOCAL_BIN=/usr/local/bin/clang++
+        - CXXFLAGS="-stdlib=libc++"
 
 before_install:
   # install php7-embed need for tester. Maybe needs install php on clear os
