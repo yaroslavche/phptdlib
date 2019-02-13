@@ -59,7 +59,9 @@ do
             if [ ${BUILD_STATUS_CODE} == 0 ]; then
                 echo "${LIBRARY_ALIAS} successfully builded in ${LIBRARY_CACHE_PATH}. Hash: ${LIBRARY_REPO_HEAD_HASH}."
             else
-                echo "Build ${LIBRARY_ALIAS} failed (${BUILD_STATUS_CODE})."
+                echo "Build ${LIBRARY_ALIAS} failed (${BUILD_STATUS_CODE}). Remove cache ${LIBRARY_CACHE_PATH}."
+                rm -rf ${LIBRARY_CACHE_PATH}
+                cd ${PHPTDLIB_BASE_PATH}
             fi
         else
             echo "${LIBRARY_ALIAS} is up to date. Hash: ${LIBRARY_REPO_HEAD_HASH} (Full path: ${LIBRARY_CACHE_PATH})."
@@ -71,8 +73,9 @@ do
         if [ ${INSTALL_STATUS_CODE} == 0 ]; then
             echo "${LIBRARY_ALIAS} successfully installed from ${LIBRARY_CACHE_PATH}. Hash: ${LIBRARY_REPO_HEAD_HASH}."
         else
-            echo "Install ${LIBRARY_ALIAS} failed (${INSTALL_STATUS_CODE})."
+            echo "Install ${LIBRARY_ALIAS} failed (${INSTALL_STATUS_CODE}). Remove cache ${LIBRARY_CACHE_PATH}."
             rm -rf ${LIBRARY_CACHE_PATH}
+            cd ${PHPTDLIB_BASE_PATH}
         fi
         # PHPTDLIB_DEPS_CACHE_PATH[${LIBRARY_ALIAS}]=${LIBRARY_CACHE_PATH}
     else
