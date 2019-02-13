@@ -68,7 +68,7 @@ do
         fi
 
         echo "Install ${LIBRARY_ALIAS} from ${LIBRARY_CACHE_PATH}. Hash: ${LIBRARY_REPO_HEAD_HASH}."
-        install ${LIBRARY_CACHE_PATH}
+        install ${LIBRARY_ALIAS} ${LIBRARY_CACHE_PATH}
         INSTALL_STATUS_CODE=$?
         if [ ${INSTALL_STATUS_CODE} == 0 ]; then
             echo "${LIBRARY_ALIAS} successfully installed from ${LIBRARY_CACHE_PATH}. Hash: ${LIBRARY_REPO_HEAD_HASH}."
