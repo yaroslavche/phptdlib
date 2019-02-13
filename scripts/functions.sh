@@ -31,6 +31,10 @@ build()
     LIBRARY_ALIAS=$1
     LIBRARY_CACHE_PATH=$2
 
+    if [ ! -z "${MAKEFLAGS}" ]; then
+        MAKEFLAGS="-j2"
+    fi
+
     cd ${LIBRARY_CACHE_PATH}
     case ${LIBRARY_ALIAS} in
         "PHPCPP") build_phpcpp;;
@@ -47,6 +51,10 @@ install()
     LIBRARY_ALIAS=$1
     LIBRARY_CACHE_PATH=$2
 
+    if [ ! -z "${MAKEFLAGS}" ]; then
+        MAKEFLAGS="-j2"
+    fi
+
     cd ${LIBRARY_CACHE_PATH}
     case ${LIBRARY_ALIAS} in
         "PHPCPP") install_phpcpp;;
@@ -60,7 +68,7 @@ install()
 
 build_phpcpp()
 {
-    make -j2 || return ${PHPTDLIB_BUILD_PHPCPP_FAILED}
+    make ${MAKEFLAGS} || return ${PHPTDLIB_BUILD_PHPCPP_FAILED}
     return 0
 }
 
@@ -68,7 +76,7 @@ build_json()
 {
     mkdir build
     cd build
-    cmake .. -- -j2 || return ${PHPTDLIB_BUILD_JSON_FAILED}
+    cmake .. -- ${MAKEFLAGS} || return ${PHPTDLIB_BUILD_JSON_FAILED}
     return 0
 }
 
@@ -76,28 +84,28 @@ build_td()
 {
     mkdir build
     cd build
-    cmake -DCMAKE_BUILD_TYPE=Release .. || return ${PHPTDLIB_BUILD_TD_FAILED}
-    cmake --build . -- -j2 || return ${PHPTDLIB_BUILD_TD_FAILED}
+    cmake -DCMAKE_BUILD_TYPE=Release .. -- ${MAKEFLAGS} || return ${PHPTDLIB_BUILD_TD_FAILED}
+    cmake --build . -- ${MAKEFLAGS} || return ${PHPTDLIB_BUILD_TD_FAILED}
     return 0
 }
 
 install_phpcpp()
 {
-    sudo make install || return ${PHPTDLIB_INSTALL_PHPCPP_FAILED}
+    sudo make install ${MAKEFLAGS} || return ${PHPTDLIB_INSTALL_PHPCPP_FAILED}
     return 0
 }
 
 install_json()
 {
     cd build
-    sudo make install || return ${PHPTDLIB_INSTALL_JSON_FAILED}
+    sudo make install ${MAKEFLAGS} || return ${PHPTDLIB_INSTALL_JSON_FAILED}
     return 0
 }
 
 install_td()
 {
     cd build
-    sudo make install || return ${PHPTDLIB_INSTALL_TD_FAILED}
+    sudo make install ${MAKEFLAGS} || return ${PHPTDLIB_INSTALL_TD_FAILED}
     return 0
 }
 
