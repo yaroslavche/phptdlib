@@ -60,7 +60,7 @@ install()
 
 build_phpcpp()
 {
-    make || return ${PHPTDLIB_BUILD_PHPCPP_FAILED}
+    make -j2 || return ${PHPTDLIB_BUILD_PHPCPP_FAILED}
     return 0
 }
 
@@ -68,7 +68,7 @@ build_json()
 {
     mkdir build
     cd build
-    cmake .. || return ${PHPTDLIB_BUILD_JSON_FAILED}
+    cmake .. -- -j2 || return ${PHPTDLIB_BUILD_JSON_FAILED}
     return 0
 }
 
@@ -77,7 +77,7 @@ build_td()
     mkdir build
     cd build
     cmake -DCMAKE_BUILD_TYPE=Release .. || return ${PHPTDLIB_BUILD_TD_FAILED}
-    cmake --build . || return ${PHPTDLIB_BUILD_TD_FAILED}
+    cmake --build . -- -j2 || return ${PHPTDLIB_BUILD_TD_FAILED}
     return 0
 }
 
