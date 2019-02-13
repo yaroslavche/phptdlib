@@ -5,6 +5,7 @@ PHPTDLIB_BUILD_PHPCPP_FAILED=2
 PHPTDLIB_BUILD_JSON_FAILED=3
 PHPTDLIB_BUILD_TD_FAILED=4
 PHPTDLIB_INSTALL_ERROR=5
+PHPTDLIB_INSTALL_MAKEFILE_NOT_FOUND=6
 
 get_repository_head_hash()
 {
@@ -27,8 +28,6 @@ build()
     LIBRARY_ALIAS=$1
     LIBRARY_CACHE_PATH=$2
 
-    echo "Build ${LIBRARY_ALIAS} in ${LIBRARY_CACHE_PATH}"
-
     cd ${LIBRARY_CACHE_PATH}
     case ${LIBRARY_ALIAS} in
         "PHPCPP") build_phpcpp;;
@@ -44,8 +43,10 @@ install()
 {
     LIBRARY_CACHE_PATH=$1
 
-    echo "Install in ${LIBRARY_CACHE_PATH}"
     cd ${LIBRARY_CACHE_PATH}
+    if [ ! -f "${LIBRARY_CACHE_PATH}/Makefile" ]; then
+        return ${PHPTDLIB_INSTALL_MAKEFILE_NOT_FOUND}
+    fi
     sudo make install || return ${PHPTDLIB_INSTALL_ERROR}
     INSTALL_STATUS_CODE=$?
     return ${INSTALL_STATUS_CODE}
@@ -73,3 +74,18 @@ build_td()
     cmake --build . || return ${PHPTDLIB_BUILD_TD_FAILED}
     return 0
 }
+
+#get_error_message()
+#{
+#    CODE=$1
+#
+#    case ${CODE} in
+#        "${PHPTDLIB_BUILD_PHPCPP_FAILED}") echo "PHP-CPP build failed";;
+#        "${PHPTDLIB_BUILD_JSON_FAILED}") echo "json build failed";;
+#        "${PHPTDLIB_BUILD_TD_FAILED}") echo "td build failed";;
+#        "${PHPTDLIB_INSTALL_ERROR}") echo "Install failed";;
+#        "${PHPTDLIB_BUILD_INVALID_LIBRARY_ALIAS}") echo "Unknown library alias";;
+#        *) echo "Unhandled error";;
+#    esac
+#    return 0
+#}
