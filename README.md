@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/yaroslavche/phptdlib.svg?branch=master)](https://travis-ci.org/yaroslavche/phptdlib)
+[![Build Status](https://travis-ci.com/yaroslavche/phptdlib.svg?branch=master)](https://travis-ci.com/yaroslavche/phptdlib)
 
 [Documentation](https://yaroslavche.github.io/phptdlib/)
 
