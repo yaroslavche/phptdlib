@@ -1,27 +1,92 @@
-sudo: required
+sudo: true
+language: php
+php:
+  - '7.2'
 
-language: cpp
+cache:
+  ccache: true
+  directories:
+    - ~/cached_builds
 
-services:
-    - docker
+git:
+  submodules: false
 
-os:
-    - linux
-
-dist: xenial
+env:
+  global:
+    - MAKEFLAGS="-j2"
+    - CMAKE_VERSION=3.13.4
 
 matrix:
-    include:
-        - name: "Opensuse static build"
-          env: tag=opensuse-static target_image=phptdlib/opensuse-static JOBS_IN_PARALLEL=2 from_image=opensuse/leap:latest
-#        - name: "Opensuse shared build"
-#          env: tag=opensuse-shared target_image=phptdlib/opensuse-shared JOBS_IN_PARALLEL=2 from_image=opensuse/leap:latest
+  include:
+    # Latest gcc supported on Travis Linux
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-8
+            - gperf
+            - build-essential
+            - zlib1g-dev
+      env:
+        - CONFIG=gcc
+        - CC=gcc-8
+        - CXX=g++-8
+
+    # Latest clang supported by Travis Linux
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-7
+          packages:
+            - clang-7
+            - g++-8
+            - gperf
+            - build-essential
+            - zlib1g-dev
+      env:
+        - CONFIG=clang
+        - CC=clang-7
+        - CXX=clang++-7
 
 before_install:
-    - docker pull $from_image
+  # install php7-embed need for tester. Maybe needs install php on clear os
+  #  - sudo -E apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6B05F25D762E3157
+  #  - sudo -E apt-add-repository -y "ppa:ondrej/php"
+  #  - sudo -E apt -y update && sudo apt -y install libphp7.2-embed
+  # install newest CMake
+  # todo cache cmake downloaded archive and install here. It's be little bit faster
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+      DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+      mkdir -p "${DEPS_DIR}"
+      cd "${DEPS_DIR}"
+      CMAKE_URL="https://cmake.org/files/v${CMAKE_VERSION%.[0-9]}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz"
+      mkdir cmake && travis_retry wget --no-check-certificate -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+      export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+    fi
+  - cmake --version
+  - ${CC} --version
+  - ${CXX} --version
+  - cd ${TRAVIS_BUILD_DIR}
+  # check cached builded dependencies
+  - ./scripts/install.sh ~/cached_builds
+  - cd ${TRAVIS_BUILD_DIR}
+  - sudo ldconfig
 
-install:
-    - $TRAVIS_BUILD_DIR/tests/scripts/docker_build.sh $tag $from_image $target_image
+before_script:
+  - mkdir build
+  - cd build
+  - cmake -D USE_SHARED_TD:BOOL=ON -D USE_SHARED_JSON:BOOL=ON -D USE_SHARED_PHPCPP:BOOL=ON .. # -DTDLIB_BUILD_TESTS:BOOL=ON
 
 script:
-    - docker run -it -v $TRAVIS_BUILD_DIR/php_examples:/php_examples $target_image /php_examples/func.php
+  - make ${MAKEFLAGS}
+  - sudo make install
+  - php -m | grep tdlib
+  - php ../php_examples/func.php
+
+#after_success:
+#  - maybe need cleanup add cache as volumes and push
