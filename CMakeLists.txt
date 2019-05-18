@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
 set(EXT_NAME tdlib)
-set(EXT_VERSION 0.0.7)
+set(EXT_VERSION 0.0.8)
 project(${EXT_NAME} VERSION ${EXT_VERSION} LANGUAGES CXX)
 
 
@@ -108,7 +108,7 @@ endif()
 ###################
 
 if(USE_SHARED_TD)
-    find_package(Td 1.3.0 REQUIRED)
+    find_package(Td 1.4.0 REQUIRED)
     if(NOT Td_FOUND)
         message(SEND_ERROR "Failed to find Td")
         return()
