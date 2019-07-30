@@ -1,28 +1,64 @@
 [![Build Status](https://travis-ci.com/yaroslavche/phptdlib.svg?branch=master)](https://travis-ci.com/yaroslavche/phptdlib)
 
+The PHP extension `tdlib` allows you to work with the [Telegram database library](https://core.telegram.org/tdlib).
+If simple, this is the usual [functions wrapper](include/td_json_client_func.hpp) for working with the `tdlib/td` json client. You can:
+ - create a JSON client `$client = td_json_client_create()`
+ - execute the synchronization request `$result = td_json_client_execute($params);`
+ - perform an asynchronous request `td_json_client_send($params);` *
+ - get all the responses at the moment `$response = td_json_client_receive($params);`
+ - and destroy client `td_json_client_destroy($client);`
+
+`*` you must use `td_json_client_receive` to get a response from an asynchronous request.
+
 [Documentation](https://yaroslavche.github.io/phptdlib/)
 
-## example
+## Example
 [https://github.com/tdlib/td/blob/master/example/cpp/tdjson_example.cpp](https://github.com/tdlib/td/blob/master/example/cpp/tdjson_example.cpp)
 ```php
 <?php
 $client = td_json_client_create();
+td_json_client_execute($client, json_encode(['@type' => 'setLogVerbosityLevel', 'new_verbosity_level' => '0']));
+$waitTimeout = 10;
 while(true)
 {
-    $result = td_json_client_receive($client, 10);
+    $result = td_json_client_receive($client, $waitTimeout);
     if(!empty($result)) {
         echo $result;
         break;
     }
 }
+td_json_client_destroy($client);
 ```
+
+## TDLib\JsonClient
+
+```php
+$client = new \TDLib\JsonClient();
+$client->setDefaultTimeout(10);
+$result = $client->execute($stringQuery);
+$client->send($stringQuery);
+$response = $client->receive($floatTimeout);
+$response = $client->query($stringQuery, $floatTimeout);
+$responses = $client->getReceivedResponses();
+$client->destroy();
+```
+
+Thanks to @maxvgi, `phptdlib` has a really good implementation of `query` method. You no longer need to use `send` and `receive` (but you can if you want). An additional field will be added to `query`, and will wait for this additional field in the responses. Since this is for asynchronous requests, before you get an answer to the request, you can get others. And you can get all the responses to the last request with `$client->getReceivedResponses();` 
+
+Example. Simple workflow:
+ - create a client
+ - `setTdlibParameters`
+ - if need, `setDatabaseEncryptionKey`
+ - if `getAuthorizationState` returns `authorizationStateWaitPhoneNumber`, then `setAuthenticationPhoneNumber`
+ - if `getAuthorizationState` returns `authorizationStateWaitCode`, then `checkAuthenticationCode`
+ - if `getAuthorizationState` returns `authorizationStateReady`, then you are allowed to do what you want with `tdlib/td` ([Function class reference](https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1_function.html)).
 
 ```php
 <?php
 Error_Reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$api_id = 11111; // must be integer
+$api_id = 11111; // must be an integer
 $api_hash = 'abcdef1234567890abcdef1234567890';
 $phone_number = '+380991234567';
 
@@ -30,7 +66,6 @@ try {
     TDApi\LogConfiguration::setLogVerbosityLevel(\TDApi\LogConfiguration::LVL_ERROR);
     
     $client = new TDLib\JsonClient();
-    $client->getAuthorizationState();
     
     $tdlibParams = new TDApi\TDLibParameters();
     $tdlibParams
@@ -50,18 +85,18 @@ try {
         ->setParameter(TDApi\TDLibParameters::ENABLE_STORAGE_OPTIMIZER, true)
         ->setParameter(TDApi\TDLibParameters::IGNORE_FILE_NAMES, false);
     $result = $client->setTdlibParameters($tdlibParams);
-    $result = $client->setDatabaseEncryptionKey(); // checkDatabaseEncryptionKey(key) or DESTROY
+
+    $result = $client->setDatabaseEncryptionKey();
     
-    $result = $client->setAuthenticationPhoneNumber($phone_number, 3); // wait response 3 seconds. default - 1.
-    // UNCOMMENT NEXT and COMMENT PREVIOUS LINES WHEN RECEIVE SMS. Set your data
+    $state = $client->getAuthorizationState();
+    
+    // you must check the state and follow workflow. Lines below is just for an example.
+    // $result = $client->setAuthenticationPhoneNumber($phone_number, 3); // wait response 3 seconds. default - 1.
     // $result = $client->query(json_encode(['@type' => 'checkAuthenticationCode', 'code' => 'xxxxx', 'first_name' => 'dummy', 'last_name' => 'dummy']), 10);
     
-    $result = $client->getAuthorizationState();
     $result = $client->query(json_encode(['@type' => 'searchPublicChat', 'username' => 'telegram']), 10);
-    var_dump($result);
     
     $allNotifications = $client->getReceivedResponses();
-    var_dump($allNotifications);
 } catch (\Exception $exception) {
     echo sprintf('something goes wrong: %s', $exception->getMessage());
 }
@@ -98,34 +133,6 @@ sudo make install
 php -i | grep tdlib
 php ../php_examples/func.php
 ```
-
-
-## Docker
-
-```
-docker build -t phptdlib .
-docker run -it phptdlib
-
-php -i | grep tdlib
-
-cd $HOME/phptdlib/php_examples
-
-php func.php
-
-cp credentials.php.dist credentials.php
-php client.php
-```
-
-### yaroslavche/phptdlib
-[docker image][phptdlib_docker_image]
-
-```
-docker build -f Dockerfile.phptdlib_env -t yaroslavche/phptdlib .
-```
-
-`OpenSUSE Leap` with installed `sudo` `which` `gcc` `gcc-c++` `zlib` `gperf` `openssl` `openssl-devel` `cmake` `git` `php7` `php7-devel` `php7-ctype` `php7-json`. Needs min [4GB RAM][td_ram_issue] and must wait a while.
-1.25Gb
-needs: g++ -> clang (RAM issue) and opensuse -> alpine (size), docker-compose
 
 [1]: https://github.com/tdlib/td
 [2]: https://github.com/CopernicaMarketingSoftware/PHP-CPP/
