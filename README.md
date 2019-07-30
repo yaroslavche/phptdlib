@@ -3,7 +3,7 @@
 The PHP extension `tdlib` allows you to work with the [Telegram database library](https://core.telegram.org/tdlib).
 If simple, this is the usual [functions wrapper](include/td_json_client_func.hpp) for working with the `tdlib/td` json client. You can:
  - create a JSON client `$client = td_json_client_create()`
- - execute the synchronization request `$result = td_json_client_execute($params);`
+ - execute the synchronous request `$result = td_json_client_execute($params);`
  - perform an asynchronous request `td_json_client_send($params);` *
  - get all the responses at the moment `$response = td_json_client_receive($params);`
  - and destroy client `td_json_client_destroy($client);`
@@ -104,6 +104,8 @@ try {
 
 ## Required
 
+Please note that TDLib itself requires a lot of resources. The extension will be built in a couple of seconds. But the extension requires compiled [tdlib/td](https://github.com/tdlib/td). A minimum of 4GB of RAM is recommended. But I know that it is possible to build on a VPS with g++ and 2GB RAM + swap.
+
 The most of dependencies are installed via git submodules currently.
 
 But PHP-CPP currently has to be built separately.
@@ -133,6 +135,10 @@ sudo make install
 php -i | grep tdlib
 php ../php_examples/func.php
 ```
+
+---
+
+Feel free to `$client->query(json_encode(['@type' => 'sendMessage', 'chat' => '@yaroslavche']));` if you have any questions.
 
 [1]: https://github.com/tdlib/td
 [2]: https://github.com/CopernicaMarketingSoftware/PHP-CPP/
