@@ -2,8 +2,7 @@
 #include "../../tdlib.hpp"
 #include "../common.hpp"
 
-TDLibParameters::TDLibParameters()
-{
+TDLibParameters::TDLibParameters() {
     parameters[USE_TEST_DC] = false;
     parameters[DATABASE_DIRECOTRY] = "/var/tmp/tdlib";
     parameters[FILES_DIRECTORY] = "/var/tmp/tdlib";
@@ -21,88 +20,65 @@ TDLibParameters::TDLibParameters()
     parameters[IGNORE_FILE_NAMES] = false;
 }
 
-Php::Value TDLibParameters::setParameter(Php::Parameters &params)
-{
+Php::Value TDLibParameters::setParameter(Php::Parameters &params) {
     std::string parameter = getPhpFunctionArgument(params, 0, "");
     Php::Value value = params[1];
     setParameter(parameter, value);
     return this;
 }
 
-void TDLibParameters::setParameter(const std::string &parameterName, int parameterValue)
-{
+void TDLibParameters::setParameter(const std::string &parameterName, int parameterValue) {
     parameters[parameterName] = parameterValue;
 }
 
-void TDLibParameters::setParameter(const std::string &parameterName, std::string parameterValue)
-{
+void TDLibParameters::setParameter(const std::string &parameterName, std::string parameterValue) {
     parameters[parameterName] = parameterValue;
 }
 
-void TDLibParameters::setParameter(const std::string &parameterName, bool parameterValue)
-{
+void TDLibParameters::setParameter(const std::string &parameterName, bool parameterValue) {
     parameters[parameterName] = parameterValue;
 }
 
-void TDLibParameters::setParameter(const std::string &parameterName, const Php::Value &parameterValue)
-{
+void TDLibParameters::setParameter(const std::string &parameterName, const Php::Value &parameterValue) {
     auto paramsIt = parameters.find(parameterName);
-    if (paramsIt == parameters.end())
-    {
+    if (paramsIt == parameters.end()) {
         throw Php::Exception("Invalid parameter name");
     }
 
-    if (parameterValue.isNumeric() && paramsIt->is_number())
-    {
+    if (parameterValue.isNumeric() && paramsIt->is_number()) {
         int typedValue = parameterValue;
         setParameter(parameterName, typedValue);
-    }
-    else if (parameterValue.isString() && paramsIt->is_string())
-    {
+    } else if (parameterValue.isString() && paramsIt->is_string()) {
         std::string typedValue = parameterValue;
         setParameter(parameterName, typedValue);
-    }
-    else if (parameterValue.isBool() && paramsIt->is_boolean())
-    {
+    } else if (parameterValue.isBool() && paramsIt->is_boolean()) {
         bool typedValue = parameterValue;
         setParameter(parameterName, typedValue);
-    }
-    else
-    {
+    } else {
         throw Php::Exception("Invalid TDLib parameter type");
     }
 }
 
-nlohmann::json TDLibParameters::getParameters()
-{
+nlohmann::json TDLibParameters::getParameters() {
     return parameters;
 }
 
-Php::Value TDLibParameters::__debugInfo()
-{
+Php::Value TDLibParameters::__debugInfo() {
     Php::Value phpValueParameters, result;
 
-    for (auto iterator=parameters.begin(); iterator != parameters.end(); iterator++) {
-        if ((*iterator).is_number())
-        {
+    for (auto iterator = parameters.begin(); iterator != parameters.end(); iterator++) {
+        if ((*iterator).is_number()) {
             int value = iterator.value();
             phpValueParameters[iterator.key()] = value;
-        }
-        else if ((*iterator).is_string())
-        {
+        } else if ((*iterator).is_string()) {
             std::string value = iterator.value();
             phpValueParameters[iterator.key()] = value;
-        }
-        else if ((*iterator).is_boolean())
-        {
+        } else if ((*iterator).is_boolean()) {
             bool value = iterator.value();
             phpValueParameters[iterator.key()] = value;
-        }
-        else if ((*iterator).is_null())
-        {
+        } else if ((*iterator).is_null()) {
             phpValueParameters[iterator.key()] = nullptr;
-        }
-        else {
+        } else {
             assert(false);
         }
     }

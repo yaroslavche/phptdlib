@@ -3,9 +3,9 @@
 The PHP extension `tdlib` allows you to work with the [Telegram database library](https://core.telegram.org/tdlib).
 If simple, this is the usual [functions wrapper](include/td_json_client_func.hpp) for working with the `tdlib/td` json client. You can:
  - create a JSON client `$client = td_json_client_create()`
- - execute the synchronous request `$result = td_json_client_execute($params);`
- - perform an asynchronous request `td_json_client_send($params);` *
- - get all the responses at the moment `$response = td_json_client_receive($params);`
+ - execute the synchronous request `$result = td_json_client_execute($client, $json);`
+ - perform an asynchronous request `td_json_client_send($client, $json);` *
+ - get all the responses at the moment `$response = td_json_client_receive($client, $timeout);`
  - and destroy client `td_json_client_destroy($client);`
 
 `*` you must use `td_json_client_receive` to get a response from an asynchronous request.
