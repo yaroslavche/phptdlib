@@ -16,7 +16,7 @@ public:
 
     TDLibLogConfiguration() = default;
 
-    virtual ~TDLibLogConfiguration() = default;
+    ~TDLibLogConfiguration() override = default;
 
     static Php::Value setLogFilePath(Php::Parameters &params);
 

@@ -1,6 +1,5 @@
 #include <td/telegram/td_json_client.h>
 #include "TDLib/BaseJsonClient.hpp"
-#include "td_json_client_func.hpp"
 
 Php::Value td_json_client_func_create() {
     void *client_ptr = td_json_client_create();

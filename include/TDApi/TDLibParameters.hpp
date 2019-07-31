@@ -28,7 +28,7 @@ public:
 
     TDLibParameters();
 
-    virtual ~TDLibParameters() = default;
+    ~TDLibParameters() override = default;
 
     Php::Value setParameter(Php::Parameters &params);
 

@@ -31,7 +31,7 @@ void JsonClient::handleResponses(json *breakOnExtra) {
             if (hasExtraInResponse) {
                 receivedResponsesExtras.push_back(responseJson["@extra"]);
             } else {
-                receivedResponsesExtras.push_back(0);
+                receivedResponsesExtras.emplace_back(0);
             }
             if (breakOnExtra != nullptr && hasExtraInResponse && (*breakOnExtra) == responseJson["@extra"]) {
                 break;
@@ -83,10 +83,21 @@ std::string JsonClient::query(const char *query, double timeout, json *extra) {
     // todo: lastQuery [lastRequest, lastResponse, isSuccess, state] ?
 }
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "cert-msc30-c"
+
 std::string JsonClient::addExtraAndSendQuery(const std::string &type, json *jsonQuery, double timeout) {
     json extra;
     auto extraIt = jsonQuery->find("@extra");
     if (extraIt == jsonQuery->end()) {
+        /*
+        struct timespec ts{};
+        if (timespec_get(&ts, TIME_UTC) == 0) {
+            // Handle error
+        }
+        srandom(ts.tv_nsec ^ ts.tv_sec);
+        extra = random();
+        */
         extra = rand();
         (*jsonQuery)["@extra"] = extra;
     } else {
@@ -97,6 +108,8 @@ std::string JsonClient::addExtraAndSendQuery(const std::string &type, json *json
 
     return query(jsonQuery->dump().c_str(), timeout, &extra);
 }
+
+#pragma clang diagnostic pop
 
 /**
 * exported
@@ -222,7 +235,7 @@ Php::Value JsonClient::setTdlibParameters(Php::Parameters &params) {
         throw Php::Exception("First parameter must be instance of TDApi\\TDLibParameters.");
     }
 
-    TDLibParameters *parametersObject = (TDLibParameters *) tdlibParams.implementation();
+    auto *parametersObject = (TDLibParameters *) tdlibParams.implementation();
 
     return setTdlibParameters(
             parametersObject,

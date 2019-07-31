@@ -5,14 +5,14 @@
 
 class BaseJsonClient : public Php::Base {
 protected:
-    void *_client = NULL;
+    void *_client = nullptr;
 
 public:
     BaseJsonClient() = default;
 
-    BaseJsonClient(void *&client_ptr);
+    explicit BaseJsonClient(void *&client_ptr);
 
-    virtual ~BaseJsonClient() = default;
+    ~BaseJsonClient() override = default;
 
     std::string execute(const char *query);
 
@@ -21,19 +21,19 @@ public:
     std::string receive(double timeout);
 
     // export
-    void __construct(Php::Parameters &params);
+    virtual void __construct(Php::Parameters &params);
 
-    void __destruct();
+    virtual void __destruct();
 
     void create();
 
     void destroy();
 
-    Php::Value execute(Php::Parameters &params);
+    virtual Php::Value execute(Php::Parameters &params);
 
-    void send(Php::Parameters &params);
+    virtual void send(Php::Parameters &params);
 
-    Php::Value receive(Php::Parameters &params);
+    virtual Php::Value receive(Php::Parameters &params);
 };
 
 #endif // TDLIB_BASEJSONCLIENT_H
