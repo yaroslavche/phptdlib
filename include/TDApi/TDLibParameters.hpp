@@ -11,7 +11,7 @@ private:
 
 public:
     static constexpr const char *USE_TEST_DC = "use_test_dc";
-    static constexpr const char *DATABASE_DIRECOTRY = "database_directory";
+    static constexpr const char *DATABASE_DIRECTORY = "database_directory";
     static constexpr const char *FILES_DIRECTORY = "files_directory";
     static constexpr const char *USE_FILE_DATABASE = "use_file_database";
     static constexpr const char *USE_CHAT_INFO_DATABASE = "use_chat_info_database";

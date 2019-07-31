@@ -101,7 +101,7 @@ PHPCPP_EXPORT void *get_module()
     td_api_tdlibParameters.method<&TDLibParameters::__debugInfo> ("__debugInfo");
 
     td_api_tdlibParameters.property("USE_TEST_DC", TDLibParameters::USE_TEST_DC, Php::Const);
-    td_api_tdlibParameters.property("DATABASE_DIRECOTRY", TDLibParameters::DATABASE_DIRECOTRY, Php::Const);
+    td_api_tdlibParameters.property("DATABASE_DIRECTORY", TDLibParameters::DATABASE_DIRECTORY, Php::Const);
     td_api_tdlibParameters.property("FILES_DIRECTORY", TDLibParameters::FILES_DIRECTORY, Php::Const);
     td_api_tdlibParameters.property("USE_FILE_DATABASE", TDLibParameters::USE_FILE_DATABASE, Php::Const);
     td_api_tdlibParameters.property("USE_CHAT_INFO_DATABASE", TDLibParameters::USE_CHAT_INFO_DATABASE, Php::Const);

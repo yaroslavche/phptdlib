@@ -4,7 +4,7 @@
 
 TDLibParameters::TDLibParameters() {
     parameters[USE_TEST_DC] = false;
-    parameters[DATABASE_DIRECOTRY] = "/var/tmp/tdlib";
+    parameters[DATABASE_DIRECTORY] = "/var/tmp/tdlib";
     parameters[FILES_DIRECTORY] = "/var/tmp/tdlib";
     parameters[USE_FILE_DATABASE] = false;
     parameters[USE_CHAT_INFO_DATABASE] = false;
