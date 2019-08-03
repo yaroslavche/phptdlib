@@ -4,62 +4,53 @@
 #include <td/telegram/td_json_client.h>
 
 
-BaseJsonClient::BaseJsonClient(void *&client_ptr)
-{
+BaseJsonClient::BaseJsonClient(void *&client_ptr) {
     _client = client_ptr;
 }
 
-void BaseJsonClient::create()
-{
-    if(_client == nullptr) _client = td_json_client_create();
+void BaseJsonClient::create() {
+    if (_client == nullptr) _client = td_json_client_create();
 }
 
-void BaseJsonClient::destroy()
-{
+void BaseJsonClient::destroy() {
     assert(_client != nullptr);
     td_json_client_destroy(_client);
     _client = nullptr;
 }
 
-Php::Value BaseJsonClient::execute(Php::Parameters &params)
-{
+Php::Value BaseJsonClient::execute(Php::Parameters &params) {
     assert(_client != nullptr);
     const char *query = getPhpFunctionArgument(params, 0, "");
     return execute(query);
 }
 
-std::string BaseJsonClient::execute(const char *query)
-{
+std::string BaseJsonClient::execute(const char *query) {
     assert(_client != nullptr);
     std::string result = td_json_client_execute(_client, query);
     return result;
 }
 
-void BaseJsonClient::send(Php::Parameters &params)
-{
+void BaseJsonClient::send(Php::Parameters &params) {
     assert(_client != nullptr);
     const char *query = getPhpFunctionArgument(params, 0, "");
     send(query);
 }
 
-void BaseJsonClient::send(const char *query)
-{
+void BaseJsonClient::send(const char *query) {
     assert(_client != nullptr);
     td_json_client_send(_client, query);
 }
 
-Php::Value BaseJsonClient::receive(Php::Parameters &params)
-{
+Php::Value BaseJsonClient::receive(Php::Parameters &params) {
     assert(_client != nullptr);
     double timeout = getPhpFunctionArgument(params, 0, 0.0);
     return receive(timeout);
 }
 
-std::string BaseJsonClient::receive(double timeout)
-{
+std::string BaseJsonClient::receive(double timeout) {
     assert(_client != nullptr);
-    const char* result = td_json_client_receive(_client, timeout);
-    if(result == nullptr) {
+    const char *result = td_json_client_receive(_client, timeout);
+    if (result == nullptr) {
         return "";
     } else return result;
 }
@@ -68,12 +59,10 @@ std::string BaseJsonClient::receive(double timeout)
  * Magic methods
  */
 
-void BaseJsonClient::__construct(Php::Parameters &params)
-{
+void BaseJsonClient::__construct(Php::Parameters &params) {
     create();
 }
 
-void BaseJsonClient::__destruct()
-{
-    if(_client != nullptr) destroy();
+void BaseJsonClient::__destruct() {
+    if (_client != nullptr) destroy();
 }

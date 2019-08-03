@@ -9,7 +9,7 @@ SCENARIO( "Check TDLibParameters", "[TDLibParameters]" ) {
 
         THEN( "constants exist" ) {
             REQUIRE( ((char*)parameters->USE_TEST_DC) == "use_test_dc" );
-            REQUIRE( ((char*)parameters->DATABASE_DIRECOTRY) == "database_directory" );
+            REQUIRE(((char*)parameters->DATABASE_DIRECTORY) == "database_directory" );
             REQUIRE( ((char*)parameters->FILES_DIRECTORY) == "files_directory" );
             REQUIRE( ((char*)parameters->USE_FILE_DATABASE) == "use_file_database" );
             REQUIRE( ((char*)parameters->USE_CHAT_INFO_DATABASE) == "use_chat_info_database" );

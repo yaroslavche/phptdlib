@@ -3,9 +3,9 @@
 The PHP extension `tdlib` allows you to work with the [Telegram database library](https://core.telegram.org/tdlib).
 If simple, this is the usual [functions wrapper](include/td_json_client_func.hpp) for working with the `tdlib/td` json client. You can:
  - create a JSON client `$client = td_json_client_create()`
- - execute the synchronous request `$result = td_json_client_execute($params);`
- - perform an asynchronous request `td_json_client_send($params);` *
- - get all the responses at the moment `$response = td_json_client_receive($params);`
+ - execute the synchronous request `$result = td_json_client_execute($client, $json);`
+ - perform an asynchronous request `td_json_client_send($client, $json);` *
+ - get all the responses at the moment `$response = td_json_client_receive($client, $timeout);`
  - and destroy client `td_json_client_destroy($client);`
 
 `*` you must use `td_json_client_receive` to get a response from an asynchronous request.
@@ -70,7 +70,7 @@ try {
     $tdlibParams = new TDApi\TDLibParameters();
     $tdlibParams
         ->setParameter(TDApi\TDLibParameters::USE_TEST_DC, true)
-        ->setParameter(TDApi\TDLibParameters::DATABASE_DIRECOTRY, '/var/tmp/tdlib')
+        ->setParameter(TDApi\TDLibParameters::DATABASE_DIRECTORY, '/var/tmp/tdlib')
         ->setParameter(TDApi\TDLibParameters::FILES_DIRECTORY, '/var/tmp/tdlib')
         ->setParameter(TDApi\TDLibParameters::USE_FILE_DATABASE, false)
         ->setParameter(TDApi\TDLibParameters::USE_CHAT_INFO_DATABASE, false)
@@ -81,7 +81,7 @@ try {
         ->setParameter(TDApi\TDLibParameters::SYSTEM_LANGUAGE_CODE, 'en')
         ->setParameter(TDApi\TDLibParameters::DEVICE_MODEL, php_uname('s'))
         ->setParameter(TDApi\TDLibParameters::SYSTEM_VERSION, php_uname('v'))
-        ->setParameter(TDApi\TDLibParameters::APPLICATION_VERSION, '0.0.8')
+        ->setParameter(TDApi\TDLibParameters::APPLICATION_VERSION, '0.0.9')
         ->setParameter(TDApi\TDLibParameters::ENABLE_STORAGE_OPTIMIZER, true)
         ->setParameter(TDApi\TDLibParameters::IGNORE_FILE_NAMES, false);
     $result = $client->setTdlibParameters($tdlibParams);

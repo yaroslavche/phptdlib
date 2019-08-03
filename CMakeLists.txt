@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
 set(EXT_NAME tdlib)
-set(EXT_VERSION 0.0.8)
+set(EXT_VERSION 0.0.9)
 project(${EXT_NAME} VERSION ${EXT_VERSION} LANGUAGES CXX)
 
 
