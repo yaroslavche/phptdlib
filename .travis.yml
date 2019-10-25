@@ -1,7 +1,5 @@
 sudo: true
 language: php
-php:
-  - '7.2'
 
 cache:
   ccache: true
@@ -14,43 +12,123 @@ git:
 env:
   global:
     - MAKEFLAGS="-j2"
-    - CMAKE_VERSION=3.13.4
+    - CMAKE_VERSION=3.15.4
 
 matrix:
   include:
-    # Latest gcc supported on Travis Linux
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-8
-            - gperf
-            - build-essential
-            - zlib1g-dev
-      env:
-        - CONFIG=gcc
-        - CC=gcc-8
-        - CXX=g++-8
 
-    # Latest clang supported by Travis Linux
+    # 7.2 CLANG
     - os: linux
+      php: '7.2'
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-7
+            - llvm-toolchain-trusty
           packages:
-            - clang-7
-            - g++-8
+            - clang-9
+            - g++-9
             - gperf
             - build-essential
             - zlib1g-dev
       env:
         - CONFIG=clang
-        - CC=clang-7
-        - CXX=clang++-7
+        - CC=clang-9
+        - CXX=clang++-9
+
+    # 7.2 GCC
+    - os: linux
+      php: '7.2'
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-9
+            - gperf
+            - build-essential
+            - zlib1g-dev
+      env:
+        - CONFIG=gcc
+        - CC=gcc-9
+        - CXX=g++-9
+
+    # 7.3 CLANG
+    - os: linux
+      php: '7.3'
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty
+          packages:
+            - clang-9
+            - g++-9
+            - gperf
+            - build-essential
+            - zlib1g-dev
+      env:
+        - CONFIG=clang
+        - CC=clang-9
+        - CXX=clang++-9
+
+    # 7.3 GCC
+    - os: linux
+      php: '7.3'
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-9
+            - gperf
+            - build-essential
+            - zlib1g-dev
+      env:
+        - CONFIG=gcc
+        - CC=gcc-9
+        - CXX=g++-9
+
+    # 7.4 GCC
+    - os: linux
+      php: '7.4snapshot'
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-9
+            - gperf
+            - build-essential
+            - zlib1g-dev
+      env:
+        - CONFIG=gcc
+        - CC=gcc-9
+        - CXX=g++-9
+
+
+    # 7.4 CLANG
+    - os: linux
+      php: '7.4snapshot'
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty
+          packages:
+            - clang-9
+            - g++-9
+            - gperf
+            - build-essential
+            - zlib1g-dev
+      env:
+        - CONFIG=clang
+        - CC=clang-9
+        - CXX=clang++-9
+
+jobs:
+  allow_failures:
+    - php: '7.4snapshot'
 
 before_install:
   # install php7-embed need for tester. Maybe needs install php on clear os
