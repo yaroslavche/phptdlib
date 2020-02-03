@@ -11,6 +11,7 @@ If simple, this is the usual [functions wrapper](include/td_json_client_func.hpp
 `*` you must use `td_json_client_receive` to get a response from an asynchronous request.
 
 [Getting started with TDLib](https://core.telegram.org/tdlib/getting-started)
+
 [phptdlib Documentation](https://yaroslavche.github.io/phptdlib/)
 
 ## Example
