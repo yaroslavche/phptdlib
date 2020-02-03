@@ -1,4 +1,3 @@
-sudo: true
 language: php
 
 cache:
@@ -88,7 +87,7 @@ matrix:
         - CONFIG=gcc
         - CC=gcc-9
         - CXX=g++-9
-
+  allow_failures:
     # 7.4 GCC
     - os: linux
       php: '7.4snapshot'
@@ -125,10 +124,6 @@ matrix:
         - CONFIG=clang
         - CC=clang-9
         - CXX=clang++-9
-
-jobs:
-  allow_failures:
-    - php: '7.4snapshot'
 
 before_install:
   # install php7-embed need for tester. Maybe needs install php on clear os
