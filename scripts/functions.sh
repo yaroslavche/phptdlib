@@ -39,9 +39,9 @@ build()
     fi
 
     case ${LIBRARY_ALIAS} in
-        "PHPCPP") build_phpcpp;;
-        "JSON") build_json;;
-        "TD") build_td;;
+        "CopernicaMarketingSoftware_PHP-CPP") build_phpcpp;;
+        "nlohmann_json") build_json;;
+        "tdlib_td") build_td;;
         *) return ${PHPTDLIB_INVALID_LIBRARY_ALIAS};;
     esac
     BUILD_STATUS_CODE=$?
@@ -61,9 +61,9 @@ install()
     fi
 
     case ${LIBRARY_ALIAS} in
-        "PHPCPP") install_phpcpp;;
-        "JSON") install_json;;
-        "TD") install_td;;
+        "CopernicaMarketingSoftware_PHP-CPP") install_phpcpp;;
+        "nlohmann_json") install_json;;
+        "tdlib_td") install_td;;
         *) return ${PHPTDLIB_INVALID_LIBRARY_ALIAS};;
     esac
     INSTALL_STATUS_CODE=$?

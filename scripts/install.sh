@@ -37,9 +37,9 @@ fi
 
 # declare assoc array with dependencies. LIBRARY_ALIAS => LIBRARY_REPO_HTTPS_URI
 declare -A PHPTDLIB_DEPS
-PHPTDLIB_DEPS['PHPCPP']="https://github.com/CopernicaMarketingSoftware/PHP-CPP.git"
-PHPTDLIB_DEPS['JSON']="https://github.com/nlohmann/json.git"
-PHPTDLIB_DEPS['TD']="https://github.com/tdlib/td.git"
+PHPTDLIB_DEPS['CopernicaMarketingSoftware_PHP-CPP']="https://github.com/scorninpc/PHP-CPP.git"
+PHPTDLIB_DEPS['nlohmann_json']="https://github.com/nlohmann/json.git"
+PHPTDLIB_DEPS['tdlib_td']="https://github.com/tdlib/td.git"
 
 # for each library get head hash, check if build cache exists (if not - clone and build) and install
 for LIBRARY_ALIAS in "${!PHPTDLIB_DEPS[@]}"
@@ -48,7 +48,7 @@ do
     LIBRARY_REPO_HEAD_HASH="$(get_repository_head_hash ${LIBRARY_REPO_HTTPS_URI})"
 
     if [ ! -z "${LIBRARY_REPO_HEAD_HASH}" ]; then
-        LIBRARY_CACHE_PATH="${PHPTDLIB_CACHE_DIR}/${PHPTDLIB_CURRENT_OS}/${PHPTDLIB_CURRENT_BRANCH}/${CONFIG}/${LIBRARY_ALIAS}/${LIBRARY_REPO_HEAD_HASH}"
+        LIBRARY_CACHE_PATH="${PHPTDLIB_CACHE_DIR}/${PHPTDLIB_CURRENT_OS}/${CONFIG}/${LIBRARY_ALIAS}/${LIBRARY_REPO_HEAD_HASH}"
         if [ ! -d "${LIBRARY_CACHE_PATH}" ]; then
             echo "Build ${LIBRARY_ALIAS} in ${LIBRARY_CACHE_PATH}."
             mkdir -p ${LIBRARY_CACHE_PATH}
