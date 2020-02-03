@@ -87,7 +87,7 @@ matrix:
         - CONFIG=gcc
         - CC=gcc-9
         - CXX=g++-9
-  allow_failures:
+
     # 7.4 GCC
     - os: linux
       php: '7.4snapshot'
