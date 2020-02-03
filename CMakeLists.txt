@@ -108,7 +108,7 @@ endif()
 ###################
 
 if(USE_SHARED_TD)
-    find_package(Td 1.5.4 REQUIRED)
+    find_package(Td 1.6.0 REQUIRED)
     if(NOT Td_FOUND)
         message(SEND_ERROR "Failed to find Td")
         return()
