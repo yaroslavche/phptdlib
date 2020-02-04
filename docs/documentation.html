@@ -56,29 +56,68 @@
         <div class="container">
             <div id="doc-header" class="doc-header text-center">
                 <h1 class="doc-title"><i class="icon icon_cogs"></i> Documentation</h1>
-                <div class="meta"><i class="far fa-clock"></i> Last updated: February 19, 2019</div>
+                <div class="meta"><i class="far fa-clock"></i> Last updated: February 04, 2020</div>
             </div>
             <!--//doc-header-->
             <div class="doc-body row">
                 <div class="doc-content col-md-9 col-12 order-1">
                     <div class="content-inner">
                         <section id="example-section" class="doc-section">
-                            <h2 class="section-title">Demo example</h2>
-                            <div id="example-wrapper" class="section-block">
+                            <h2 class="section-title">How it works in few words</h2>
+                            <div id="tdlib" class="section-block">
                                 <div class="code-block">
-                                    <h6>tdlib/td wrapper</h6>
-                                    <pre><code class="language-php">&lt;?php
-
-$client = td_json_client_create();
-$result = td_json_client_execute($client, json_encode(['@type' =&gt; 'getAuthorizationState']));
-td_json_client_send($client, json_encode(['@type' =&gt; '...']));
-$result = td_json_client_receive($client, 10);
-td_json_client_destroy($client);</code></pre>
+                                    <h6>TDLib</h6>
+                                    For working with Telegram database, you need to have a configured and authorized client.
+                                    So, you should create a new client instance:
+                                    <pre><code class="language-php">
+$client = td_json_client_create();</code></pre>
+                                    Then you can send requests to Telegram database. Both types: synchronous and asynchronous.<br>
+                                    But most of requests to database should be async. Then you should use <b>send</b> and <b>receive</b>:
+                                    <pre><code class="language-php">
+td_json_client_send($client, json_encode(['@type' =&gt; 'someType']));
+$result = td_json_client_receive($client, 10);</code></pre>
+                                    <b>someType</b> here is a type (object/method) from  <a href="https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1_function.html">tdlib Function Class Reference</a>.<br>
+                                    For instance: <a href="https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1get_authorization_state.html">getAuthorizationState</a>.<br><br>
+                                    For sync request to database you should use
+                                    <pre><code class="language-php">
+$result = td_json_client_execute($client, json_encode(['@type' =&gt; 'someType']));</code></pre>
+                                    As you can see, you have a <b>$result</b> in that function call (and <b>td_json_client_send</b> haven't).
                                 </div>
+                                And then, when you have done your business, you should destroy a client.
+                                <pre><code class="language-php">
+td_json_client_destroy($client);</code></pre>
+                                Same things can be done in object-oriented way:
+                                <pre><code class="language-php">
+$client = new \TDLib\JsonClient();
+$client->setDefaultTimeout(10);
+$result = $client->execute($stringQuery);
+$client->send($stringQuery);
+$response = $client->receive($floatTimeout);
+$response = $client->query($stringQuery, $floatTimeout);
+$responses = $client->getReceivedResponses();
+$client->destroy();</code></pre>
+                                Where <b>$stringQuery</b> is already formatted json with "@type" and arguments.</b>
+                                Also exists two helper methods: <b>$client->query</b> and <b>$client->getReceivedResponses</b>.
+                                Query is just send request with <b>@extra</b> and then wait that field in responses. Since this is for asynchronous requests, before you get an answer to the request, you can get others. And you can get all the responses to the last request with getReceivedResponses
+
+                            </div>
+                            <!--//section-block-->
+                            <div id="tdlib-client" class="section-block">
+                                <div class="code-block">
+                                    <h6>Preparing a client</h6>
+                                    Before you can search chats, send messages and receive them, you should have authorized client.
+                                    You can check your client state with <a href="https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1get_authorization_state.html">getAuthorizationState</a> request.
+                                    Only if response will be ok, then you allowed to do what you want. Otherwise in response will contain a message what client wants to be configured or set<br>
+                                    So, firstly after client was created, need send few request:<br>
+                                    <ul>
+                                        <li><a href="https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1set_tdlib_parameters.html">setTdlibParameters</a></li>
+                                        <li><a href="https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1set_database_encryption_key.html">setDatabaseEncryptionKey</a></li>
+                                        <li><a href="https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1set_authentication_phone_number.html">setAuthenticationPhoneNumber</a></li>
+                                        <li>and after receiving a SMS with code: <a href="https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1check_authentication_code.html">checkAuthenticationCode</a></li>
+                                    </ul>
+                                    Better explanation you can find <a href="https://core.telegram.org/tdlib/getting-started">here</a>
+                                    Almost complete example is below. But please remember, that this is async requests, so it should be handled also async
                                 <!--//code-block-->
-                                Check <a
-                                    href="https://core.telegram.org/tdlib/docs/classtd_1_1td__api_1_1_function.html">tdlib
-                                Function Class Reference</a>.
                             </div>
                             <!--//section-block-->
                             <div id="example-client" class="section-block">
@@ -208,7 +247,8 @@ if(!empty($res['last_message']['sendingState']) && $res['last_message']['sending
                         <nav id="doc-menu" class="nav doc-menu flex-column sticky">
                             <a class="nav-link scrollto" href="#example-section">Documentation</a>
                             <nav class="doc-sub-menu nav flex-column">
-                                <a class="nav-link scrollto" href="#example-wrapper">tdlib/td wrapper example</a>
+                                <a class="nav-link scrollto" href="#tdlib">How it works</a>
+                                <a class="nav-link scrollto" href="#tdlib-client">Preparing a client</a>
                                 <a class="nav-link scrollto" href="#example-client">TDLib\JsonClient example</a>
                                 <a class="nav-link scrollto" href="#example-send-message">sendMessage example</a>
                             </nav>
