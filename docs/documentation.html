@@ -113,7 +113,7 @@ try {
         ->setParameter(TDApi\TDLibParameters::SYSTEM_LANGUAGE_CODE, 'en')
         ->setParameter(TDApi\TDLibParameters::DEVICE_MODEL, php_uname('s'))
         ->setParameter(TDApi\TDLibParameters::SYSTEM_VERSION, php_uname('v'))
-        ->setParameter(TDApi\TDLibParameters::APPLICATION_VERSION, '0.0.9')
+        ->setParameter(TDApi\TDLibParameters::APPLICATION_VERSION, '0.0.10')
         ->setParameter(TDApi\TDLibParameters::ENABLE_STORAGE_OPTIMIZER, true)
         ->setParameter(TDApi\TDLibParameters::IGNORE_FILE_NAMES, false);
     $result = $client->setTdlibParameters($tdlibParams);

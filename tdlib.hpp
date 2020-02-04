@@ -1,1 +1,1 @@
-#define TDLIB_PHP_VERSION "0.0.9"
+#define TDLIB_PHP_VERSION "0.0.10"
