@@ -65,27 +65,27 @@ $api_hash = 'abcdef1234567890abcdef1234567890';
 $phone_number = '+380991234567';
 
 try {
-    TDApi\LogConfiguration::setLogVerbosityLevel(\TDApi\LogConfiguration::LVL_ERROR);
+    \TDApi\LogConfiguration::setLogVerbosityLevel(\TDApi\LogConfiguration::LVL_ERROR);
     
-    $client = new TDLib\JsonClient();
+    $client = new \TDLib\JsonClient();
     
-    $tdlibParams = new TDApi\TDLibParameters();
+    $tdlibParams = new \TDApi\TDLibParameters();
     $tdlibParams
-        ->setParameter(TDApi\TDLibParameters::USE_TEST_DC, true)
-        ->setParameter(TDApi\TDLibParameters::DATABASE_DIRECTORY, '/var/tmp/tdlib')
-        ->setParameter(TDApi\TDLibParameters::FILES_DIRECTORY, '/var/tmp/tdlib')
-        ->setParameter(TDApi\TDLibParameters::USE_FILE_DATABASE, false)
-        ->setParameter(TDApi\TDLibParameters::USE_CHAT_INFO_DATABASE, false)
-        ->setParameter(TDApi\TDLibParameters::USE_MESSAGE_DATABASE, false)
-        ->setParameter(TDApi\TDLibParameters::USE_SECRET_CHATS, false)
-        ->setParameter(TDApi\TDLibParameters::API_ID, $api_id)
-        ->setParameter(TDApi\TDLibParameters::API_HASH, $api_hash)
-        ->setParameter(TDApi\TDLibParameters::SYSTEM_LANGUAGE_CODE, 'en')
-        ->setParameter(TDApi\TDLibParameters::DEVICE_MODEL, php_uname('s'))
-        ->setParameter(TDApi\TDLibParameters::SYSTEM_VERSION, php_uname('v'))
-        ->setParameter(TDApi\TDLibParameters::APPLICATION_VERSION, '0.0.10')
-        ->setParameter(TDApi\TDLibParameters::ENABLE_STORAGE_OPTIMIZER, true)
-        ->setParameter(TDApi\TDLibParameters::IGNORE_FILE_NAMES, false);
+        ->setParameter(\TDApi\TDLibParameters::USE_TEST_DC, true)
+        ->setParameter(\TDApi\TDLibParameters::DATABASE_DIRECTORY, '/var/tmp/tdlib')
+        ->setParameter(\TDApi\TDLibParameters::FILES_DIRECTORY, '/var/tmp/tdlib')
+        ->setParameter(\TDApi\TDLibParameters::USE_FILE_DATABASE, false)
+        ->setParameter(\TDApi\TDLibParameters::USE_CHAT_INFO_DATABASE, false)
+        ->setParameter(\TDApi\TDLibParameters::USE_MESSAGE_DATABASE, false)
+        ->setParameter(\TDApi\TDLibParameters::USE_SECRET_CHATS, false)
+        ->setParameter(\TDApi\TDLibParameters::API_ID, $api_id)
+        ->setParameter(\TDApi\TDLibParameters::API_HASH, $api_hash)
+        ->setParameter(\TDApi\TDLibParameters::SYSTEM_LANGUAGE_CODE, 'en')
+        ->setParameter(\TDApi\TDLibParameters::DEVICE_MODEL, php_uname('s'))
+        ->setParameter(\TDApi\TDLibParameters::SYSTEM_VERSION, php_uname('v'))
+        ->setParameter(\TDApi\TDLibParameters::APPLICATION_VERSION, '0.0.10')
+        ->setParameter(\TDApi\TDLibParameters::ENABLE_STORAGE_OPTIMIZER, true)
+        ->setParameter(\TDApi\TDLibParameters::IGNORE_FILE_NAMES, false);
     $result = $client->setTdlibParameters($tdlibParams);
 
     $result = $client->setDatabaseEncryptionKey();
