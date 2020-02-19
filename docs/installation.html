@@ -52,7 +52,7 @@
         <div class="container">
             <div id="doc-header" class="doc-header text-center">
                 <h1 class="doc-title"><i class="icon icon_cogs"></i> Installation</h1>
-                <div class="meta"><i class="far fa-clock"></i> Last updated: February 04, 2020</div>
+                <div class="meta"><i class="far fa-clock"></i> Last updated: February 19, 2020</div>
             </div><!--//doc-header-->
             <div class="doc-body row">
                 <div class="doc-content col-md-9 col-12 order-1">
@@ -142,6 +142,26 @@ $ php ../php_examples/func.php
 $ php -r "echo (function_exists('td_json_client_create') ? 'ok' : 'failed') . PHP_EOL;"</code></pre>
                                 </div><!--//code-block-->
                             </div><!--//section-block-->
+                            <div id="scripts-install" class="section-block">
+                                <h3 class="block-title">Installation with shared libraries</h3>
+                                <div class="code-block">
+                                    This way of installation using in travis. And this can be useful and simpler than other ways. Let's say, we have installed and configured cmake with gcc (9). Need just specify 3 env variables (CONFIG, CC and GCC) and run <b>./scripts/install.sh</b>
+                                    <pre><code class="language-bash">
+$ CONFIG=gcc CC=gcc CXX=g++ ./scripts/install.sh</code></pre>
+                                    This will clone modules into cached_builds directory, build it and install (requires sudo). Then you can always run this command for easy module updates.<br>
+                                    After success modules installation can continue to install extension. Same way as above, just with one difference: need specify cmake flags:
+                                    <pre><code class="language-bash">
+$ cmake -D USE_SHARED_TD:BOOL=ON -D USE_SHARED_JSON:BOOL=ON -D USE_SHARED_PHPCPP:BOOL=ON ..</code></pre>
+                                    So, full command list:
+                                    <pre><code class="language-bash">
+$ git clone https://github.com/yaroslavche/phptdlib.git && cd phptdlib
+$ CONFIG=gcc CC=gcc CXX=g++ ./scripts/install.sh
+$ mkdir build && cd build
+$ cmake -D USE_SHARED_TD:BOOL=ON -D USE_SHARED_JSON:BOOL=ON -D USE_SHARED_PHPCPP:BOOL=ON ..
+$ make
+$ sudo make install</code></pre>
+                                </div><!--//code-block-->
+                            </div><!--//section-block-->
                         </section><!--//doc-section-->
 
 
@@ -156,6 +176,7 @@ $ php -r "echo (function_exists('td_json_client_create') ? 'ok' : 'failed') . PH
                                 <a class="nav-link scrollto" href="#phptdlib">yaroslavche/phptdlib</a>
                                 <a class="nav-link scrollto" href="#ubuntu-bionic-beaver">Installation example on Ubuntu
                                     18.04</a>
+                                <a class="nav-link scrollto" href="#scripts-install">scripts/install.sh</a>
                             </nav><!--//nav-->
                         </nav><!--//doc-menu-->
                     </div>
