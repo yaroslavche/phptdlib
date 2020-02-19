@@ -37,7 +37,7 @@ fi
 
 # declare assoc array with dependencies. LIBRARY_ALIAS => LIBRARY_REPO_HTTPS_URI
 declare -A PHPTDLIB_DEPS
-PHPTDLIB_DEPS['CopernicaMarketingSoftware_PHP-CPP']="https://github.com/scorninpc/PHP-CPP.git"
+PHPTDLIB_DEPS['CopernicaMarketingSoftware_PHP-CPP']="https://github.com/CopernicaMarketingSoftware/PHP-CPP.git"
 PHPTDLIB_DEPS['nlohmann_json']="https://github.com/nlohmann/json.git"
 PHPTDLIB_DEPS['tdlib_td']="https://github.com/tdlib/td.git"
 

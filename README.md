@@ -113,12 +113,9 @@ The most of dependencies are installed via git submodules currently.
 But PHP-CPP currently has to be built separately.
  
  - [PHP-CPP v2.0.0][2]
- - [Fork with PHP 7.4 support](https://github.com/scorninpc/PHP-CPP.git)
  
 ```bash
 git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
-# or
-git clone https://github.com/scorninpc/PHP-CPP.git
 
 cd PHP-CPP
 make
