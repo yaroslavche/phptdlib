@@ -12,6 +12,10 @@ If simple, this is the usual [functions wrapper](include/td_json_client_func.hpp
 
 [Getting started with TDLib](https://core.telegram.org/tdlib/getting-started)
 
+[td_json_client.h File Reference](https://core.telegram.org/tdlib/docs/td__json__client_8h.html)
+
+[Video tutorial how to install and simple usage](https://www.youtube.com/watch?v=gtQOjSVlvlI)
+
 [phptdlib Documentation](https://yaroslavche.github.io/phptdlib/)
 
 ## Example
