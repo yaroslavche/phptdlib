@@ -36,20 +36,15 @@ jobs:
                 if: startsWith(matrix.config.name, 'Ubuntu Latest GCC')
                 run: |
                     sudo apt-get update
-                    sudo apt-get install ninja-build cmake
+                    sudo apt-get install ninja-build cmake gperf build-essential zlib1g-dev
                     ninja --version
                     cmake --version
                     gcc --version
-            -   name: Cache extension dependecies
-                id: cahce-ext-deps
-                uses: actions/cache@v2
-                with:
-                    path: cached_builds
-                    key: ${{ runner.os }}-ext-deps
             -   name: Install extension dependecies
-                if: steps.cahce-ext-deps.outputs.cache-hit != 'true'
                 shell: bash
-                run: ./scripts/install.sh cached_builds
+                run: |
+                    ./scripts/install.sh cached_builds
+                    sudo ldconfig
             -   name: Configure
                 shell: bash
                 run: |
