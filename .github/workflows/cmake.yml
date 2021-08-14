@@ -72,5 +72,6 @@ jobs:
             -   name: Build
                 shell: bash
                 run: |
+                    cd build
                     make
                     sudo make install
