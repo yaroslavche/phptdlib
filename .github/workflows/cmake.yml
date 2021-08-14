@@ -45,20 +45,12 @@ jobs:
                     cmake --version
                     gcc --version
                     php --version
-                    php-config
             -   name: Cache extension dependecies
                 id: cahce-ext-deps
                 uses: actions/cache@v2
                 with:
                     path: ~/cached_builds
                     key: ${{ runner.os }}-ext-deps
-            -   name: Install PHP-CPP
-                run: |
-                    git clone https://github.com/CopernicaMarketingSoftware/PHP-CPP.git
-                    cd PHP-CPP
-                    make
-                    sudo make install
-                    sudo ldconfig
             -   name: Install extension dependecies
                 shell: bash
                 run: |
