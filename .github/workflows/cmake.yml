@@ -67,3 +67,8 @@ jobs:
                     sudo make install
                     php -m | grep tdlib
                     php ../php_examples/func.php
+            -   name: Test
+                shell: bash
+                run: |
+                    php -m | grep tdlib
+                    php ../php_examples/func.php
