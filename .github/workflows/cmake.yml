@@ -57,21 +57,13 @@ jobs:
                     ./scripts/install.sh ~/cached_builds
                     cd ~/cached_builds
                     sudo ldconfig
-            -   name: Configure
-                shell: bash
-                run: |
-                    mkdir build
-                    cmake \
-                      -S . \
-                      -B build \
-                      -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
-                      -DUSE_SHARED_TD:BOOL=ON \
-                      -DUSE_SHARED_JSON:BOOL=ON \
-                      -DUSE_SHARED_PHPCPP:BOOL=ON \
-                      -G "${{ matrix.config.generators }}"
             -   name: Build
                 shell: bash
                 run: |
+                    mkdir build
                     cd build
+                    cmake -D USE_SHARED_TD:BOOL=ON -D USE_SHARED_JSON:BOOL=ON -D USE_SHARED_PHPCPP:BOOL=ON ..
                     make
                     sudo make install
+                    php -m | grep tdlib
+                    php ../php_examples/func.php
