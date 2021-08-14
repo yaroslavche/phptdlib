@@ -1,0 +1,73 @@
+name: CMake Build
+
+on:
+    push:
+    pull_request:
+    release:
+
+jobs:
+    build:
+        name: ${{ matrix.config.name }}
+        runs-on: ${{ matrix.config.os }}
+        env:
+            CONFIG: gcc
+            CC: gcc
+            CXX: g++
+        strategy:
+            fail-fast: false
+            matrix:
+                config:
+                    - {
+                        name: "Ubuntu Latest GCC (Release)",
+                        os: ubuntu-latest,
+                        build_type: "Release",
+                        cc: "gcc",
+                        cxx: "g++",
+                        generators: "Ninja"
+                    }
+
+        steps:
+            -   uses: actions/checkout@v2
+            -   name: Setup PHP 7.4 with PECL extension
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '7.4'
+            -   name: ENV
+                run: |
+                    echo github.event.action: ${{ github.event.action }}
+                    echo github.event_name: ${{ github.event_name }}
+            -   name: Install main dependencies (Ubuntu)
+                if: startsWith(matrix.config.name, 'Ubuntu Latest GCC')
+                run: |
+                    sudo apt-get update
+                    sudo apt-get install ninja-build cmake gperf build-essential zlib1g-dev
+                    ninja --version
+                    cmake --version
+                    gcc --version
+                    php --version
+            -   name: Cache extension dependecies
+                id: cahce-ext-deps
+                uses: actions/cache@v2
+                with:
+                    path: ~/cached_builds
+                    key: ${{ runner.os }}-ext-deps
+            -   name: Install extension dependecies
+                shell: bash
+                run: |
+                    ./scripts/install.sh ~/cached_builds
+                    cd ~/cached_builds
+                    sudo ldconfig
+            -   name: Build and install
+                shell: bash
+                run: |
+                    mkdir build
+                    cd build
+                    cmake -D USE_SHARED_TD:BOOL=ON -D USE_SHARED_JSON:BOOL=ON -D USE_SHARED_PHPCPP:BOOL=ON ..
+                    make
+                    sudo make install
+            -   name: Test
+                shell: bash
+                run: |
+                    pwd
+                    php -m | grep tdlib
+                    php php_examples/func.php
