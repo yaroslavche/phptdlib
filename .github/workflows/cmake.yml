@@ -9,6 +9,10 @@ jobs:
     build:
         name: ${{ matrix.config.name }}
         runs-on: ${{ matrix.config.os }}
+        env:
+            CONFIG: gcc
+            CC: gcc
+            CXX: g++
         strategy:
             fail-fast: false
             matrix:
@@ -23,43 +27,43 @@ jobs:
                     }
 
         steps:
-            - uses: actions/checkout@v2
-            - name: ENV
-              run: |
-                  echo github.event.action: ${{ github.event.action }}
-                  echo github.event_name: ${{ github.event_name }}
-            - name: Install main dependencies (Ubuntu)
-              if: startsWith(matrix.config.name, 'Ubuntu Latest GCC')
-              run: |
-                  sudo apt-get update
-                  sudo apt-get install ninja-build cmake
-                  ninja --version
-                  cmake --version
-                  gcc --version
-            - name: Cache extension dependecies
-              id: cahce-ext-deps
-              uses: actions/cache@v2
-              with:
-                path: cached_builds
-                key: ${{ runner.os }}-ext-deps
-            - name: Install extension dependecies
-              if: steps.cahce-ext-deps.outputs.cache-hit != 'true'
-              shell: bash
-              run: ./scripts/install.sh cached_builds
-            - name: Configure
-              shell: bash
-              run: |
-                  mkdir build
-                  cmake \
-                    -S . \
-                    -B build \
-                    -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
-                    -DUSE_SHARED_TD:BOOL=ON \
-                    -DUSE_SHARED_JSON:BOOL=ON \
-                    -DUSE_SHARED_PHPCPP:BOOL=ON \
-                    -G "${{ matrix.config.generators }}"
-            - name: Build
-              shell: bash
-              run: |
-                  make
-                  sudo make install
+            -   uses: actions/checkout@v2
+            -   name: ENV
+                run: |
+                    echo github.event.action: ${{ github.event.action }}
+                    echo github.event_name: ${{ github.event_name }}
+            -   name: Install main dependencies (Ubuntu)
+                if: startsWith(matrix.config.name, 'Ubuntu Latest GCC')
+                run: |
+                    sudo apt-get update
+                    sudo apt-get install ninja-build cmake
+                    ninja --version
+                    cmake --version
+                    gcc --version
+            -   name: Cache extension dependecies
+                id: cahce-ext-deps
+                uses: actions/cache@v2
+                with:
+                    path: cached_builds
+                    key: ${{ runner.os }}-ext-deps
+            -   name: Install extension dependecies
+                if: steps.cahce-ext-deps.outputs.cache-hit != 'true'
+                shell: bash
+                run: ./scripts/install.sh cached_builds
+            -   name: Configure
+                shell: bash
+                run: |
+                    mkdir build
+                    cmake \
+                      -S . \
+                      -B build \
+                      -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
+                      -DUSE_SHARED_TD:BOOL=ON \
+                      -DUSE_SHARED_JSON:BOOL=ON \
+                      -DUSE_SHARED_PHPCPP:BOOL=ON \
+                      -G "${{ matrix.config.generators }}"
+            -   name: Build
+                shell: bash
+                run: |
+                    make
+                    sudo make install
