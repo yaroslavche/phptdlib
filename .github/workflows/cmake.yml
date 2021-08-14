@@ -36,7 +36,7 @@ jobs:
                 if: startsWith(matrix.config.name, 'Ubuntu Latest GCC')
                 run: |
                     sudo apt-get update
-                    sudo apt-get install ninja-build cmake gperf build-essential zlib1g-dev php-devel
+                    sudo apt-get install ninja-build cmake gperf build-essential zlib1g-dev php-dev
                     ninja --version
                     cmake --version
                     gcc --version
