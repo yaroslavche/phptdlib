@@ -28,6 +28,9 @@ jobs:
 
         steps:
             -   uses: actions/checkout@v2
+            -   uses: nanasess/setup-php@master
+                with:
+                    php-version: '7.4'
             -   name: ENV
                 run: |
                     echo github.event.action: ${{ github.event.action }}
@@ -36,10 +39,7 @@ jobs:
                 if: startsWith(matrix.config.name, 'Ubuntu Latest GCC')
                 run: |
                     sudo apt-get update
-                    sudo apt -y install software-properties-common
-                    sudo add-apt-repository ppa:ondrej/php
-                    sudo apt-get update
-                    sudo apt-get install ninja-build cmake gperf build-essential zlib1g-dev php7.4 php7.4-dev
+                    sudo apt-get install ninja-build cmake gperf build-essential zlib1g-dev
                     ninja --version
                     cmake --version
                     gcc --version
