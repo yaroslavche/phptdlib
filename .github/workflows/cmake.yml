@@ -36,10 +36,14 @@ jobs:
                 if: startsWith(matrix.config.name, 'Ubuntu Latest GCC')
                 run: |
                     sudo apt-get update
-                    sudo apt-get install ninja-build cmake gperf build-essential zlib1g-dev php7.4-dev
+                    sudo apt -y install software-properties-common
+                    sudo add-apt-repository ppa:ondrej/php
+                    sudo apt-get update
+                    sudo apt-get install ninja-build cmake gperf build-essential zlib1g-dev php7.4 php7.4-dev
                     ninja --version
                     cmake --version
                     gcc --version
+                    php --version
             -   name: Cache extension dependecies
                 id: cahce-ext-deps
                 uses: actions/cache@v2
