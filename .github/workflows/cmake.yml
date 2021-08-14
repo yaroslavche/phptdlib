@@ -57,7 +57,7 @@ jobs:
                     ./scripts/install.sh ~/cached_builds
                     cd ~/cached_builds
                     sudo ldconfig
-            -   name: Build
+            -   name: Build and install
                 shell: bash
                 run: |
                     mkdir build
@@ -65,10 +65,9 @@ jobs:
                     cmake -D USE_SHARED_TD:BOOL=ON -D USE_SHARED_JSON:BOOL=ON -D USE_SHARED_PHPCPP:BOOL=ON ..
                     make
                     sudo make install
-                    php -m | grep tdlib
-                    php ../php_examples/func.php
             -   name: Test
                 shell: bash
                 run: |
+                    pwd
                     php -m | grep tdlib
-                    php ../php_examples/func.php
+                    php php_examples/func.php
