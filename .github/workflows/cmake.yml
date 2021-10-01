@@ -5,7 +5,7 @@ on:
     pull_request:
     release:
     schedule:
-        -   cron: "0 0 1 * *"
+        -   cron: "0 0 1,15 * *"
 
 jobs:
     build:
