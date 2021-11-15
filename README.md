@@ -1,4 +1,4 @@
-![Cmake workflow](https://github.com/yaroslavche/phptdlib/actions/workflows/cmake.yml/badge.svg)
+[![Cmake workflow](https://github.com/yaroslavche/phptdlib/actions/workflows/cmake.yml/badge.svg)](https://github.com/yaroslavche/phptdlib/actions/workflows/cmake.yml)
 
 The PHP extension `tdlib` allows you to work with the [Telegram database library](https://core.telegram.org/tdlib).
 If simple, this is the usual [functions wrapper](include/td_json_client_func.hpp) for working with the `tdlib/td` json client. You can:
