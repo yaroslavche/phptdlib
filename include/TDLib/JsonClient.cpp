@@ -220,7 +220,7 @@ std::string JsonClient::setTdlibParameters(TDLibParameters *parameters, double t
     json parametersJson = parameters->getParameters();
 
     json jsonQuery;
-    jsonQuery["parameters"] = parametersJson;
+    jsonQuery = parametersJson;
 
     return addExtraAndSendQuery(
             "setTdlibParameters",
